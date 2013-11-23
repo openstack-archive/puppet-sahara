@@ -1,0 +1,13 @@
+{
+  "name": "puppet-savanna",
+  "version": "0.0.1",
+  "summary": "Installs the savanna backend",
+  "author": "andy@edmonds.be",
+  "description": "Installs the savanna backend and can also install the savanna UI in OpenStack horizon",
+  "dependencies": [],
+  "types": [],
+  "checksums": {},
+  "source": "https://github.com/stackforge/puppet-savanna",
+  "project_page": "https://github.com/stackforge/puppet-savanna",
+  "license": "Apache License, Version 2.0"
+}
