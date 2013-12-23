@@ -1,1 +1,6 @@
 .project
+Gemfile.lock
+spec/fixtures/modules/*
+spec/fixtures/manifests/site.pp
+*.swp
+pkg
