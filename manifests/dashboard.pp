@@ -38,11 +38,11 @@ class savanna::dashboard (
   if $savanna::params::development {
     info('Installing the developement version of savanna dashboard')
 
-    exec { 'savannadashboard':
-      command => "pip install ${::savanna::params::development_dashboard_build_url}",
-      path    => '/usr/bin:/usr/sbin:/bin:/usr/local/bin',
-      unless  => 'stat /usr/local/lib/python2.7/dist-packages/savannadashboard',
-      require => Package['python-pip'],
+    package { 'savanna-dashboard':
+      ensure   => installed,
+      provider => pip,
+      source   => $savanna::params::development_dashboard_build_url,
+      require  => Package['python-pip'],
     }
   } else {
     package { 'savanna-dashboard':

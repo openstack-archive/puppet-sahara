@@ -19,7 +19,7 @@ class savanna::install {
   # this is here until this fix is released
   # https://bugs.launchpad.net/ubuntu/+source/python-pbr/+bug/1245676
   if !defined(Package['git']) {
-    package { 'python-pip': ensure => latest, }
+    package { 'git': ensure => latest, }
   }
 
   if !defined(Package['python-pip']) {
@@ -40,11 +40,11 @@ class savanna::install {
     info("Installing and using the savanna development version. URL:
       ${savanna::params::development_build_url}")
 
-    exec { 'savanna':
-      command => "pip install ${savanna::params::development_build_url}",
-      path    => '/usr/bin:/usr/sbin:/bin:/usr/local/bin',
-      unless  => 'stat /usr/local/lib/python2.7/dist-packages/savanna',
-      require => Package['python-pip'],
+    package { 'savanna':
+      ensure   => installed,
+      provider => pip,
+      source   => $savanna::params::development_build_url,
+      require  => Package['python-pip'],
     }
   } else {
     package { 'savanna':
