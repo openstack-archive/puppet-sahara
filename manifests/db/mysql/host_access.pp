@@ -14,10 +14,10 @@
 #    under the License.
 
 #
-# Used to grant access to the savanna mysql DB
+# Used to grant access to the sahara mysql DB
 #
 
-define savanna::db::mysql::host_access ($user, $password, $database) {
+define sahara::db::mysql::host_access ($user, $password, $database) {
   database_user { "${user}@${name}":
     password_hash => mysql_password($password),
     provider      => 'mysql',

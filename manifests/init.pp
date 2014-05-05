@@ -13,9 +13,9 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-# == Class: savanna
+# == Class: sahara
 #
-# Installs the savanna backend.
+# Installs the sahara backend.
 #
 # === Parameters
 #
@@ -29,15 +29,15 @@
 #
 # Here you should define a list of variables that this module would require.
 #
-# [*savanna_host*]
-# The host on which the savanna process (API) runs. Defaults to '127.0.0.1'
-# [*savanna_port*]
-# The port on which the savanna process (API) runs on. Defaults to 3836
+# [*sahara_host*]
+# The host on which the sahara process (API) runs. Defaults to '127.0.0.1'
+# [*sahara_port*]
+# The port on which the sahara process (API) runs on. Defaults to 3836
 # [*db_host*]
-# The host where the database is running. Savanna will use this to persist
+# The host where the database is running. Sahara will use this to persist
 # information about clusters. Defaults to '127.0.0.1'
-# [*savanna_db_name*]
-# [*savanna_db_password*]
+# [*sahara_db_name*]
+# [*sahara_db_password*]
 # [*keystone_auth_protocol*]
 # Defaults to 'http',
 # [*keystone_auth_host*]
@@ -45,24 +45,24 @@
 # [*keystone_auth_port*]
 # Defaults to '35357'
 # [*keystone_user*]
-# Defaults to 'savanna'
+# Defaults to 'sahara'
 # [*keystone_password*]
-# Defaults to 'savanna'
+# Defaults to 'sahara'
 # [*keystone_tenant*]
 # Defaults to undef
-# [*savanna_verbose*]
+# [*sahara_verbose*]
 # Defaults to false
-# [*savanna_debug*]
+# [*sahara_debug*]
 # Defaults to false
 # === Examples
 #
-# class{'savanna':
-#   savanna_host              => '127.0.0.1',
+# class{'sahara':
+#   sahara_host              => '127.0.0.1',
 #   db_host                   => '127.0.0.1',
-#   savanna_db_password       => 'savanna',
+#   sahara_db_password       => 'sahara',
 #   keystone_auth_host        => '127.0.0.1',
 #   keystone_password         => 'admin',
-#   savanna_verbose           => True,
+#   sahara_verbose           => True,
 #}
 #
 # === Authors
@@ -76,24 +76,24 @@
 # - use a puppet type for configuration file
 # - clean up documentation
 
-class savanna (
-  $savanna_host           = '127.0.0.1',
-  $savanna_port           = '8386',
-  $savanna_verbose        = false,
-  $savanna_debug          = false,
+class sahara (
+  $sahara_host           = '127.0.0.1',
+  $sahara_port           = '8386',
+  $sahara_verbose        = false,
+  $sahara_debug          = false,
   # db
   $db_host                = '127.0.0.1',
-  $savanna_db_name        = 'savanna',
-  $savanna_db_user        = 'savanna',
-  $savanna_db_password    = 'savanna',
+  $sahara_db_name        = 'sahara',
+  $sahara_db_user        = 'sahara',
+  $sahara_db_password    = 'sahara',
   # keystone
   $keystone_auth_protocol = 'http',
   $keystone_auth_host     = '127.0.0.1',
   $keystone_auth_port     = '35357',
-  $keystone_user          = 'savanna',
-  $keystone_password      = 'savanna',
+  $keystone_user          = 'sahara',
+  $keystone_password      = 'sahara',
   $keystone_tenant        = undef,) {
-  include savanna::params
+  include sahara::params
 
   # move keystone and db classes here?
 
@@ -103,7 +103,7 @@ class savanna (
     $int_keystone_tenant = $keystone_tenant
   }
 
-  class { '::savanna::install':
+  class { '::sahara::install':
   } ->
-  class { '::savanna::service': }
+  class { '::sahara::service': }
 }

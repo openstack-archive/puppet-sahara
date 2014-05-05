@@ -14,17 +14,17 @@
 #    under the License.
 
 #
-# Used to create the savanna db
+# Used to create the sahara db
 #
 
-class savanna::db::mysql (
-  $password      = 'savanna',
-  $dbname        = 'savanna',
-  $user          = 'savanna',
+class sahara::db::mysql (
+  $password      = 'sahara',
+  $dbname        = 'sahara',
+  $user          = 'sahara',
   $host          = '127.0.0.1',
   $allowed_hosts = undef, # ['127.0.0.1'],
   $charset       = 'latin1',) {
-  Class['mysql::server'] -> Class['savanna::db::mysql']
+  Class['mysql::server'] -> Class['sahara::db::mysql']
 
   require mysql::python
 
@@ -44,7 +44,7 @@ class savanna::db::mysql (
   }
 
   if $real_allowed_hosts {
-    savanna::db::mysql::host_access { $real_allowed_hosts:
+    sahara::db::mysql::host_access { $real_allowed_hosts:
       user     => $user,
       password => $password,
       database => $dbname,

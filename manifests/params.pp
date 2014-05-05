@@ -13,22 +13,22 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-class savanna::params {
+class sahara::params {
   $sys_rundir = '/var/run'
-  $savanna_service = 'savanna-api'
-  $savanna_logdir = '/var/log/savanna'
-  $savanna_rundir = '/var/run/savanna'
-  $savanna_lockdir = '/var/lock/savanna'
-  $savanna_conf_file = '/etc/savanna/savanna.conf'
-  $savanna_syslog = false
-  $savanna_usefips = false
-  $savanna_node_domain = 'novalocal'
+  $sahara_service = 'sahara-api'
+  $sahara_logdir = '/var/log/sahara'
+  $sahara_rundir = '/var/run/sahara'
+  $sahara_lockdir = '/var/lock/sahara'
+  $sahara_conf_file = '/etc/sahara/sahara.conf'
+  $sahara_syslog = false
+  $sahara_usefips = false
+  $sahara_node_domain = 'novalocal'
   # installs source version from github builds
   $development = false
   $development_build_url =
-    'http://tarballs.openstack.org/savanna/savanna-master.tar.gz'
+    'http://tarballs.openstack.org/sahara/sahara-master.tar.gz'
   $development_dashboard_build_url =
-  'http://tarballs.openstack.org/savanna-dashboard/savanna-dashboard-master.tar.gz'
+  'http://tarballs.openstack.org/sahara-dashboard/sahara-dashboard-master.tar.gz'
 
   # these two paths are OS specific - on redhat they're diff
   $horizon_settings =

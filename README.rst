@@ -1,1 +1,1 @@
-This repo will contain puppet manifests for Savanna
+This repo will contain puppet manifests for Sahara

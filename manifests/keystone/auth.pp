@@ -14,13 +14,13 @@
 #    under the License.
 
 #
-# Used to setup the savanna keystone user
+# Used to setup the sahara keystone user
 #
 
-class savanna::keystone::auth (
-  $password = 'savanna',
-  $auth_name = 'savanna',
-  $email = 'savanna@localhost',
+class sahara::keystone::auth (
+  $password = 'sahara',
+  $auth_name = 'sahara',
+  $email = 'sahara@localhost',
   $tenant = 'services',
   $configure_endpoint = true,
   $service_type = 'mapreduce',
@@ -35,7 +35,7 @@ class savanna::keystone::auth (
   ) {
 
   Keystone_user_role["${auth_name}@${tenant}"] ~>
-    Service <| name == 'savanna-api' |>
+    Service <| name == 'sahara-api' |>
 
   if !$public_port {
     $real_public_port = $port
@@ -58,7 +58,7 @@ class savanna::keystone::auth (
   keystone_service { $auth_name:
     ensure      => present,
     type        => $service_type,
-    description => 'Savanna MapReduce Service',
+    description => 'Sahara MapReduce Service',
   }
 
   if $configure_endpoint {

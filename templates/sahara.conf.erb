@@ -1,18 +1,18 @@
 [DEFAULT]
 
 #
-# Options defined in savanna.config
+# Options defined in sahara.config
 #
 
 # set host (string value)
-host=<%= @savanna_host %>
+host=<%= @sahara_host %>
 
 # set port (integer value)
-port=<%= @savanna_port %>
+port=<%= @sahara_port %>
 
 
 #
-# Options defined in savanna.main
+# Options defined in sahara.main
 #
 
 # Protocol used to access OpenStack Identity service (string
@@ -36,22 +36,22 @@ os_admin_password=<%= @keystone_password %>
 
 # Name of tenant where the user is admin (string value)
 
-os_admin_tenant_name=<%= scope.lookupvar("savanna::keystone::auth::tenant") %>
+os_admin_tenant_name=<%= scope.lookupvar("sahara::keystone::auth::tenant") %>
 
 
 #
-# Options defined in savanna.openstack.common.db.sqlalchemy.session
+# Options defined in sahara.openstack.common.db.sqlalchemy.session
 #
 
 # the filename to use with sqlite (string value)
-#sqlite_db=savanna.sqlite
+#sqlite_db=sahara.sqlite
 
 # If true, use synchronous mode for sqlite (boolean value)
 #sqlite_synchronous=true
 
 
 #
-# Options defined in savanna.openstack.common.lockutils
+# Options defined in sahara.openstack.common.lockutils
 #
 
 # Whether to disable inter-process locks (boolean value)
@@ -59,20 +59,20 @@ os_admin_tenant_name=<%= scope.lookupvar("savanna::keystone::auth::tenant") %>
 
 # Directory to use for lock files. Default to a temp directory
 # (string value)
-lock_path=<%= scope.lookupvar("savanna::params::savanna_lockdir") %>
+lock_path=<%= scope.lookupvar("sahara::params::sahara_lockdir") %>
 
 
 #
-# Options defined in savanna.openstack.common.log
+# Options defined in sahara.openstack.common.log
 #
 
 # Print debugging output (set logging level to DEBUG instead
 # of default WARNING level). (boolean value)
-debug=<%= @savanna_debug %>
+debug=<%= @sahara_debug %>
 
 # Print more verbose output (set logging level to INFO instead
 # of default WARNING level). (boolean value)
-verbose=<%= @savanna_verbose %>
+verbose=<%= @sahara_verbose %>
 
 # Log output to standard error (boolean value)
 #use_stderr=true
@@ -130,21 +130,21 @@ verbose=<%= @savanna_verbose %>
 
 # (Optional) Name of log file to output to. If no default is
 # set, logging will go to stdout. (string value)
-log_file=<%= scope.lookupvar("savanna::params::savanna_logdir") %>/savanna.log
+log_file=<%= scope.lookupvar("sahara::params::sahara_logdir") %>/sahara.log
 
 # (Optional) The base directory used for relative --log-file
 # paths (string value)
-# log_dir=<%= scope.lookupvar("savanna::params::savanna_logdir") %>
+# log_dir=<%= scope.lookupvar("sahara::params::sahara_logdir") %>
 
 # Use syslog for logging. (boolean value)
-use_syslog=<%= scope.lookupvar("savanna::params::savanna_syslog") %>
+use_syslog=<%= scope.lookupvar("sahara::params::sahara_syslog") %>
 
 # syslog facility to receive log lines (string value)
 #syslog_log_facility=LOG_USER
 
 
 #
-# Options defined in savanna.openstack.common.notifier.api
+# Options defined in sahara.openstack.common.notifier.api
 #
 
 # Driver or drivers to handle sending notifications (multi
@@ -161,50 +161,50 @@ use_syslog=<%= scope.lookupvar("savanna::params::savanna_syslog") %>
 
 
 #
-# Options defined in savanna.plugins.base
+# Options defined in sahara.plugins.base
 #
 
 # TODO(dizz): parameterise the following!
-# List of plugins to be loaded. Savanna preserves the order of
+# List of plugins to be loaded. Sahara preserves the order of
 # the list when returning it. (list value) - vanilla, hdp
 plugins=vanilla
 
 [plugin:vanilla]
-plugin_class=savanna.plugins.vanilla.plugin:VanillaProvider
+plugin_class=sahara.plugins.vanilla.plugin:VanillaProvider
 
 #[plugin:hdp]
-#plugin_class=savanna.plugins.hdp.plugin:AmbariPlugin
+#plugin_class=sahara.plugins.hdp.plugin:AmbariPlugin
 
 #
-# Options defined in savanna.service.networks
+# Options defined in sahara.service.networks
 #
 
-# When set to false, Savanna uses only internal IP of VMs.
-# When set to true, Savanna expects OpenStack to auto-assign
+# When set to false, Sahara uses only internal IP of VMs.
+# When set to true, Sahara expects OpenStack to auto-assign
 # floating IPs to cluster nodes. Internal IPs will be used for
 # inter-cluster communication, while floating ones will be
-# used by Savanna to configure nodes. Also floating IPs will
+# used by Sahara to configure nodes. Also floating IPs will
 # be exposed in service URLs. (boolean value)
-use_floating_ips=<%= scope.lookupvar("savanna::params::savanna_usefips") %>
+use_floating_ips=<%= scope.lookupvar("sahara::params::sahara_usefips") %>
 
 # The suffix of the node's FQDN. In nova-network that is
 # dhcp_domain config parameter (string value)
-node_domain=<%= scope.lookupvar("savanna::params::savanna_node_domain") %>
+node_domain=<%= scope.lookupvar("sahara::params::sahara_node_domain") %>
 
 
 [database]
 
 #
-# Options defined in savanna.db.migration.cli
+# Options defined in sahara.db.migration.cli
 #
 
 # URL to database (string value)
-# connection=sqlite:////tmp/savanna-server.db
-connection=mysql://<%= @savanna_db_user %>:<%= @savanna_db_password %>@<%= @db_host %>/<%= @savanna_db_name %>
+# connection=sqlite:////tmp/sahara-server.db
+connection=mysql://<%= @sahara_db_user %>:<%= @sahara_db_password %>@<%= @db_host %>/<%= @sahara_db_name %>
 
 
 #
-# Options defined in savanna.openstack.common.db.api
+# Options defined in sahara.openstack.common.db.api
 #
 
 # The backend to use for db (string value)
@@ -216,12 +216,12 @@ connection=mysql://<%= @savanna_db_user %>:<%= @savanna_db_password %>@<%= @db_h
 
 
 #
-# Options defined in savanna.openstack.common.db.sqlalchemy.session
+# Options defined in sahara.openstack.common.db.sqlalchemy.session
 #
 
 # The SQLAlchemy connection string used to connect to the
 # database (string value)
-#connection=sqlite:////savanna/openstack/common/db/$sqlite_db
+#connection=sqlite:////sahara/openstack/common/db/$sqlite_db
 
 # The SQLAlchemy connection string used to connect to the
 # slave database (string value)

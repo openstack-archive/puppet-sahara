@@ -13,8 +13,8 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-class savanna::service ($enable = true,) {
-  service { 'savanna-api':
+class sahara::service ($enable = true,) {
+  service { 'sahara-api':
     ensure     => running,
     enable     => $enable,
     hasrestart => true,

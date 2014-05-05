@@ -14,16 +14,16 @@
 #    under the License.
 
 #
-# Used to install savanna's horizon component
+# Used to install sahara's horizon component
 #
 
-class savanna::dashboard (
-  $savanna_host = '127.0.0.1',
-  $savanna_port = '8386',
+class sahara::dashboard (
+  $sahara_host = '127.0.0.1',
+  $sahara_port = '8386',
   $use_neutron = false,
   ) {
 
-  include savanna::params
+  include sahara::params
 
   if use_neutron {
     $neutron = 'True'
@@ -35,48 +35,48 @@ class savanna::dashboard (
     package { 'python-pip': ensure => latest, }
   }
 
-  if $savanna::params::development {
-    info('Installing the developement version of savanna dashboard')
+  if $sahara::params::development {
+    info('Installing the developement version of sahara dashboard')
 
-    package { 'savanna-dashboard':
+    package { 'sahara-dashboard':
       ensure   => installed,
       provider => pip,
-      source   => $savanna::params::development_dashboard_build_url,
+      source   => $sahara::params::development_dashboard_build_url,
       require  => Package['python-pip'],
     }
   } else {
-    package { 'savanna-dashboard':
+    package { 'sahara-dashboard':
       ensure   => installed,
       provider => pip,
       require  => Package['python-pip'],
     }
   }
 
-  exec { 'savanna-horizon-config':
-    command => "echo \"HORIZON_CONFIG['dashboards'] += ('savanna',)\" >> ${savanna::params::horizon_settings}",
+  exec { 'sahara-horizon-config':
+    command => "echo \"HORIZON_CONFIG['dashboards'] += ('sahara',)\" >> ${sahara::params::horizon_settings}",
     path    => '/usr/bin:/usr/sbin:/bin:/usr/local/bin',
-    unless  => "grep \"HORIZON_CONFIG\['dashboards'\] +=\" ${savanna::params::horizon_settings}",
-    require => Package['savanna-dashboard'],
+    unless  => "grep \"HORIZON_CONFIG\['dashboards'\] +=\" ${sahara::params::horizon_settings}",
+    require => Package['sahara-dashboard'],
   }
 
-  exec { 'savanna-installed-apps':
-    command => "echo \"INSTALLED_APPS += ('savannadashboard',)\" >> ${savanna::params::horizon_settings}",
+  exec { 'sahara-installed-apps':
+    command => "echo \"INSTALLED_APPS += ('saharadashboard',)\" >> ${sahara::params::horizon_settings}",
     path    => '/usr/bin:/usr/sbin:/bin:/usr/local/bin',
-    unless  => "grep \"INSTALLED_APPS +=\" ${savanna::params::horizon_settings}",
-    require => Package['savanna-dashboard'],
+    unless  => "grep \"INSTALLED_APPS +=\" ${sahara::params::horizon_settings}",
+    require => Package['sahara-dashboard'],
   }
 
-  exec { 'savanna-use-neutron':
-    command => "echo 'SAVANNA_USE_NEUTRON = ${neutron}' >> ${savanna::params::horizon_local_settings}",
+  exec { 'sahara-use-neutron':
+    command => "echo 'SAHARA_USE_NEUTRON = ${neutron}' >> ${sahara::params::horizon_local_settings}",
     path    => '/usr/bin:/usr/sbin:/bin:/usr/local/bin',
-    unless  => "grep \"SAVANNA_USE_NEUTRON\" ${savanna::params::horizon_local_settings}",
-    require => Package['savanna-dashboard'],
+    unless  => "grep \"SAHARA_USE_NEUTRON\" ${sahara::params::horizon_local_settings}",
+    require => Package['sahara-dashboard'],
   }
 
-  exec { 'savanna-url':
-    command => "echo \"SAVANNA_URL = 'http://${savanna_host}:${savanna_port}/v1.1'\" >> ${savanna::params::horizon_local_settings}",
+  exec { 'sahara-url':
+    command => "echo \"SAHARA_URL = 'http://${sahara_host}:${sahara_port}/v1.1'\" >> ${sahara::params::horizon_local_settings}",
     path    => '/usr/bin:/usr/sbin:/bin:/usr/local/bin',
-    unless  => "grep \"SAVANNA_URL\" ${savanna::params::horizon_local_settings}",
-    require => Package['savanna-dashboard'],
+    unless  => "grep \"SAHARA_URL\" ${sahara::params::horizon_local_settings}",
+    require => Package['sahara-dashboard'],
   }
 }

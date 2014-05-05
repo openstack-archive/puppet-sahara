@@ -13,14 +13,14 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-name    'puppet-savanna'
+name    'puppet-sahara'
 version '0.0.1'
-source 'https://github.com/stackforge/puppet-savanna'
+source 'https://github.com/stackforge/puppet-sahara'
 author 'andy@edmonds.be'
 license 'Apache License, Version 2.0'
-summary 'Installs the savanna backend'
-description 'Installs the savanna backend and can also install the savanna UI in OpenStack horizon'
-project_page 'https://github.com/stackforge/puppet-savanna'
+summary 'Installs the sahara backend'
+description 'Installs the sahara backend and can also install the sahara UI in OpenStack horizon'
+project_page 'https://github.com/stackforge/puppet-sahara'
 
 ## Add dependencies, if any:
 # dependency 'username/name', '>= 1.2.0'
