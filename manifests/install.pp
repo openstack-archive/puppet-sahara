@@ -29,10 +29,25 @@ class sahara::install {
     }
   }
 
-  if !defined(Package['python-dev']) {
-    package { 'python-dev':
-      ensure  => latest,
-      require => Package['python-pip']
+  if $::osfamily == 'Debian' {
+    if !defined(Package['python-dev']) {
+      package { 'python-dev':
+        ensure  => latest,
+        require => Package['python-pip']
+      }
+    }
+  } elsif $::osfamily == 'Redhat' {
+    if !defined(Package['python-devel']) {
+      package { 'python-devel':
+        ensure  => latest,
+        require => Package['python-pip']
+      }
+    }
+    if !defined(Package['python-jinja2']) {
+      package { 'python-jinja2':
+        ensure  => latest,
+        require => Package['python-pip']
+      }
     }
   }
 
@@ -116,9 +131,33 @@ class sahara::install {
       group   => 'root',
       notify  => Service['sahara-api'],
     }
+  } elsif $::osfamily == 'Redhat' {
+      file { '/etc/init.d/sahara-api':
+      ensure  => file,
+      path    => '/etc/init.d/sahara-api',
+      content => template('sahara/sahara-api-redhat.erb'),
+      mode    => '0750',
+      owner   => 'root',
+      group   => 'root',
+    } ->
+    file { '/etc/sahara/sahara-api.conf':
+      ensure  => file,
+      path    => '/etc/init/sahara-api.conf',
+      content => template('sahara/sahara-api.conf.erb'),
+      mode    => '0750',
+      owner   => 'root',
+      group   => 'root',
+      notify  => Service['sahara-api'],
+    }  ->
+    file { '/var/run/sahara':
+      ensure => 'directory',
+      owner  => 'sahara',
+      group  => 'root',
+      mode   => '0750',
+    }
   } else {
     error('Sahara cannot be installed on this operating system.
           It does not have the supported initscripts. There is only
-          support for Debian-based systems.')
+          support for Debian and Red Hat-based systems.')
   }
 }

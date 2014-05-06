@@ -14,9 +14,20 @@
 #    under the License.
 
 #
+# workaround for desire of python-mysqldb on RHEL
+#
+class mysql::bindings::python {
+  include mysql::params
+  package { 'python-mysqldb':
+    ensure   => $mysql::params::python_package_ensure,
+    name     => $mysql::params::python_package_name,
+    provider => $mysql::params::python_package_provider,
+  }
+}
+
+#
 # Used to create the sahara db
 #
-
 class sahara::db::mysql (
   $password      = 'sahara',
   $dbname        = 'sahara',
@@ -26,14 +37,14 @@ class sahara::db::mysql (
   $charset       = 'latin1',) {
   Class['mysql::server'] -> Class['sahara::db::mysql']
 
-  require mysql::python
+  require mysql::server
 
   mysql::db { $dbname:
     user     => $user,
     password => $password,
     host     => $host,
     charset  => $charset,
-    require  => Class['mysql::config'],
+    require  => Class['mysql::server::config'],
   }
 
   # Check allowed_hosts to avoid duplicate resource declarations

@@ -58,7 +58,7 @@ class sahara::keystone::auth (
   keystone_service { $auth_name:
     ensure      => present,
     type        => $service_type,
-    description => 'Sahara MapReduce Service',
+    description => 'Openstack Data Processing',
   }
 
   if $configure_endpoint {
