@@ -30,6 +30,10 @@ class sahara::params {
   $development_dashboard_build_url =
   'http://tarballs.openstack.org/sahara-dashboard/sahara-dashboard-master.tar.gz'
 
+  $rpm_install = false
+  $rpm_package_name_service = 'openstack-sahara'
+  $rpm_package_name_dashboard = 'python-django-sahara'
+
   # these two paths are OS specific - on redhat they're diff
   $horizon_settings =
     '/usr/share/openstack-dashboard/openstack_dashboard/settings.py'

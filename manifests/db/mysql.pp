@@ -34,7 +34,7 @@ class sahara::db::mysql (
   $user          = 'sahara',
   $host          = '127.0.0.1',
   $allowed_hosts = undef, # ['127.0.0.1'],
-  $charset       = 'latin1',) {
+  $charset       = 'utf8',) {
   Class['mysql::server'] -> Class['sahara::db::mysql']
 
   require mysql::server

@@ -61,8 +61,13 @@ class sahara::install {
       source   => $sahara::params::development_build_url,
       require  => Package['python-pip'],
     }
+  } elsif $sahara::params::rpm_install {
+    info('Installing RPM package of Sahara')
+    package { $sahara::params::rpm_package_name_service:
+      ensure  => installed,
+    }
   } else {
-    package { 'sahara':
+      package { 'sahara':
       ensure   => installed,
       provider => pip,
       require  => Package['python-pip'],
@@ -159,5 +164,10 @@ class sahara::install {
     error('Sahara cannot be installed on this operating system.
           It does not have the supported initscripts. There is only
           support for Debian and Red Hat-based systems.')
+  }
+
+  info('Creating database schema, latest version')
+  exec { 'sahara-db-manage':
+    command => '/usr/bin/sahara-db-manage upgrade head'
   }
 }

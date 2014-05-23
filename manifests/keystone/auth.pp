@@ -23,7 +23,7 @@ class sahara::keystone::auth (
   $email = 'sahara@localhost',
   $tenant = 'services',
   $configure_endpoint = true,
-  $service_type = 'mapreduce',
+  $service_type = 'data_processing',
   $public_address = '127.0.0.1',
   $admin_address = '127.0.0.1',
   $internal_address = '127.0.0.1',

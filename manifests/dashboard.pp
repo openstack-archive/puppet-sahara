@@ -44,39 +44,40 @@ class sahara::dashboard (
       source   => $sahara::params::development_dashboard_build_url,
       require  => Package['python-pip'],
     }
+  } elsif $sahara::params::rpm_install {
+      info('Installing RPM package of Sahara-dashboard')
+      package { $sahara::params::rpm_package_name_dashboard:
+        ensure  => installed,
+      }
   } else {
-    package { 'sahara-dashboard':
-      ensure   => installed,
-      provider => pip,
-      require  => Package['python-pip'],
-    }
+      package { 'sahara-dashboard':
+        ensure   => installed,
+        provider => pip,
+        require  => Package['python-pip'],
+      }
   }
 
   exec { 'sahara-horizon-config':
     command => "echo \"HORIZON_CONFIG['dashboards'] += ('sahara',)\" >> ${sahara::params::horizon_settings}",
     path    => '/usr/bin:/usr/sbin:/bin:/usr/local/bin',
     unless  => "grep \"HORIZON_CONFIG\['dashboards'\] +=\" ${sahara::params::horizon_settings}",
-    require => Package['sahara-dashboard'],
   }
 
   exec { 'sahara-installed-apps':
     command => "echo \"INSTALLED_APPS += ('saharadashboard',)\" >> ${sahara::params::horizon_settings}",
     path    => '/usr/bin:/usr/sbin:/bin:/usr/local/bin',
     unless  => "grep \"INSTALLED_APPS +=\" ${sahara::params::horizon_settings}",
-    require => Package['sahara-dashboard'],
   }
 
   exec { 'sahara-use-neutron':
     command => "echo 'SAHARA_USE_NEUTRON = ${neutron}' >> ${sahara::params::horizon_local_settings}",
     path    => '/usr/bin:/usr/sbin:/bin:/usr/local/bin',
     unless  => "grep \"SAHARA_USE_NEUTRON\" ${sahara::params::horizon_local_settings}",
-    require => Package['sahara-dashboard'],
   }
 
   exec { 'sahara-url':
     command => "echo \"SAHARA_URL = 'http://${sahara_host}:${sahara_port}/v1.1'\" >> ${sahara::params::horizon_local_settings}",
     path    => '/usr/bin:/usr/sbin:/bin:/usr/local/bin',
     unless  => "grep \"SAHARA_URL\" ${sahara::params::horizon_local_settings}",
-    require => Package['sahara-dashboard'],
   }
 }

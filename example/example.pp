@@ -20,5 +20,4 @@ class { 'sahara':
 class { 'sahara::dashboard':
   sahara_host => '127.0.0.1',
   use_neutron => true,
-  require     => Class['Openstack::Horizon']
 }
