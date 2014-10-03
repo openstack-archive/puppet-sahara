@@ -1,13 +1,33 @@
 {
-  "name": "puppet-sahara",
-  "version": "0.0.1",
-  "summary": "Installs the sahara backend",
-  "author": "andy@edmonds.be",
-  "description": "Installs the sahara backend and can also install the sahara UI in OpenStack horizon",
-  "dependencies": [],
-  "types": [],
-  "checksums": {},
-  "source": "https://github.com/stackforge/puppet-sahara",
-  "project_page": "https://github.com/stackforge/puppet-sahara",
-  "license": "Apache License, Version 2.0"
+  "name": "stackforge-sahara",
+  "version": "4.0.0",
+  "author": "StackForge Contributors",
+  "summary": "Puppet module for OpenStack Sahara",
+  "license": "Apache License 2.0",
+  "source": "git://github.com/stackforge/puppet-sahara.git",
+  "project_page": "https://launchpad.net/puppet-sahara",
+  "issues_url": "https://bugs.launchpad.net/puppet-sahara",
+  "requirements": [
+    { "name": "pe","version_requirement": "3.2.x" },
+    { "name": "puppet","version_requirement": "3.x" }
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": ["7"]
+    },
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": ["6","7"]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": ["14.04"]
+    }
+  ],
+  "description": "Installs and configures OpenStack Sahara (Data Processing).",
+  "dependencies": [
+    { "name": "puppetlabs/stdlib", "version_requirement": ">=4.0.0 <5.0.0" },
+    { "name": "stackforge/openstacklib", "version_requirement": ">=5.0.0" }
+  ]
 }
