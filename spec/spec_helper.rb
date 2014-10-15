@@ -12,21 +12,12 @@
 #    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 #    License for the specific language governing permissions and limitations
 #    under the License.
+#
 
-dir = File.expand_path(File.dirname(__FILE__))
-$LOAD_PATH.unshift File.join(dir, 'lib')
+require 'puppetlabs_spec_helper/module_spec_helper'
 
-require 'mocha'
-require 'puppet'
-require 'rspec'
-require 'spec/autorun'
-
-Spec::Runner.configure do |config|
-    config.mock_with :mocha
+RSpec.configure do |c|
+  c.alias_it_should_behave_like_to :it_configures, 'configures'
+  c.alias_it_should_behave_like_to :it_raises, 'raises'
 end
 
-# We need this because the RAL uses 'should' as a method.  This
-# allows us the same behaviour but with a different method name.
-class Object
-    alias :must :should
-end
