@@ -1,6 +1,6 @@
 {
   "name": "stackforge-sahara",
-  "version": "4.0.0",
+  "version": "5.0.0",
   "author": "StackForge Contributors",
   "summary": "Puppet module for OpenStack Sahara",
   "license": "Apache License 2.0",
@@ -8,7 +8,7 @@
   "project_page": "https://launchpad.net/puppet-sahara",
   "issues_url": "https://bugs.launchpad.net/puppet-sahara",
   "requirements": [
-    { "name": "pe","version_requirement": "3.2.x" },
+    { "name": "pe","version_requirement": "3.x" },
     { "name": "puppet","version_requirement": "3.x" }
   ],
   "operatingsystem_support": [
@@ -18,7 +18,7 @@
     },
     {
       "operatingsystem": "RedHat",
-      "operatingsystemrelease": ["6","7"]
+      "operatingsystemrelease": ["6.5","7"]
     },
     {
       "operatingsystem": "Ubuntu",
