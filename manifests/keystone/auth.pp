@@ -43,31 +43,19 @@ class sahara::keystone::auth (
     $real_public_port = $public_port
   }
 
-  keystone_user { $auth_name:
-    ensure   => present,
-    password => $password,
-    email    => $email,
-    tenant   => $tenant,
+  keystone::resource::service_identity { $auth_name:
+    configure_user      => true,
+    configure_user_role => true,
+    configure_endpoint  => $configure_endpoint,
+    service_type        => $service_type,
+    service_description => 'Openstack Data Processing',
+    region              => $region,
+    password            => $password,
+    email               => $email,
+    tenant              => $tenant,
+    public_url          => "${public_protocol}://${public_address}:${real_public_port}/",
+    internal_url        => "${internal_protocol}://${internal_address}:${port}/",
+    admin_url           => "${internal_protocol}://${admin_address}:${port}/",
   }
 
-  keystone_user_role { "${auth_name}@${tenant}":
-    ensure => present,
-    roles  => 'admin',
-  }
-
-  keystone_service { $auth_name:
-    ensure      => present,
-    type        => $service_type,
-    description => 'Openstack Data Processing',
-  }
-
-  if $configure_endpoint {
-    keystone_endpoint { "${region}/${auth_name}":
-      ensure       => present,
-      public_url   =>
-        "${public_protocol}://${public_address}:${real_public_port}/",
-      internal_url => "${internal_protocol}://${internal_address}:${port}/",
-      admin_url    => "${internal_protocol}://${admin_address}:${port}/",
-    }
-  }
 }
