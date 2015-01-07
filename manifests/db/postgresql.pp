@@ -1,4 +1,4 @@
-# == Class: sahara::db:postgresql
+# == Class: sahara::db::postgresql
 #
 # The sahara::db::postgresql creates a PostgreSQL database for sahara.
 # It must be used on the PostgreSQL server.
@@ -6,8 +6,7 @@
 # === Parameters
 #
 # [*password*]
-#   (Mandatory) Password to connect to the database.
-#   Defaults to 'false'.
+#   (Required) Password to connect to the database.
 #
 # [*dbname*]
 #   (Optional) Name of the database.
@@ -17,20 +16,32 @@
 #   (Optional) User to connect to the database.
 #   Defaults to 'sahara'.
 #
-class sahara::db::postgresql (
+#  [*encoding*]
+#    (Optional) The charset to use for the database.
+#    Default to undef.
+#
+#  [*privileges*]
+#    (Optional) Privileges given to the database user.
+#    Default to 'ALL'
+#
+class sahara::db::postgresql(
   $password,
-  $dbname = 'sahara',
-  $user   = 'sahara',
+  $dbname     = 'sahara',
+  $user       = 'sahara',
+  $encoding   = undef,
+  $privileges = 'ALL',
 ) {
 
-  require postgresql::lib::python
-  validate_string($password)
+  Class['sahara::db::postgresql'] -> Service<| title == 'sahara' |>
 
-  postgresql::server::db { $dbname:
-    user     => $user,
-    password => postgresql_password($user, $password),
+  ::openstacklib::db::postgresql { 'sahara':
+    password_hash => postgresql_password($user, $password),
+    dbname        => $dbname,
+    user          => $user,
+    encoding      => $encoding,
+    privileges    => $privileges,
   }
 
-  PostgreSQL::Server::Db[$dbname] ~> Exec<| title == 'sahara-dbmanage' |>
-  Package['python-psycopg2'] -> Exec<| title == 'sahara-dbmanage' |>
+  ::Openstacklib::Db::Postgresql['sahara'] ~> Exec<| title == 'sahara-dbmanage' |>
+
 }
