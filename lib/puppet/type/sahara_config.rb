@@ -1,8 +1,8 @@
 Puppet::Type.newtype(:sahara_config) do
-
   ensurable
 
   newparam(:name, :namevar => true) do
+    desc 'Section/setting name to manage from sahara.conf'
     newvalues(/\S+\/\S+/)
   end
 
@@ -13,9 +13,8 @@ Puppet::Type.newtype(:sahara_config) do
       value.capitalize! if value =~ /^(true|false)$/i
       value
     end
-    newvalues(/^[\S ]*$/)
 
-    def is_to_s( currentvalue )
+    def is_to_s(currentvalue)
       if resource.secret?
         return '[old secret redacted]'
       else
@@ -23,7 +22,7 @@ Puppet::Type.newtype(:sahara_config) do
       end
     end
 
-    def should_to_s( newvalue )
+    def should_to_s(newvalue)
       if resource.secret?
         return '[new secret redacted]'
       else
@@ -33,7 +32,7 @@ Puppet::Type.newtype(:sahara_config) do
   end
 
   newparam(:secret, :boolean => true) do
-    desc 'Whether to hide the value from Puppet logs. Defaults to `false`.'
+    desc 'Whether to hide the value from Puppet logs.  Defaults to `false`.'
 
     newvalues(:true, :false)
 

@@ -1,64 +1,58 @@
-# Copyright 2013 Zuercher Hochschule fuer Angewandte Wissenschaften
-# All Rights Reserved.
+# == Class: sahara::db::mysql
 #
-#    Licensed under the Apache License, Version 2.0 (the "License"); you may
-#    not use this file except in compliance with the License. You may obtain
-#    a copy of the License at
+# The sahara::db::mysql class creates a MySQL database for sahara.
+# It must be used on the MySQL server.
 #
-#         http://www.apache.org/licenses/LICENSE-2.0
+# === Parameters
 #
-#    Unless required by applicable law or agreed to in writing, software
-#    distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
-#    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
-#    License for the specific language governing permissions and limitations
-#    under the License.
-
+# [*password*]
+#   (Required) Password to connect to the database.
 #
-# workaround for desire of python-mysqldb on RHEL
+# [*dbname*]
+#   (Optional) Name of the database.
+#   Defaults to 'sahara'.
 #
-class mysql::bindings::python {
-  include mysql::params
-  package { 'python-mysqldb':
-    ensure   => $mysql::params::python_package_ensure,
-    name     => $mysql::params::python_package_name,
-    provider => $mysql::params::python_package_provider,
-  }
-}
-
+# [*user*]
+#   (Optional) User to connect to the database.
+#   Defaults to 'sahara'.
 #
-# Used to create the sahara db
+# [*host*]
+#   (Optional) The default source host user is allowed to connect from.
+#   Defaults to '127.0.0.1'
 #
-class sahara::db::mysql (
-  $password      = 'sahara',
+# [*allowed_hosts*]
+#   (Optional) Other hosts the user is allowed to connect from.
+#   Defaults to 'undef'.
+#
+# [*charset*]
+#   (Optional) The database charset.
+#   Defaults to 'utf8'.
+#
+# [*collate*]
+#   (Optional) Charset collate of sahara database.
+#    Defaults to 'utf8_unicode_ci'.
+#
+class sahara::db::mysql(
+  $password,
   $dbname        = 'sahara',
   $user          = 'sahara',
   $host          = '127.0.0.1',
-  $allowed_hosts = undef, # ['127.0.0.1'],
-  $charset       = 'utf8',) {
-  Class['mysql::server'] -> Class['sahara::db::mysql']
+  $allowed_hosts = undef,
+  $charset       = 'utf8',
+  $collate       = 'utf8_unicode_ci',
+) {
 
-  require mysql::server
+  validate_string($password)
 
-  mysql::db { $dbname:
-    user     => $user,
-    password => $password,
-    host     => $host,
-    charset  => $charset,
-    require  => Class['mysql::server::config'],
+  ::openstacklib::db::mysql{ 'sahara':
+    user          => $user,
+    password_hash => mysql_password($password),
+    dbname        => $dbname,
+    host          => $host,
+    charset       => $charset,
+    collate       => $collate,
+    allowed_hosts => $allowed_hosts,
   }
 
-  # Check allowed_hosts to avoid duplicate resource declarations
-  if is_array($allowed_hosts) and delete($allowed_hosts, $host) != [] {
-    $real_allowed_hosts = delete($allowed_hosts, $host)
-  } elsif is_string($allowed_hosts) and ($allowed_hosts != $host) {
-    $real_allowed_hosts = $allowed_hosts
-  }
-
-  if $real_allowed_hosts {
-    sahara::db::mysql::host_access { $real_allowed_hosts:
-      user     => $user,
-      password => $password,
-      database => $dbname,
-    }
-  }
+  ::Openstacklib::Db::Mysql['sahara'] ~> Exec<| title == 'sahara-dbmanage' |>
 }
