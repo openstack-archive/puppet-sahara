@@ -84,6 +84,7 @@ class sahara(
   $identity_url        = 'http://127.0.0.1:35357/',
 ) {
   include sahara::params
+  include sahara::policy
 
   file { '/etc/sahara/':
     ensure  => directory,
@@ -106,7 +107,10 @@ class sahara(
   }
 
   Package['sahara'] -> Sahara_config<||>
+  Package['sahara'] -> Class['sahara::policy']
+
   Package['sahara'] ~> Service['sahara']
+  Class['sahara::policy'] ~> Service['sahara']
 
   validate_re($database_connection, '(sqlite|mysql|postgresql):\/\/(\S+:\S+@\S+\/\S+)?')
 

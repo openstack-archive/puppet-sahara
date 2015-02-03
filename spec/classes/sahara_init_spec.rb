@@ -13,6 +13,7 @@ describe 'sahara' do
 
   shared_examples_for 'sahara' do
     it { should contain_class('sahara::params') }
+    it { should contain_class('sahara::policy') }
     it { should contain_class('mysql::bindings::python') }
     it { should contain_exec('sahara-dbmanage') }
   end
