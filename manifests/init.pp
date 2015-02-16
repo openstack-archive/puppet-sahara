@@ -24,6 +24,19 @@
 #   (Optional) Should the daemons log debug messages
 #   Defaults to 'false'.
 #
+# [*use_syslog*]
+#   Use syslog for logging.
+#   (Optional) Defaults to false.
+#
+# [*log_facility*]
+#   Syslog facility to receive log lines.
+#   (Optional) Defaults to LOG_USER.
+#
+# [*log_dir*]
+#   (optional) Directory where logs should be stored.
+#   If set to boolean false, it will not log to any directory.
+#   Defaults to '/var/log/sahara'
+#
 # [*service_host*]
 #   (Optional) Hostname for sahara to listen on
 #   Defaults to '0.0.0.0'.
@@ -72,6 +85,9 @@ class sahara(
   $package_ensure      = 'present',
   $verbose             = false,
   $debug               = false,
+  $use_syslog          = false,
+  $log_facility        = 'LOG_USER',
+  $log_dir             = '/var/log/sahara',
   $service_host        = '0.0.0.0',
   $service_port        = 8386,
   $use_neutron         = false,
@@ -152,6 +168,27 @@ class sahara(
       'keystone_authtoken/admin_password':
         value => $keystone_password,
         secret => true;
+    }
+  }
+
+  if $log_dir {
+    sahara_config {
+      'DEFAULT/log_dir': value => $log_dir;
+    }
+  } else {
+    sahara_config {
+      'DEFAULT/log_dir': ensure => absent;
+    }
+  }
+
+  if $use_syslog {
+    sahara_config {
+      'DEFAULT/use_syslog':           value => true;
+      'DEFAULT/syslog_log_facility':  value => $log_facility;
+    }
+  } else {
+    sahara_config {
+      'DEFAULT/use_syslog':           value => false;
     }
   }
 
