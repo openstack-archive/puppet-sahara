@@ -12,7 +12,7 @@ class sahara::client (
   $package_ensure = 'present'
 ) {
 
-  include sahara::params
+  include ::sahara::params
 
   package { 'python-saharaclient':
     ensure => $package_ensure,

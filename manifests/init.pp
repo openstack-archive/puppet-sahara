@@ -99,8 +99,8 @@ class sahara(
   $keystone_url        = 'http://127.0.0.1:5000/v2.0/',
   $identity_url        = 'http://127.0.0.1:35357/',
 ) {
-  include sahara::params
-  include sahara::policy
+  include ::sahara::params
+  include ::sahara::policy
 
   file { '/etc/sahara/':
     ensure  => directory,
