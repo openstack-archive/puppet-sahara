@@ -15,24 +15,24 @@ describe 'sahara::keystone::auth' do
         :tenant   => 'foobar' }
     end
 
-    it { should contain_keystone_user('sahara').with(
+    it { is_expected.to contain_keystone_user('sahara').with(
       :ensure   => 'present',
       :password => 'sahara_password',
       :tenant   => 'foobar'
     ) }
 
-    it { should contain_keystone_user_role('sahara@foobar').with(
+    it { is_expected.to contain_keystone_user_role('sahara@foobar').with(
       :ensure  => 'present',
       :roles   => 'admin'
     )}
 
-    it { should contain_keystone_service('sahara').with(
+    it { is_expected.to contain_keystone_service('sahara').with(
       :ensure      => 'present',
       :type        => 'data-processing',
       :description => 'Sahara Data Processing'
     ) }
 
-    it { should contain_keystone_endpoint('RegionOne/sahara').with(
+    it { is_expected.to contain_keystone_endpoint('RegionOne/sahara').with(
       :ensure       => 'present',
       :public_url   => "http://127.0.0.1:8386/v1.1/%(tenant_id)s",
       :admin_url    => "http://127.0.0.1:8386/v1.1/%(tenant_id)s",
@@ -62,7 +62,7 @@ describe 'sahara::keystone::auth' do
         :admin_address    => '10.10.10.12' }
     end
 
-    it { should contain_keystone_endpoint('RegionOne/sahara').with(
+    it { is_expected.to contain_keystone_endpoint('RegionOne/sahara').with(
       :ensure       => 'present',
       :public_url   => "https://10.10.10.10:80/v1.1/%(tenant_id)s",
       :internal_url => "http://10.10.10.11:81/v1.1/%(tenant_id)s",
@@ -76,9 +76,9 @@ describe 'sahara::keystone::auth' do
         :auth_name => 'saharay' }
     end
 
-    it { should contain_keystone_user('saharay') }
-    it { should contain_keystone_user_role('saharay@services') }
-    it { should contain_keystone_service('saharay') }
-    it { should contain_keystone_endpoint('RegionOne/saharay') }
+    it { is_expected.to contain_keystone_user('saharay') }
+    it { is_expected.to contain_keystone_user_role('saharay@services') }
+    it { is_expected.to contain_keystone_service('saharay') }
+    it { is_expected.to contain_keystone_endpoint('RegionOne/saharay') }
   end
 end

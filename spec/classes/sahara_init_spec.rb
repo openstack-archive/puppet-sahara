@@ -12,15 +12,15 @@ describe 'sahara' do
   end
 
   shared_examples_for 'sahara' do
-    it { should contain_class('sahara::params') }
-    it { should contain_class('sahara::policy') }
-    it { should contain_class('mysql::bindings::python') }
-    it { should contain_exec('sahara-dbmanage') }
+    it { is_expected.to contain_class('sahara::params') }
+    it { is_expected.to contain_class('sahara::policy') }
+    it { is_expected.to contain_class('mysql::bindings::python') }
+    it { is_expected.to contain_exec('sahara-dbmanage') }
   end
 
   shared_examples_for 'sahara logging' do
     context 'with syslog disabled' do
-      it { should contain_sahara_config('DEFAULT/use_syslog').with_value(false) }
+      it { is_expected.to contain_sahara_config('DEFAULT/use_syslog').with_value(false) }
     end
 
     context 'with syslog enabled' do
@@ -28,8 +28,8 @@ describe 'sahara' do
         { :use_syslog   => 'true' }
       end
 
-      it { should contain_sahara_config('DEFAULT/use_syslog').with_value(true) }
-      it { should contain_sahara_config('DEFAULT/syslog_log_facility').with_value('LOG_USER') }
+      it { is_expected.to contain_sahara_config('DEFAULT/use_syslog').with_value(true) }
+      it { is_expected.to contain_sahara_config('DEFAULT/syslog_log_facility').with_value('LOG_USER') }
     end
 
     context 'with syslog enabled and custom settings' do
@@ -40,15 +40,15 @@ describe 'sahara' do
         }
       end
 
-      it { should contain_sahara_config('DEFAULT/use_syslog').with_value(true) }
-      it { should contain_sahara_config('DEFAULT/syslog_log_facility').with_value('LOG_LOCAL0') }
+      it { is_expected.to contain_sahara_config('DEFAULT/use_syslog').with_value(true) }
+      it { is_expected.to contain_sahara_config('DEFAULT/syslog_log_facility').with_value('LOG_LOCAL0') }
     end
 
     context 'with log_dir disabled' do
       let :params do
         { :log_dir => false }
       end
-      it { should contain_sahara_config('DEFAULT/log_dir').with_ensure('absent') }
+      it { is_expected.to contain_sahara_config('DEFAULT/log_dir').with_ensure('absent') }
     end
 
   end

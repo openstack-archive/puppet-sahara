@@ -24,7 +24,7 @@ describe 'sahara::db::postgresql' do
         req_params
       end
 
-      it { should contain_postgresql__server__db('sahara').with(
+      it { is_expected.to contain_postgresql__server__db('sahara').with(
         :user     => 'sahara',
         :password => 'md59b1dd0cc439677764ef5a848112ef0ab'
       )}
@@ -47,7 +47,7 @@ describe 'sahara::db::postgresql' do
         req_params
       end
 
-      it { should contain_postgresql__server__db('sahara').with(
+      it { is_expected.to contain_postgresql__server__db('sahara').with(
         :user     => 'sahara',
         :password => 'md59b1dd0cc439677764ef5a848112ef0ab'
       )}

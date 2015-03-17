@@ -23,11 +23,11 @@ describe 'sahara::db::mysql' do
 
     context 'when omiting the required parameter password' do
       before { params.delete(:password) }
-      it { expect { should raise_error(Puppet::Error) } }
+      it { expect { is_expected.to raise_error(Puppet::Error) } }
     end
 
     it 'creates a mysql database' do
-      should contain_openstacklib__db__mysql('sahara').with(
+      is_expected.to contain_openstacklib__db__mysql('sahara').with(
         :user          => params[:user],
         :dbname        => params[:dbname],
         :password_hash => '*58C036CDA51D8E8BBBBF2F9EA5ABF111ADA444F0',
@@ -44,7 +44,7 @@ describe 'sahara::db::mysql' do
       end
 
       it {
-        should contain_openstacklib__db__mysql('sahara').with(
+        is_expected.to contain_openstacklib__db__mysql('sahara').with(
           :user          => params[:user],
           :dbname        => params[:dbname],
           :password_hash => '*58C036CDA51D8E8BBBBF2F9EA5ABF111ADA444F0',
@@ -62,7 +62,7 @@ describe 'sahara::db::mysql' do
       end
 
       it {
-        should contain_openstacklib__db__mysql('sahara').with(
+        is_expected.to contain_openstacklib__db__mysql('sahara').with(
           :user          => params[:user],
           :dbname        => params[:dbname],
           :password_hash => '*58C036CDA51D8E8BBBBF2F9EA5ABF111ADA444F0',
