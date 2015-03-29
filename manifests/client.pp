@@ -17,5 +17,6 @@ class sahara::client (
   package { 'python-saharaclient':
     ensure => $package_ensure,
     name   => $::sahara::params::client_package_name,
+    tag    => 'openstack',
   }
 }

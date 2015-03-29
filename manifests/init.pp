@@ -120,6 +120,7 @@ class sahara(
   package { 'sahara':
     ensure => $package_ensure,
     name   => $::sahara::params::package_name,
+    tag    => 'openstack',
   }
 
   Package['sahara'] -> Sahara_config<||>
