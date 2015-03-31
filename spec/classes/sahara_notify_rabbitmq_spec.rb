@@ -57,6 +57,18 @@ describe 'sahara::notify::rabbitmq' do
     it { is_expected.to contain_sahara_config('DEFAULT/kombu_ssl_version').with_value('TLSv1') }
   end
 
+  describe 'with rabbit ssl cert parameters' do
+    let :params do
+      {
+        :rabbit_password    => 'pass',
+        :rabbit_use_ssl     => 'true',
+      }
+    end
+
+    it { is_expected.to contain_sahara_config('DEFAULT/rabbit_use_ssl').with_value('true') }
+    it { is_expected.to contain_sahara_config('DEFAULT/kombu_ssl_version').with_value('TLSv1') }
+  end
+
   describe 'with rabbit ssl disabled' do
     let :params do
       {

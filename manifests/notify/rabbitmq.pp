@@ -105,29 +105,37 @@ class sahara::notify::rabbitmq(
   $kombu_reconnect_delay = '1.0',
 ) {
   if $rabbit_use_ssl {
-    if !$kombu_ssl_keyfile {
-      fail('kombu_ssl_keyfile must be set when using SSL in rabbit')
+
+    if $kombu_ssl_ca_certs {
+      sahara_config { 'DEFAULT/kombu_ssl_ca_certs': value => $kombu_ssl_ca_certs; }
+    } else {
+      sahara_config { 'DEFAULT/kombu_ssl_ca_certs': ensure => absent; }
     }
-    if !$kombu_ssl_certfile {
-      fail('kombu_ssl_certfile must be set when using SSL in rabbit')
+
+    if $kombu_ssl_certfile or $kombu_ssl_keyfile {
+      sahara_config {
+        'DEFAULT/kombu_ssl_certfile': value => $kombu_ssl_certfile;
+        'DEFAULT/kombu_ssl_keyfile':  value => $kombu_ssl_keyfile;
+      }
+    } else {
+      sahara_config {
+        'DEFAULT/kombu_ssl_certfile': ensure => absent;
+        'DEFAULT/kombu_ssl_keyfile':  ensure => absent;
+      }
     }
-    if !$kombu_ssl_ca_certs {
-      fail('kombu_ssl_ca_certs must be set when using SSL in rabbit')
+
+    if $kombu_ssl_version {
+      sahara_config { 'DEFAULT/kombu_ssl_version':  value => $kombu_ssl_version; }
+    } else {
+      sahara_config { 'DEFAULT/kombu_ssl_version':  ensure => absent; }
     }
-    sahara_config {
-      'DEFAULT/kombu_ssl_version': value => $kombu_ssl_version;
-      'DEFAULT/kombu_ssl_keyfile': value => $kombu_ssl_keyfile;
-      'DEFAULT/kombu_ssl_certfile': value => $kombu_ssl_certfile;
-      'DEFAULT/kombu_ssl_ca_certs': value => $kombu_ssl_ca_certs;
-      'DEFAULT/kombu_reconnect_delay': value => $kombu_reconnect_delay;
-    }
+
   } else {
     sahara_config {
-      'DEFAULT/kombu_ssl_version': ensure => absent;
-      'DEFAULT/kombu_ssl_keyfile': ensure => absent;
-      'DEFAULT/kombu_ssl_certfile': ensure => absent;
       'DEFAULT/kombu_ssl_ca_certs': ensure => absent;
-      'DEFAULT/kombu_reconnect_delay': ensure => absent;
+      'DEFAULT/kombu_ssl_certfile': ensure => absent;
+      'DEFAULT/kombu_ssl_keyfile':  ensure => absent;
+      'DEFAULT/kombu_ssl_version':  ensure => absent;
     }
   }
 
@@ -161,5 +169,6 @@ class sahara::notify::rabbitmq(
     'DEFAULT/rabbit_max_retries': value => $rabbit_max_retries;
     'DEFAULT/notification_topics': value => $notification_topics;
     'DEFAULT/control_exchange': value => $control_exchange;
+    'DEFAULT/kombu_reconnect_delay': value => $kombu_reconnect_delay;
   }
 }
