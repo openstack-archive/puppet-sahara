@@ -30,7 +30,7 @@
 #
 # [*collate*]
 #   (Optional) Charset collate of sahara database.
-#    Defaults to 'utf8_unicode_ci'.
+#    Defaults to 'utf8_general_ci'.
 #
 class sahara::db::mysql(
   $password,
@@ -39,7 +39,7 @@ class sahara::db::mysql(
   $host          = '127.0.0.1',
   $allowed_hosts = undef,
   $charset       = 'utf8',
-  $collate       = 'utf8_unicode_ci',
+  $collate       = 'utf8_general_ci',
 ) {
 
   validate_string($password)
