@@ -14,7 +14,7 @@ describe 'sahara::db::mysql' do
       :password      => 's3cr3t',
       :user          => 'sahara',
       :charset       => 'utf8',
-      :collate       => 'utf8_unicode_ci',
+      :collate       => 'utf8_general_ci',
       :host          => '127.0.0.1',
     }
   end
