@@ -11,7 +11,7 @@ shared_examples 'generic sahara service' do |service|
       should contain_package(service[:name]).with({
         :name   => service[:package_name],
         :ensure => 'present',
-        :notify => "Service[#{service[:name]}]"
+        :notify => ["Service[#{service[:name]}]"]
       })
       should contain_service(service[:name]).with({
         :name      => service[:service_name],
@@ -32,7 +32,7 @@ shared_examples 'generic sahara service' do |service|
       should contain_package(service[:name]).with({
         :name   => service[:package_name],
         :ensure => '2014.2-1',
-        :notify => "Service[#{service[:name]}]"
+        :notify => ["Service[#{service[:name]}]"]
       })
       should contain_service(service[:name]).with({
         :name      => service[:service_name],
