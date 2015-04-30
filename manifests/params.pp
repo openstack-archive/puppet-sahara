@@ -12,17 +12,8 @@ class sahara::params {
       $service_name = 'openstack-sahara-all'
     }
     'Debian': {
-      case $::operatingsystem {
-        'Debian': {
-          $package_name = 'sahara'
-          $service_name = 'sahara'
-        }
-        default: {
-          fail('While Sahara is packaged in Debian, it is not packaged in \
-          Ubuntu or any derivatives (yet).  If you would like to package \
-          Sahara for this system, please contact the Sahara team.')
-        }
-      }
+      $package_name = 'sahara'
+      $service_name = 'sahara'
     }
     default: {
       fail("Unsupported osfamily: ${::osfamily} operatingsystem: ${::operatingsystem}")
