@@ -102,19 +102,22 @@ class sahara(
   include ::sahara::params
   include ::sahara::policy
 
+  group { 'sahara':
+    ensure => 'present',
+    name   => 'sahara',
+  }
+
   file { '/etc/sahara/':
     ensure  => directory,
     owner   => 'root',
     group   => 'sahara',
-    mode    => '0750',
-    require => Package['sahara'],
+    require => Group['sahara']
   }
 
   file { '/etc/sahara/sahara.conf':
     owner   => 'root',
     group   => 'sahara',
-    mode    => '0640',
-    require => File['/etc/sahara'],
+    require => File['/etc/sahara']
   }
 
   package { 'sahara':
@@ -123,7 +126,15 @@ class sahara(
     tag    => 'openstack',
   }
 
-  Package['sahara'] -> Sahara_config<||>
+  # Because Sahara does not support SQLite, sahara-common will fail to be installed
+  # if /etc/sahara/sahara.conf does not contain valid database connection and if the
+  # database does not actually exist.
+  # So we first manage the configuration file existence, then we configure Sahara and
+  # then we install Sahara. This is a very ugly hack to fix packaging issue.
+  # https://bugs.launchpad.net/cloud-archive/+bug/1450945
+  File['/etc/sahara/sahara.conf'] -> Sahara_config<| |>
+  Sahara_config<| |> -> Package['sahara']
+
   Package['sahara'] -> Class['sahara::policy']
 
   Package['sahara'] ~> Service['sahara']
