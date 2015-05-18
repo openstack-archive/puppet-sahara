@@ -108,16 +108,18 @@ class sahara(
   }
 
   file { '/etc/sahara/':
-    ensure  => directory,
-    owner   => 'root',
-    group   => 'sahara',
-    require => Group['sahara']
+    ensure                  => directory,
+    owner                   => 'root',
+    group                   => 'sahara',
+    require                 => Group['sahara'],
+    selinux_ignore_defaults => true
   }
 
   file { '/etc/sahara/sahara.conf':
-    owner   => 'root',
-    group   => 'sahara',
-    require => File['/etc/sahara']
+    owner                   => 'root',
+    group                   => 'sahara',
+    require                 => File['/etc/sahara'],
+    selinux_ignore_defaults => true
   }
 
   package { 'sahara':
