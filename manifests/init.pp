@@ -102,23 +102,47 @@ class sahara(
   include ::sahara::params
   include ::sahara::policy
 
+  if $::osfamily == 'RedHat' {
+    $group_require = Package['sahara']
+    $dir_require = Package['sahara']
+    $conf_require = Package['sahara']
+  } else {
+    # TO-DO(mmagr): This hack has to be removed as soon as following bug
+    # is fixed. On Ubuntu sahara-trove is not installable because it needs
+    # running database and prefilled sahara.conf in order to install package:
+    # https://bugs.launchpad.net/ubuntu/+source/sahara/+bug/1452698
+    Sahara_config<| |> -> Package['sahara']
+
+    $group_require = undef
+    $dir_require = Group['sahara']
+    $conf_require = File['/etc/sahara']
+  }
   group { 'sahara':
-    ensure => 'present',
-    name   => 'sahara',
+    ensure  => 'present',
+    name    => 'sahara',
+    system  => true,
+    require => $group_require
+  }
+
+  user { 'sahara':
+    ensure  => 'present',
+    gid     => 'sahara',
+    system  => true,
+    require => Group['sahara']
   }
 
   file { '/etc/sahara/':
     ensure                  => directory,
     owner                   => 'root',
     group                   => 'sahara',
-    require                 => Group['sahara'],
+    require                 => $dir_require,
     selinux_ignore_defaults => true
   }
 
   file { '/etc/sahara/sahara.conf':
     owner                   => 'root',
     group                   => 'sahara',
-    require                 => File['/etc/sahara'],
+    require                 => $conf_require,
     selinux_ignore_defaults => true
   }
 
@@ -135,7 +159,6 @@ class sahara(
   # then we install Sahara. This is a very ugly hack to fix packaging issue.
   # https://bugs.launchpad.net/cloud-archive/+bug/1450945
   File['/etc/sahara/sahara.conf'] -> Sahara_config<| |>
-  Sahara_config<| |> -> Package['sahara']
 
   Package['sahara'] -> Class['sahara::policy']
 
@@ -226,9 +249,9 @@ class sahara(
   exec { 'sahara-dbmanage':
     command     => $::sahara::params::dbmanage_command,
     path        => '/usr/bin',
-    user        => 'root',
+    user        => 'sahara',
     refreshonly => true,
-    subscribe   => [Package['sahara'],Sahara_config['database/connection']],
+    subscribe   => [Package['sahara'], Sahara_config['database/connection']],
     logoutput   => on_failure,
   }
 
