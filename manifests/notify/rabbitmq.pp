@@ -107,68 +107,68 @@ class sahara::notify::rabbitmq(
   if $rabbit_use_ssl {
 
     if $kombu_ssl_ca_certs {
-      sahara_config { 'DEFAULT/kombu_ssl_ca_certs': value => $kombu_ssl_ca_certs; }
+      sahara_config { 'oslo_messaging_rabbit/kombu_ssl_ca_certs': value => $kombu_ssl_ca_certs; }
     } else {
-      sahara_config { 'DEFAULT/kombu_ssl_ca_certs': ensure => absent; }
+      sahara_config { 'oslo_messaging_rabbit/kombu_ssl_ca_certs': ensure => absent; }
     }
 
     if $kombu_ssl_certfile or $kombu_ssl_keyfile {
       sahara_config {
-        'DEFAULT/kombu_ssl_certfile': value => $kombu_ssl_certfile;
-        'DEFAULT/kombu_ssl_keyfile':  value => $kombu_ssl_keyfile;
+        'oslo_messaging_rabbit/kombu_ssl_certfile': value => $kombu_ssl_certfile;
+        'oslo_messaging_rabbit/kombu_ssl_keyfile':  value => $kombu_ssl_keyfile;
       }
     } else {
       sahara_config {
-        'DEFAULT/kombu_ssl_certfile': ensure => absent;
-        'DEFAULT/kombu_ssl_keyfile':  ensure => absent;
+        'oslo_messaging_rabbit/kombu_ssl_certfile': ensure => absent;
+        'oslo_messaging_rabbit/kombu_ssl_keyfile':  ensure => absent;
       }
     }
 
     if $kombu_ssl_version {
-      sahara_config { 'DEFAULT/kombu_ssl_version':  value => $kombu_ssl_version; }
+      sahara_config { 'oslo_messaging_rabbit/kombu_ssl_version':  value => $kombu_ssl_version; }
     } else {
-      sahara_config { 'DEFAULT/kombu_ssl_version':  ensure => absent; }
+      sahara_config { 'oslo_messaging_rabbit/kombu_ssl_version':  ensure => absent; }
     }
 
   } else {
     sahara_config {
-      'DEFAULT/kombu_ssl_ca_certs': ensure => absent;
-      'DEFAULT/kombu_ssl_certfile': ensure => absent;
-      'DEFAULT/kombu_ssl_keyfile':  ensure => absent;
-      'DEFAULT/kombu_ssl_version':  ensure => absent;
+      'oslo_messaging_rabbit/kombu_ssl_ca_certs': ensure => absent;
+      'oslo_messaging_rabbit/kombu_ssl_certfile': ensure => absent;
+      'oslo_messaging_rabbit/kombu_ssl_keyfile':  ensure => absent;
+      'oslo_messaging_rabbit/kombu_ssl_version':  ensure => absent;
     }
   }
 
   if $rabbit_hosts {
     sahara_config {
-      'DEFAULT/rabbit_hosts':     value => join($rabbit_hosts, ',');
-      'DEFAULT/rabbit_ha_queues': value => true
+      'oslo_messaging_rabbit/rabbit_hosts':     value => join($rabbit_hosts, ',');
+      'oslo_messaging_rabbit/rabbit_ha_queues': value => true;
     }
   } else {
     sahara_config {
-      'DEFAULT/rabbit_host':      value => $rabbit_host;
-      'DEFAULT/rabbit_port':      value => $rabbit_port;
-      'DEFAULT/rabbit_ha_queues': value => false;
+      'oslo_messaging_rabbit/rabbit_host':      value => $rabbit_host;
+      'oslo_messaging_rabbit/rabbit_port':      value => $rabbit_port;
+      'oslo_messaging_rabbit/rabbit_ha_queues': value => false;
       # single-quotes to get literal dollar signs
-      'DEFAULT/rabbit_hosts':     value => '$rabbit_host:$rabbit_port';
+      'oslo_messaging_rabbit/rabbit_hosts':     value => '$rabbit_host:$rabbit_port';
     }
   }
 
   sahara_config {
-    'DEFAULT/rpc_backend': value => 'rabbit';
+    'oslo_messaging_rabbit/rpc_backend': value => 'rabbit';
     'DEFAULT/amqp_durable_queues': value => $durable_queues;
-    'DEFAULT/rabbit_use_ssl': value => $rabbit_use_ssl;
-    'DEFAULT/rabbit_userid': value => $rabbit_userid;
-    'DEFAULT/rabbit_password':
+    'oslo_messaging_rabbit/rabbit_use_ssl': value => $rabbit_use_ssl;
+    'oslo_messaging_rabbit/rabbit_userid': value => $rabbit_userid;
+    'oslo_messaging_rabbit/rabbit_password':
       value => $rabbit_password,
       secret => true;
-    'DEFAULT/rabbit_login_method': value => $rabbit_login_method;
-    'DEFAULT/rabbit_virtual_host': value => $rabbit_virtual_host;
-    'DEFAULT/rabbit_retry_interval': value => $rabbit_retry_interval;
-    'DEFAULT/rabbit_retry_backoff': value => $rabbit_retry_backoff;
-    'DEFAULT/rabbit_max_retries': value => $rabbit_max_retries;
+    'oslo_messaging_rabbit/rabbit_login_method': value => $rabbit_login_method;
+    'oslo_messaging_rabbit/rabbit_virtual_host': value => $rabbit_virtual_host;
+    'oslo_messaging_rabbit/rabbit_retry_interval': value => $rabbit_retry_interval;
+    'oslo_messaging_rabbit/rabbit_retry_backoff': value => $rabbit_retry_backoff;
+    'oslo_messaging_rabbit/rabbit_max_retries': value => $rabbit_max_retries;
     'DEFAULT/notification_topics': value => $notification_topics;
     'DEFAULT/control_exchange': value => $control_exchange;
-    'DEFAULT/kombu_reconnect_delay': value => $kombu_reconnect_delay;
+    'oslo_messaging_rabbit/kombu_reconnect_delay': value => $kombu_reconnect_delay;
   }
 }
