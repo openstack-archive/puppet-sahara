@@ -149,8 +149,7 @@ class sahara::notify::rabbitmq(
       'oslo_messaging_rabbit/rabbit_host':      value => $rabbit_host;
       'oslo_messaging_rabbit/rabbit_port':      value => $rabbit_port;
       'oslo_messaging_rabbit/rabbit_ha_queues': value => false;
-      # single-quotes to get literal dollar signs
-      'oslo_messaging_rabbit/rabbit_hosts':     value => '$rabbit_host:$rabbit_port';
+      'oslo_messaging_rabbit/rabbit_hosts':     value => "${rabbit_host}:${rabbit_port}";
     }
   }
 
