@@ -51,7 +51,23 @@ describe 'sahara::keystone::auth' do
     end
   end
 
-  describe 'when overriding public_protocol, public_port and public address' do
+  describe 'with endpoint parameters' do
+    let :params do
+      { :password     => 'sahara_password',
+        :public_url   => 'https://10.10.10.10:80/v1.1/%(tenant_id)s',
+        :internal_url => 'http://10.10.10.11:81/v1.1/%(tenant_id)s',
+        :admin_url    => 'http://10.10.10.12:81/v1.1/%(tenant_id)s' }
+    end
+
+    it { is_expected.to contain_keystone_endpoint('RegionOne/sahara').with(
+      :ensure       => 'present',
+      :public_url   => 'https://10.10.10.10:80/v1.1/%(tenant_id)s',
+      :internal_url => 'http://10.10.10.11:81/v1.1/%(tenant_id)s',
+      :admin_url    => 'http://10.10.10.12:81/v1.1/%(tenant_id)s'
+    ) }
+  end
+
+  describe 'with deprecated endpoint parameters' do
     let :params do
       { :password         => 'sahara_password',
         :public_protocol  => 'https',
