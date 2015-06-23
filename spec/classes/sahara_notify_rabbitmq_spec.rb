@@ -15,7 +15,7 @@ describe 'sahara::notify::rabbitmq' do
     it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_userid').with_value('guest') }
     it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_host').with_value('localhost') }
     it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_port').with_value('5672') }
-    xit { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_hosts').with_value('localhost:5672') }
+    it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_hosts').with_value('localhost:5672') }
     it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('false') }
     it { is_expected.to contain_sahara_config('DEFAULT/amqp_durable_queues').with_value('false') }
     it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_virtual_host').with_value('/') }
@@ -100,7 +100,7 @@ describe 'sahara::notify::rabbitmq' do
     it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_userid').with_value('guest2') }
     it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_host').with_value('localhost2') }
     it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_port').with_value('5673') }
-    xit { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_hosts').with_value('localhost2:5673') }
+    it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_hosts').with_value('localhost2:5673') }
     it { is_expected.to contain_sahara_config('DEFAULT/amqp_durable_queues').with_value('true') }
   end
 
