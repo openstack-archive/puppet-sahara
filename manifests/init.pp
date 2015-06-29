@@ -95,6 +95,10 @@
 #   (Optional) Admin identity endpoint
 #   Defaults to 'http://127.0.0.1:35357/'.
 #
+# [*sync_db*]
+#   (Optional) Enable dbsync
+#   Defaults to true.
+#
 class sahara(
   $manage_service      = true,
   $enabled             = true,
@@ -118,6 +122,7 @@ class sahara(
   $keystone_tenant     = 'admin',
   $keystone_url        = 'http://127.0.0.1:5000/v2.0/',
   $identity_url        = 'http://127.0.0.1:35357/',
+  $sync_db             = true,
 ) {
   include ::sahara::params
   include ::sahara::policy
@@ -280,6 +285,10 @@ class sahara(
     }
   }
 
+  if $sync_db {
+    include ::sahara::db::sync
+  }
+
   service { 'sahara':
     ensure     => $service_ensure,
     name       => $::sahara::params::service_name,
@@ -288,15 +297,6 @@ class sahara(
     hasrestart => true,
     subscribe  => Exec['sahara-dbmanage'],
     tag        => 'sahara-service',
-  }
-
-  exec { 'sahara-dbmanage':
-    command     => $::sahara::params::dbmanage_command,
-    path        => '/usr/bin',
-    user        => 'sahara',
-    refreshonly => true,
-    subscribe   => [Package['sahara'], Sahara_config['database/connection']],
-    logoutput   => on_failure,
   }
 
 }
