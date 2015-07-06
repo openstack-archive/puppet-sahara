@@ -1,6 +1,7 @@
 # == Class: sahara::notify::rabbitmq
 #
 #  RabbitMQ broker configuration for Sahara
+#  Deprecated class
 #
 # === Parameters
 #
@@ -104,6 +105,9 @@ class sahara::notify::rabbitmq(
   $kombu_ssl_ca_certs    = undef,
   $kombu_reconnect_delay = '1.0',
 ) {
+
+  warning('This class is deprecated. Use sahara::init for configuration rpc options instead')
+  warning('This class is deprecated. Use sahara::notify for configuration ceilometer notifications instead')
 
   if $rabbit_use_ssl {
 
