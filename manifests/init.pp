@@ -149,7 +149,7 @@ class sahara(
   package { 'sahara':
     ensure => $package_ensure,
     name   => $::sahara::params::package_name,
-    tag    => 'openstack',
+    tag    => ['openstack', 'sahara-package'],
   }
 
   # Because Sahara does not support SQLite, sahara-common will fail to be installed
@@ -244,6 +244,7 @@ class sahara(
     enable     => $enabled,
     hasrestart => true,
     subscribe  => Exec['sahara-dbmanage'],
+    tag        => 'sahara-service',
   }
 
   exec { 'sahara-dbmanage':
