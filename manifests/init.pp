@@ -37,11 +37,11 @@
 #   If set to boolean false, it will not log to any directory.
 #   Defaults to '/var/log/sahara'
 #
-# [*service_host*]
+# [*host*]
 #   (Optional) Hostname for sahara to listen on
 #   Defaults to '0.0.0.0'.
 #
-# [*service_port*]
+# [*port*]
 #   (Optional) Port for sahara to listen on
 #   Defaults to 8386.
 #
@@ -59,25 +59,63 @@
 #
 # == keystone authentication options
 #
-# [*keystone_username*]
-#   (Optional) Username for sahara credentials
+# [*admin_user*]
+#   (Optional) Service user name
 #   Defaults to 'admin'.
 #
-# [*keystone_password*]
-#   (Optional) Password for sahara credentials
+# [*admin_password*]
+#   (Optional) Service user password.
 #   Defaults to false.
 #
-# [*keystone_tenant*]
-#   (Optional) Tenant for keystone_username
+# [*admin_tenant_name*]
+#   (Optional) Service tenant name.
 #   Defaults to 'admin'.
 #
-# [*keystone_url*]
-#   (Optional) Public identity endpoint
+# [*auth_uri*]
+#   (Optional) Complete public Identity API endpoint.
 #   Defaults to 'http://127.0.0.1:5000/v2.0/'.
 #
-# [*identity_url*]
-#   (Optional) Admin identity endpoint
+# [*identity_uri*]
+#   (Optional) Complete admin Identity API endpoint.
+#   This should specify the unversioned root endpoint.
 #   Defaults to 'http://127.0.0.1:35357/'.
+#
+# == DEPRECATED PARAMETERS
+#
+# [*service_host*]
+#   (Optional) DEPRECATED: Use host instead.
+#   Hostname for sahara to listen on
+#   Defaults to undef.
+#
+# [*service_port*]
+#   (Optional) DEPRECATED: Use port instead.
+#   Port for sahara to listen on
+#   Defaults to undef.
+#
+# [*keystone_username*]
+#   (Optional) DEPRECATED: Use admin_user instead.
+#   Username for sahara credentials
+#   Defaults to undef.
+#
+# [*keystone_password*]
+#   (Optional) DEPRECATED: Use admin_password instead.
+#   Password for sahara credentials
+#   Defaults to undef.
+#
+# [*keystone_tenant*]
+#   (Optional) DEPRECATED: Use admin_tenant_name instead.
+#   Tenant for keystone_username
+#   Defaults to undef.
+#
+# [*keystone_url*]
+#   (Optional) DEPRECATED: Use auth_uri instead.
+#   Public identity endpoint
+#   Defaults to undef.
+#
+# [*identity_url*]
+#   (Optional) DEPRECATED: Use identity_uri instead.
+#   Admin identity endpoint
+#   Defaults to undef.
 #
 class sahara(
   $manage_service      = true,
@@ -88,19 +126,76 @@ class sahara(
   $use_syslog          = false,
   $log_facility        = 'LOG_USER',
   $log_dir             = '/var/log/sahara',
-  $service_host        = '0.0.0.0',
-  $service_port        = 8386,
+  $host                = '0.0.0.0',
+  $port                = '8386',
   $use_neutron         = false,
   $use_floating_ips    = true,
   $database_connection = 'mysql://sahara:secrete@localhost:3306/sahara',
-  $keystone_username   = 'admin',
-  $keystone_password   = false,
-  $keystone_tenant     = 'admin',
-  $keystone_url        = 'http://127.0.0.1:5000/v2.0/',
-  $identity_url        = 'http://127.0.0.1:35357/',
+  $admin_user          = 'admin',
+  $admin_password      = false,
+  $admin_tenant_name   = 'admin',
+  $auth_uri            = 'http://127.0.0.1:5000/v2.0/',
+  $identity_uri        = 'http://127.0.0.1:35357/',
+  # DEPRECATED PARAMETERS
+  $service_host        = undef,
+  $service_port        = undef,
+  $keystone_username   = undef,
+  $keystone_password   = undef,
+  $keystone_tenant     = undef,
+  $keystone_url        = undef,
+  $identity_url        = undef,
 ) {
   include ::sahara::params
   include ::sahara::policy
+
+  if $service_host {
+    warning('The service_host parameter is deprecated. Use host parameter instead')
+    $host_real = $service_host
+  } else {
+    $host_real = $host
+  }
+
+  if $service_port {
+    warning('The service_port parameter is deprecated. Use port parameter instead')
+    $port_real = $service_port
+  } else {
+    $port_real = $port
+  }
+
+  if $keystone_username {
+    warning('The keystone_username parameter is deprecated. Use admin_user parameter instead')
+    $admin_user_real = $keystone_username
+  } else {
+    $admin_user_real = $admin_user
+  }
+
+  if $keystone_password {
+    warning('The keystone_password parameter is deprecated. Use admin_password parameter instead')
+    $admin_password_real = $keystone_password
+  } else {
+    $admin_password_real = $admin_password
+  }
+
+  if $keystone_tenant {
+    warning('The keystone_tenant parameter is deprecated. Use admin_tenant_name parameter instead')
+    $admin_tenant_name_real = $keystone_tenant
+  } else {
+    $admin_tenant_name_real = $admin_tenant_name
+  }
+
+  if $keystone_url {
+    warning('The keystone_url parameter is deprecated. Use auth_uri parameter instead')
+    $auth_uri_real = $keystone_url
+  } else {
+    $auth_uri_real = $auth_uri
+  }
+
+  if $identity_url {
+    warning('The identity_url parameter is deprecated. Use identity_uri parameter instead')
+    $identity_uri_real = $identity_url
+  } else {
+    $identity_uri_real = $identity_uri
+  }
 
   if $::osfamily == 'RedHat' {
     $group_require = Package['sahara']
@@ -186,24 +281,23 @@ class sahara(
   sahara_config {
     'DEFAULT/use_neutron': value => $use_neutron;
     'DEFAULT/use_floating_ips': value => $use_floating_ips;
-    'DEFAULT/host': value => $service_host;
-    'DEFAULT/port': value => $service_port;
-    'DEFAULT/debug': value => $debug;
-    'DEFAULT/verbose': value => $verbose;
-
+    'DEFAULT/host':             value => $host_real;
+    'DEFAULT/port':             value => $port_real;
+    'DEFAULT/debug':            value => $debug;
+    'DEFAULT/verbose':          value => $verbose;
     'database/connection':
       value => $database_connection,
       secret => true;
   }
 
-  if $keystone_password {
+  if $admin_password_real {
     sahara_config {
-      'keystone_authtoken/auth_uri': value => $keystone_url;
-      'keystone_authtoken/identity_uri': value => $identity_url;
-      'keystone_authtoken/admin_user': value => $keystone_username;
-      'keystone_authtoken/admin_tenant_name': value => $keystone_tenant;
+      'keystone_authtoken/auth_uri':          value => $auth_uri_real;
+      'keystone_authtoken/identity_uri':      value => $identity_uri_real;
+      'keystone_authtoken/admin_user':        value => $admin_user_real;
+      'keystone_authtoken/admin_tenant_name': value => $admin_tenant_name_real;
       'keystone_authtoken/admin_password':
-        value => $keystone_password,
+        value => $admin_password_real,
         secret => true;
     }
   }
@@ -220,12 +314,12 @@ class sahara(
 
   if $use_syslog {
     sahara_config {
-      'DEFAULT/use_syslog':           value => true;
-      'DEFAULT/syslog_log_facility':  value => $log_facility;
+      'DEFAULT/use_syslog':          value => true;
+      'DEFAULT/syslog_log_facility': value => $log_facility;
     }
   } else {
     sahara_config {
-      'DEFAULT/use_syslog':           value => false;
+      'DEFAULT/use_syslog': value => false;
     }
   }
 
