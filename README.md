@@ -32,7 +32,11 @@ Setup
 
 **What the sahara module affects:**
 
-* sahara, the data processing service for OpenStack.
+* [Sahara](https://wiki.openstack.org/wiki/Sahara), the data processing service for OpenStack.
+
+### Installing Sahara
+
+    puppet module install openstack/sahara
 
 ### Beginning with sahara
 
