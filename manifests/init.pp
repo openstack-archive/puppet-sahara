@@ -53,6 +53,22 @@
 #   (Optional) Whether to use floating IPs to communicate with instances.
 #   Defaults to 'true'.
 #
+# [*use_ssl*]
+#   (optional) Enable SSL on the API server
+#   Defaults to false, not set
+#
+# [*cert_file*]
+#   (optinal) Certificate file to use when starting API server securely
+#   Defaults to undef
+#
+# [*key_file*]
+#   (optional) Private key file to use when starting API server securely
+#   Defaults to undef
+#
+# [*ca_file*]
+#   (optional) CA certificate file to use to verify connecting clients
+#   Defaults to undef
+#
 # [*database_connection*]
 #   (Optional) Non-sqllite database for sahara
 #   Defaults to 'mysql://sahara:secrete@localhost:3306/sahara'
@@ -92,6 +108,10 @@ class sahara(
   $service_port        = 8386,
   $use_neutron         = false,
   $use_floating_ips    = true,
+  $use_ssl             = false,
+  $ca_file             = undef,
+  $cert_file           = undef,
+  $key_file            = undef,
   $database_connection = 'mysql://sahara:secrete@localhost:3306/sahara',
   $keystone_username   = 'admin',
   $keystone_password   = false,
@@ -234,6 +254,29 @@ class sahara(
       $service_ensure = 'running'
     } else {
       $service_ensure = 'stopped'
+    }
+  }
+
+  if $use_ssl {
+    if !$ca_file {
+      fail('The ca_file parameter is required when use_ssl is set to true')
+    }
+    if !$cert_file {
+      fail('The cert_file parameter is required when use_ssl is set to true')
+    }
+    if !$key_file {
+      fail('The key_file parameter is required when use_ssl is set to true')
+    }
+    sahara_config {
+      'ssl/cert_file' : value => $cert_file;
+      'ssl/key_file' :  value => $key_file;
+      'ssl/ca_file' :   value => $ca_file;
+    }
+  } else {
+    sahara_config {
+      'ssl/cert_file' : ensure => absent;
+      'ssl/key_file' :  ensure => absent;
+      'ssl/ca_file' :   ensure => absent;
     }
   }
 
