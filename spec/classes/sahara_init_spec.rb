@@ -19,6 +19,10 @@ describe 'sahara' do
   end
 
   shared_examples_for 'sahara logging' do
+    context 'with use_stderr enabled' do
+      it { is_expected.to contain_sahara_config('DEFAULT/use_stderr').with_value(true) }
+    end
+
     context 'with syslog disabled' do
       it { is_expected.to contain_sahara_config('DEFAULT/use_syslog').with_value(false) }
     end
