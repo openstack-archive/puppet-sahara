@@ -94,7 +94,7 @@ describe 'basic sahara' do
       # Sahara resources
       class { '::sahara':
         database_connection => 'mysql://sahara:a_big_secret@127.0.0.1/sahara?charset=utf8',
-        keystone_password   => 'a_big_secret',
+        admin_password      => 'a_big_secret',
       }
       class { '::sahara::db::mysql':
         password => 'a_big_secret',
