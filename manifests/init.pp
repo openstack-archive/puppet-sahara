@@ -290,7 +290,7 @@ class sahara(
   Package['sahara'] ~> Service['sahara']
   Class['sahara::policy'] ~> Service['sahara']
 
-  validate_re($database_connection, '(sqlite|mysql|postgresql):\/\/(\S+:\S+@\S+\/\S+)?')
+  validate_re($database_connection, '(mysql|postgresql):\/\/(\S+:\S+@\S+\/\S+)?')
 
   case $database_connection {
     /^mysql:\/\//: {
@@ -299,9 +299,6 @@ class sahara(
     }
     /^postgresql:\/\//: {
       require postgresql::lib::python
-    }
-    /^sqlite:\/\//: {
-      fail('Sahara does not support sqlite!')
     }
     default: {
       fail('Unsupported db backend configured')
