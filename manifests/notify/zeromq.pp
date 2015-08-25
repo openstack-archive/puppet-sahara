@@ -1,6 +1,7 @@
 # == Class: sahara::notify::zeromq
 #
 #  Zeromq broker configuration for Sahara
+#  Deprecated class
 #
 # === Parameters
 #
@@ -71,6 +72,8 @@ class sahara::notify::zeromq(
   $kombu_ssl_ca_certs     = undef,
   $kombu_reconnect_delay  = undef,
 ) {
+
+  warning('This class is deprecated. Use sahara::init for configuration rpc options instead')
 
   if $kombu_ssl_version {
     warning('The kombu_ssl_version parameter is deprecated and has no effect.')

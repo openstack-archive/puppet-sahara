@@ -1,6 +1,7 @@
 # == Class: sahara::notify::qpid
 #
 #  Qpid broker configuration for Sahara
+#  Deprecated class
 #
 # === Parameters
 #
@@ -101,6 +102,9 @@ class sahara::notify::qpid(
   $kombu_ssl_ca_certs     = undef,
   $kombu_reconnect_delay  = undef,
 ) {
+
+  warning('This class is deprecated. Use sahara::init for configuration rpc options instead')
+  warning('This class is deprecated. Use sahara::notify for configuration ceilometer notifications instead')
 
   if $kombu_ssl_version {
     warning('The kombu_ssl_version parameter is deprecated and has no effect.')

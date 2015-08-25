@@ -93,6 +93,10 @@ describe 'basic sahara' do
 
       # Sahara resources
       class { '::sahara':
+        rabbit_userid       => 'sahara',
+        rabbit_password     => 'an_even_bigger_secret',
+        rabbit_host         => '127.0.0.1',
+        rpc_backend         => 'rabbit',
         database_connection => 'mysql://sahara:a_big_secret@127.0.0.1/sahara?charset=utf8',
         admin_password      => 'a_big_secret',
       }
@@ -103,10 +107,8 @@ describe 'basic sahara' do
         password => 'a_big_secret',
       }
       class { '::sahara::client': }
-      class { '::sahara::notify::rabbitmq':
-        rabbit_userid       => 'sahara',
-        rabbit_password     => 'an_even_bigger_secret',
-        rabbit_host         => '127.0.0.1',
+      class { '::sahara::notify':
+        enable_notifications => true,
       }
       EOS
 
