@@ -92,6 +92,9 @@ describe 'basic sahara' do
       }
 
       # Sahara resources
+      class { '::sahara::db::mysql':
+        password => 'a_big_secret',
+      }
       class { '::sahara':
         rabbit_userid       => 'sahara',
         rabbit_password     => 'an_even_bigger_secret',
@@ -100,9 +103,8 @@ describe 'basic sahara' do
         database_connection => 'mysql://sahara:a_big_secret@127.0.0.1/sahara?charset=utf8',
         admin_password      => 'a_big_secret',
       }
-      class { '::sahara::db::mysql':
-        password => 'a_big_secret',
-      }
+      class { '::sahara::service::api': }
+      class { '::sahara::service::engine': }
       class { '::sahara::keystone::auth':
         password => 'a_big_secret',
       }
