@@ -35,6 +35,9 @@ class { '::sahara':
   use_floating_ips    => true,
 }
 
+# Please note, that if you enabled 'all' service, then you should not enable 'api' and 'engine'. And vice versa.
+class { '::sahara::service::all': }
+
 # Finally, make it accessible
 class { '::sahara::keystone::auth':
   password => 'secrete',

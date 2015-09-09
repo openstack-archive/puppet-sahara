@@ -8,14 +8,6 @@
 #   (Optional) Ensure state for package
 #   Defaults to 'present'.
 #
-# [*manage_service*]
-#   (optional) Whether the service should be managed by Puppet.
-#   Defaults to true.
-#
-# [*enabled*]
-#   (optional) Should the service be enabled.
-#   Defaults to true.
-#
 # [*verbose*]
 #   (Optional) Should the daemons log verbose messages
 #   Defaults to 'false'.
@@ -263,6 +255,14 @@
 #
 # == DEPRECATED PARAMETERS
 #
+# [*manage_service*]
+#   (optional) Whether the service should be managed by Puppet.
+#   Defaults to undef.
+#
+# [*enabled*]
+#   (optional) Should the service be enabled.
+#   Defaults to undef.
+#
 # [*service_host*]
 #   (Optional) DEPRECATED: Use host instead.
 #   Hostname for sahara to listen on
@@ -299,8 +299,6 @@
 #   Defaults to undef.
 #
 class sahara(
-  $manage_service      = true,
-  $enabled             = true,
   $package_ensure      = 'present',
   $verbose             = false,
   $debug               = false,
@@ -361,6 +359,8 @@ class sahara(
   $kombu_ssl_ca_certs    = undef,
   $kombu_reconnect_delay = '1.0',
   # DEPRECATED PARAMETERS
+  $manage_service      = undef,
+  $enabled             = undef,
   $service_host        = undef,
   $service_port        = undef,
   $keystone_username   = undef,
@@ -422,15 +422,15 @@ class sahara(
   }
 
   if $::osfamily == 'RedHat' {
-    $group_require = Package['sahara']
-    $dir_require = Package['sahara']
-    $conf_require = Package['sahara']
+    $group_require = Package['sahara-common']
+    $dir_require = Package['sahara-common']
+    $conf_require = Package['sahara-common']
   } else {
     # TO-DO(mmagr): This hack has to be removed as soon as following bug
     # is fixed. On Ubuntu sahara-trove is not installable because it needs
     # running database and prefilled sahara.conf in order to install package:
     # https://bugs.launchpad.net/ubuntu/+source/sahara/+bug/1452698
-    Sahara_config<| |> -> Package['sahara']
+    Sahara_config<| |> -> Package['sahara-common']
 
     $group_require = undef
     $dir_require = Group['sahara']
@@ -465,9 +465,9 @@ class sahara(
     selinux_ignore_defaults => true
   }
 
-  package { 'sahara':
+  package { 'sahara-common':
     ensure => $package_ensure,
-    name   => $::sahara::params::package_name,
+    name   => $::sahara::params::common_package_name,
     tag    => ['openstack', 'sahara-package'],
   }
 
@@ -479,10 +479,7 @@ class sahara(
   # https://bugs.launchpad.net/cloud-archive/+bug/1450945
   File['/etc/sahara/sahara.conf'] -> Sahara_config<| |>
 
-  Package['sahara'] -> Class['sahara::policy']
-
-  Package['sahara'] ~> Service['sahara']
-  Class['sahara::policy'] ~> Service['sahara']
+  Package['sahara-common'] -> Class['sahara::policy']
 
   validate_re($database_connection, '(mysql|postgresql):\/\/(\S+:\S+@\S+\/\S+)?')
 
@@ -649,14 +646,6 @@ class sahara(
     }
   }
 
-  if $manage_service {
-    if $enabled {
-      $service_ensure = 'running'
-    } else {
-      $service_ensure = 'stopped'
-    }
-  }
-
   if $use_ssl {
     if !$ca_file {
       fail('The ca_file parameter is required when use_ssl is set to true')
@@ -684,14 +673,13 @@ class sahara(
     include ::sahara::db::sync
   }
 
-  service { 'sahara':
-    ensure     => $service_ensure,
-    name       => $::sahara::params::service_name,
-    hasstatus  => true,
-    enable     => $enabled,
-    hasrestart => true,
-    subscribe  => Exec['sahara-dbmanage'],
-    tag        => 'sahara-service',
+  if $manage_service or $enabled {
+    warning('Configuring daemon services from init class is deprecated.')
+    warning('Use ::sahara::service::{all|api|engine}.pp for configuring daemon services instead.')
+    class { '::sahara::service::all':
+      enabled        => $enabled,
+      manage_service => $manage_service,
+      package_ensure => $package_ensure,
+    }
   }
-
 }
