@@ -456,22 +456,19 @@ class sahara(
     $identity_uri_real = $identity_uri
   }
 
-  group { 'sahara':
-    ensure => 'present',
-    name   => 'sahara',
-  }
-
   file { '/etc/sahara/':
     ensure                  => directory,
     owner                   => 'root',
     group                   => 'sahara',
-    require                 => Group['sahara'],
+    mode                    => '0750',
+    require                 => Package['sahara-common'],
     selinux_ignore_defaults => true
   }
 
   file { '/etc/sahara/sahara.conf':
     owner                   => 'root',
     group                   => 'sahara',
+    mode                    => '0640',
     require                 => File['/etc/sahara'],
     selinux_ignore_defaults => true
   }
@@ -482,19 +479,7 @@ class sahara(
     tag    => ['openstack', 'sahara-package'],
   }
 
-  # Because Sahara does not support SQLite, sahara-common will fail to be installed
-  # if /etc/sahara/sahara.conf does not contain valid database connection and if the
-  # database does not actually exist.
-  # So we first manage the configuration file existence, then we configure Sahara and
-  # then we install Sahara. This is a very ugly hack to fix packaging issue.
-  # https://bugs.launchpad.net/cloud-archive/+bug/1450945
-  File['/etc/sahara/sahara.conf'] -> Sahara_config<| |>
-
-  # degorenko: temporarily hack to avoid the problem with group mode for /etc/sahara
-  # folder, because of incorrect mode in RPM package. Will be deleted as soon as
-  # possible.
-  Package['sahara-common'] -> Group['sahara']
-
+  Package['sahara-common'] -> Sahara_config<||>
   Package['sahara-common'] -> Class['sahara::policy']
 
   sahara_config {
