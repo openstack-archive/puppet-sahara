@@ -13,6 +13,7 @@ describe 'sahara' do
 
   shared_examples_for 'sahara' do
     it { is_expected.to contain_class('sahara::params') }
+    it { is_expected.to contain_class('sahara::db') }
     it { is_expected.to contain_class('sahara::policy') }
     it { is_expected.to contain_class('mysql::bindings::python') }
     it { is_expected.to contain_exec('sahara-dbmanage') }
@@ -33,14 +34,14 @@ describe 'sahara' do
 
     context 'with passing params' do
       let :params do {
-        :use_neutron       => 'true',
-        :host              => 'localhost',
-        :port              => '8387',
-        :auth_uri          => 'http://8.8.8.8:5000/v2.0/',
-        :identity_uri      => 'http://8.8.8.8:35357/',
-        :admin_user        => 'sahara',
-        :admin_tenant_name => 'sahara-tenant',
-        :admin_password    => 'new_password',
+        :use_neutron           => 'true',
+        :host                  => 'localhost',
+        :port                  => '8387',
+        :auth_uri              => 'http://8.8.8.8:5000/v2.0/',
+        :identity_uri          => 'http://8.8.8.8:35357/',
+        :admin_user            => 'sahara',
+        :admin_tenant_name     => 'sahara-tenant',
+        :admin_password        => 'new_password',
       }
       end
 
