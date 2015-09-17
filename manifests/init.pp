@@ -479,7 +479,6 @@ class sahara(
     tag    => ['openstack', 'sahara-package'],
   }
 
-  Package['sahara-common'] -> Sahara_config<||>
   Package['sahara-common'] -> Class['sahara::policy']
 
   sahara_config {
