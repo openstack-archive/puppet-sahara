@@ -456,47 +456,23 @@ class sahara(
     $identity_uri_real = $identity_uri
   }
 
-  if $::osfamily == 'RedHat' {
-    $group_require = Package['sahara-common']
-    $dir_require = Package['sahara-common']
-    $conf_require = Package['sahara-common']
-  } else {
-    # TO-DO(mmagr): This hack has to be removed as soon as following bug
-    # is fixed. On Ubuntu sahara-trove is not installable because it needs
-    # running database and prefilled sahara.conf in order to install package:
-    # https://bugs.launchpad.net/ubuntu/+source/sahara/+bug/1452698
-    Sahara_config<| |> -> Package['sahara-common']
-
-    $group_require = undef
-    $dir_require = Group['sahara']
-    $conf_require = File['/etc/sahara']
-  }
   group { 'sahara':
-    ensure  => 'present',
-    name    => 'sahara',
-    system  => true,
-    require => $group_require
-  }
-
-  user { 'sahara':
-    ensure  => 'present',
-    gid     => 'sahara',
-    system  => true,
-    require => Group['sahara']
+    ensure => 'present',
+    name   => 'sahara',
   }
 
   file { '/etc/sahara/':
     ensure                  => directory,
     owner                   => 'root',
     group                   => 'sahara',
-    require                 => $dir_require,
+    require                 => Group['sahara'],
     selinux_ignore_defaults => true
   }
 
   file { '/etc/sahara/sahara.conf':
     owner                   => 'root',
     group                   => 'sahara',
-    require                 => $conf_require,
+    require                 => File['/etc/sahara'],
     selinux_ignore_defaults => true
   }
 
@@ -513,6 +489,11 @@ class sahara(
   # then we install Sahara. This is a very ugly hack to fix packaging issue.
   # https://bugs.launchpad.net/cloud-archive/+bug/1450945
   File['/etc/sahara/sahara.conf'] -> Sahara_config<| |>
+
+  # degorenko: temporarily hack to avoid the problem with group mode for /etc/sahara
+  # folder, because of incorrect mode in RPM package. Will be deleted as soon as
+  # possible.
+  Package['sahara-common'] -> Group['sahara']
 
   Package['sahara-common'] -> Class['sahara::policy']
 
