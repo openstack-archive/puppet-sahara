@@ -30,6 +30,7 @@ describe 'sahara' do
       it { is_expected.to contain_sahara_config('keystone_authtoken/admin_user').with_value('admin') }
       it { is_expected.to contain_sahara_config('keystone_authtoken/admin_tenant_name').with_value('admin') }
       it { is_expected.to contain_sahara_config('keystone_authtoken/admin_password').with_value('secrete').with_secret(true) }
+      it { is_expected.to contain_sahara_config('DEFAULT/plugins').with_ensure('absent') }
     end
 
     context 'with passing params' do
@@ -42,6 +43,7 @@ describe 'sahara' do
         :admin_user            => 'sahara',
         :admin_tenant_name     => 'sahara-tenant',
         :admin_password        => 'new_password',
+        :plugins               => ['plugin1', 'plugin2'],
       }
       end
 
@@ -53,6 +55,7 @@ describe 'sahara' do
       it { is_expected.to contain_sahara_config('keystone_authtoken/admin_user').with_value('sahara') }
       it { is_expected.to contain_sahara_config('keystone_authtoken/admin_tenant_name').with_value('sahara-tenant') }
       it { is_expected.to contain_sahara_config('keystone_authtoken/admin_password').with_value('new_password').with_secret(true) }
+      it { is_expected.to contain_sahara_config('DEFAULT/plugins').with_value('plugin1,plugin2') }
     end
 
     context 'with deprecated params' do

@@ -41,6 +41,11 @@
 #   (Optional) Port for sahara to listen on
 #   Defaults to 8386.
 #
+# [*plugins*]
+#   (Optional) List of plugins to be loaded.
+#   Sahara preserves the order of the list when returning it.
+#   Defaults to undef
+#
 # [*use_neutron*]
 #   (Optional) Whether to use neutron
 #   Defaults to 'false'.
@@ -335,6 +340,7 @@ class sahara(
   $log_dir                 = '/var/log/sahara',
   $host                    = '0.0.0.0',
   $port                    = '8386',
+  $plugins                 = undef,
   $use_neutron             = false,
   $use_floating_ips        = true,
   $use_ssl                 = false,
@@ -496,6 +502,16 @@ class sahara(
   Package['sahara-common'] -> Group['sahara']
 
   Package['sahara-common'] -> Class['sahara::policy']
+
+  if $plugins {
+    sahara_config {
+      'DEFAULT/plugins': value => join(any2array($plugins),',');
+    }
+  } else {
+    sahara_config {
+      'DEFAULT/plugins': ensure => absent;
+    }
+  }
 
   sahara_config {
     'DEFAULT/use_neutron':      value => $use_neutron;
