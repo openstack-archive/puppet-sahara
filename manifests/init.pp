@@ -462,23 +462,6 @@ class sahara(
     $identity_uri_real = $identity_uri
   }
 
-  file { '/etc/sahara/':
-    ensure                  => directory,
-    owner                   => 'root',
-    group                   => 'sahara',
-    mode                    => '0750',
-    require                 => Package['sahara-common'],
-    selinux_ignore_defaults => true
-  }
-
-  file { '/etc/sahara/sahara.conf':
-    owner                   => 'root',
-    group                   => 'sahara',
-    mode                    => '0640',
-    require                 => File['/etc/sahara'],
-    selinux_ignore_defaults => true
-  }
-
   package { 'sahara-common':
     ensure => $package_ensure,
     name   => $::sahara::params::common_package_name,
