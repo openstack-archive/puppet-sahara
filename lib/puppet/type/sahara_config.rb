@@ -45,4 +45,7 @@ Puppet::Type.newtype(:sahara_config) do
     defaultto('<SERVICE DEFAULT>')
   end
 
+  autorequire(:package) do
+    'sahara-common'
+  end
 end
