@@ -28,12 +28,9 @@ class sahara::service::api (
   $package_ensure = 'present',
 ) {
 
-  include ::sahara
+  require ::sahara
 
   Sahara_config<||> ~> Service['sahara-api']
-  # degorenko: Line below (and include instead of require) is workarounds
-  # for bugs 1452698 and 1450945. It will be deleted after fix in package
-  Package<|title == 'sahara-common' |> -> Package['sahara-api']
   Class['sahara::policy'] ~> Service['sahara-api']
 
   package { 'sahara-api':
