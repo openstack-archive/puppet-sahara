@@ -27,8 +27,8 @@ describe 'sahara' do
       it { is_expected.to contain_sahara_config('DEFAULT/port').with_value('8386') }
       it { is_expected.to contain_sahara_config('keystone_authtoken/auth_uri').with_value('http://127.0.0.1:5000/v2.0/') }
       it { is_expected.to contain_sahara_config('keystone_authtoken/identity_uri').with_value('http://127.0.0.1:35357/') }
-      it { is_expected.to contain_sahara_config('keystone_authtoken/admin_user').with_value('admin') }
-      it { is_expected.to contain_sahara_config('keystone_authtoken/admin_tenant_name').with_value('admin') }
+      it { is_expected.to contain_sahara_config('keystone_authtoken/admin_user').with_value('sahara') }
+      it { is_expected.to contain_sahara_config('keystone_authtoken/admin_tenant_name').with_value('services') }
       it { is_expected.to contain_sahara_config('keystone_authtoken/admin_password').with_value('secrete').with_secret(true) }
       it { is_expected.to contain_sahara_config('DEFAULT/plugins').with_ensure('absent') }
     end
@@ -40,7 +40,7 @@ describe 'sahara' do
         :port                  => '8387',
         :auth_uri              => 'http://8.8.8.8:5000/v2.0/',
         :identity_uri          => 'http://8.8.8.8:35357/',
-        :admin_user            => 'sahara',
+        :admin_user            => 'sahara-user',
         :admin_tenant_name     => 'sahara-tenant',
         :admin_password        => 'new_password',
         :plugins               => ['plugin1', 'plugin2'],
@@ -52,7 +52,7 @@ describe 'sahara' do
       it { is_expected.to contain_sahara_config('DEFAULT/port').with_value('8387') }
       it { is_expected.to contain_sahara_config('keystone_authtoken/auth_uri').with_value('http://8.8.8.8:5000/v2.0/') }
       it { is_expected.to contain_sahara_config('keystone_authtoken/identity_uri').with_value('http://8.8.8.8:35357/') }
-      it { is_expected.to contain_sahara_config('keystone_authtoken/admin_user').with_value('sahara') }
+      it { is_expected.to contain_sahara_config('keystone_authtoken/admin_user').with_value('sahara-user') }
       it { is_expected.to contain_sahara_config('keystone_authtoken/admin_tenant_name').with_value('sahara-tenant') }
       it { is_expected.to contain_sahara_config('keystone_authtoken/admin_password').with_value('new_password').with_secret(true) }
       it { is_expected.to contain_sahara_config('DEFAULT/plugins').with_value('plugin1,plugin2') }

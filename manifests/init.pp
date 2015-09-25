@@ -109,7 +109,7 @@
 #
 # [*admin_user*]
 #   (Optional) Service user name
-#   Defaults to 'admin'.
+#   Defaults to 'sahara'.
 #
 # [*admin_password*]
 #   (Optional) Service user password.
@@ -117,7 +117,7 @@
 #
 # [*admin_tenant_name*]
 #   (Optional) Service tenant name.
-#   Defaults to 'admin'.
+#   Defaults to 'services'.
 #
 # [*auth_uri*]
 #   (Optional) Complete public Identity API endpoint.
@@ -356,9 +356,9 @@ class sahara(
   $database_retry_interval = undef,
   $database_max_overflow   = undef,
   $sync_db                 = true,
-  $admin_user              = 'admin',
+  $admin_user              = 'sahara',
   $admin_password          = false,
-  $admin_tenant_name       = 'admin',
+  $admin_tenant_name       = 'services',
   $auth_uri                = 'http://127.0.0.1:5000/v2.0/',
   $identity_uri            = 'http://127.0.0.1:35357/',
   $rpc_backend             = undef,
