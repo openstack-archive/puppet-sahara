@@ -287,45 +287,6 @@ describe 'sahara' do
     end
   end
 
-  shared_examples_for 'sahara logging' do
-    context 'with use_stderr enabled' do
-      it { is_expected.to contain_sahara_config('DEFAULT/use_stderr').with_value(true) }
-    end
-
-    context 'with syslog disabled' do
-      it { is_expected.to contain_sahara_config('DEFAULT/use_syslog').with_value(false) }
-    end
-
-    context 'with syslog enabled' do
-      let :params do
-        { :use_syslog   => 'true' }
-      end
-
-      it { is_expected.to contain_sahara_config('DEFAULT/use_syslog').with_value(true) }
-      it { is_expected.to contain_sahara_config('DEFAULT/syslog_log_facility').with_value('LOG_USER') }
-    end
-
-    context 'with syslog enabled and custom settings' do
-      let :params do
-        {
-          :use_syslog   => 'true',
-          :log_facility => 'LOG_LOCAL0'
-        }
-      end
-
-      it { is_expected.to contain_sahara_config('DEFAULT/use_syslog').with_value(true) }
-      it { is_expected.to contain_sahara_config('DEFAULT/syslog_log_facility').with_value('LOG_LOCAL0') }
-    end
-
-    context 'with log_dir disabled' do
-      let :params do
-        { :log_dir => false }
-      end
-      it { is_expected.to contain_sahara_config('DEFAULT/log_dir').with_ensure('absent') }
-    end
-
-  end
-
   shared_examples_for 'sahara ssl' do
     context 'without ssl' do
       it { is_expected.to contain_sahara_config('ssl/ca_file').with_ensure('absent') }
@@ -418,7 +379,6 @@ describe 'sahara' do
 
     it_configures 'sahara'
     it_configures 'sahara config'
-    it_configures 'sahara logging'
     it_configures 'sahara ssl'
     it_configures 'sahara rpc_backend'
 
@@ -434,7 +394,6 @@ describe 'sahara' do
 
     it_configures 'sahara'
     it_configures 'sahara config'
-    it_configures 'sahara logging'
     it_configures 'sahara ssl'
     it_configures 'sahara rpc_backend'
 

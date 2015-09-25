@@ -10,28 +10,28 @@
 #
 # [*verbose*]
 #   (Optional) Should the daemons log verbose messages
-#   Defaults to 'false'.
+#   Defaults to undef.
 #
 # [*debug*]
 #   (Optional) Should the daemons log debug messages
-#   Defaults to 'false'.
+#   Defaults to undef.
 #
 # [*use_syslog*]
 #   Use syslog for logging.
-#   (Optional) Defaults to false.
+#   (Optional) Defaults to undef.
 #
 # [*use_stderr*]
 #   (optional) Use stderr for logging
-#   Defaults to true
+#   Defaults to undef
 #
 # [*log_facility*]
 #   Syslog facility to receive log lines.
-#   (Optional) Defaults to LOG_USER.
+#   (Optional) Defaults to undef.
 #
 # [*log_dir*]
 #   (optional) Directory where logs should be stored.
 #   If set to boolean false, it will not log to any directory.
-#   Defaults to '/var/log/sahara'
+#   Defaults to undef.
 #
 # [*host*]
 #   (Optional) Hostname for sahara to listen on
@@ -332,12 +332,12 @@
 #
 class sahara(
   $package_ensure          = 'present',
-  $verbose                 = false,
-  $debug                   = false,
-  $use_syslog              = false,
-  $use_stderr              = true,
-  $log_facility            = 'LOG_USER',
-  $log_dir                 = '/var/log/sahara',
+  $verbose                 = undef,
+  $debug                   = undef,
+  $use_syslog              = undef,
+  $use_stderr              = undef,
+  $log_facility            = undef,
+  $log_dir                 = undef,
   $host                    = '0.0.0.0',
   $port                    = '8386',
   $plugins                 = undef,
@@ -410,6 +410,7 @@ class sahara(
   $identity_url        = undef,
 ) {
   include ::sahara::params
+  include ::sahara::logging
   include ::sahara::db
   include ::sahara::policy
 
@@ -485,9 +486,6 @@ class sahara(
     'DEFAULT/use_floating_ips': value => $use_floating_ips;
     'DEFAULT/host':             value => $host_real;
     'DEFAULT/port':             value => $port_real;
-    'DEFAULT/debug':            value => $debug;
-    'DEFAULT/verbose':          value => $verbose;
-    'DEFAULT/use_stderr':       value => $use_stderr;
   }
 
   if $admin_password_real {
@@ -603,27 +601,6 @@ class sahara(
       'DEFAULT/rpc_zmq_ipc_dir':       value => $zeromq_ipc_dir;
       'DEFAULT/rpc_zmq_host':          value => $zeromq_host;
       'DEFAULT/rpc_cast_timeout':      value => $cast_timeout;
-    }
-  }
-
-  if $log_dir {
-    sahara_config {
-      'DEFAULT/log_dir': value => $log_dir;
-    }
-  } else {
-    sahara_config {
-      'DEFAULT/log_dir': ensure => absent;
-    }
-  }
-
-  if $use_syslog {
-    sahara_config {
-      'DEFAULT/use_syslog':          value => true;
-      'DEFAULT/syslog_log_facility': value => $log_facility;
-    }
-  } else {
-    sahara_config {
-      'DEFAULT/use_syslog': value => false;
     }
   }
 
