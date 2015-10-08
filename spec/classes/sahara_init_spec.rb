@@ -58,26 +58,6 @@ describe 'sahara' do
       it { is_expected.to contain_sahara_config('DEFAULT/plugins').with_value('plugin1,plugin2') }
     end
 
-    context 'with deprecated params' do
-      let :params do {
-        :service_host      => 'localhost',
-        :service_port      => '8387',
-        :keystone_url      => 'http://8.8.8.8:5000/v2.0/',
-        :identity_url      => 'http://8.8.8.8:35357/',
-        :keystone_username => 'sahara',
-        :keystone_tenant   => 'sahara-tenant',
-        :keystone_password => 'new_password',
-      }
-      end
-
-      it { is_expected.to contain_sahara_config('DEFAULT/host').with_value('localhost') }
-      it { is_expected.to contain_sahara_config('DEFAULT/port').with_value('8387') }
-      it { is_expected.to contain_sahara_config('keystone_authtoken/auth_uri').with_value('http://8.8.8.8:5000/v2.0/') }
-      it { is_expected.to contain_sahara_config('keystone_authtoken/identity_uri').with_value('http://8.8.8.8:35357/') }
-      it { is_expected.to contain_sahara_config('keystone_authtoken/admin_user').with_value('sahara') }
-      it { is_expected.to contain_sahara_config('keystone_authtoken/admin_tenant_name').with_value('sahara-tenant') }
-      it { is_expected.to contain_sahara_config('keystone_authtoken/admin_password').with_value('new_password').with_secret(true) }
-    end
   end
 
   shared_examples_for 'sahara rpc_backend' do
