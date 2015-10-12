@@ -295,41 +295,6 @@
 #   (optional) Should the service be enabled.
 #   Defaults to undef.
 #
-# [*service_host*]
-#   (Optional) DEPRECATED: Use host instead.
-#   Hostname for sahara to listen on
-#   Defaults to undef.
-#
-# [*service_port*]
-#   (Optional) DEPRECATED: Use port instead.
-#   Port for sahara to listen on
-#   Defaults to undef.
-#
-# [*keystone_username*]
-#   (Optional) DEPRECATED: Use admin_user instead.
-#   Username for sahara credentials
-#   Defaults to undef.
-#
-# [*keystone_password*]
-#   (Optional) DEPRECATED: Use admin_password instead.
-#   Password for sahara credentials
-#   Defaults to undef.
-#
-# [*keystone_tenant*]
-#   (Optional) DEPRECATED: Use admin_tenant_name instead.
-#   Tenant for keystone_username
-#   Defaults to undef.
-#
-# [*keystone_url*]
-#   (Optional) DEPRECATED: Use auth_uri instead.
-#   Public identity endpoint
-#   Defaults to undef.
-#
-# [*identity_url*]
-#   (Optional) DEPRECATED: Use identity_uri instead.
-#   Admin identity endpoint
-#   Defaults to undef.
-#
 class sahara(
   $package_ensure          = 'present',
   $verbose                 = undef,
@@ -401,67 +366,11 @@ class sahara(
   # DEPRECATED PARAMETERS
   $manage_service      = undef,
   $enabled             = undef,
-  $service_host        = undef,
-  $service_port        = undef,
-  $keystone_username   = undef,
-  $keystone_password   = undef,
-  $keystone_tenant     = undef,
-  $keystone_url        = undef,
-  $identity_url        = undef,
 ) {
   include ::sahara::params
   include ::sahara::logging
   include ::sahara::db
   include ::sahara::policy
-
-  if $service_host {
-    warning('The service_host parameter is deprecated. Use host parameter instead')
-    $host_real = $service_host
-  } else {
-    $host_real = $host
-  }
-
-  if $service_port {
-    warning('The service_port parameter is deprecated. Use port parameter instead')
-    $port_real = $service_port
-  } else {
-    $port_real = $port
-  }
-
-  if $keystone_username {
-    warning('The keystone_username parameter is deprecated. Use admin_user parameter instead')
-    $admin_user_real = $keystone_username
-  } else {
-    $admin_user_real = $admin_user
-  }
-
-  if $keystone_password {
-    warning('The keystone_password parameter is deprecated. Use admin_password parameter instead')
-    $admin_password_real = $keystone_password
-  } else {
-    $admin_password_real = $admin_password
-  }
-
-  if $keystone_tenant {
-    warning('The keystone_tenant parameter is deprecated. Use admin_tenant_name parameter instead')
-    $admin_tenant_name_real = $keystone_tenant
-  } else {
-    $admin_tenant_name_real = $admin_tenant_name
-  }
-
-  if $keystone_url {
-    warning('The keystone_url parameter is deprecated. Use auth_uri parameter instead')
-    $auth_uri_real = $keystone_url
-  } else {
-    $auth_uri_real = $auth_uri
-  }
-
-  if $identity_url {
-    warning('The identity_url parameter is deprecated. Use identity_uri parameter instead')
-    $identity_uri_real = $identity_url
-  } else {
-    $identity_uri_real = $identity_uri
-  }
 
   package { 'sahara-common':
     ensure => $package_ensure,
@@ -484,18 +393,18 @@ class sahara(
   sahara_config {
     'DEFAULT/use_neutron':      value => $use_neutron;
     'DEFAULT/use_floating_ips': value => $use_floating_ips;
-    'DEFAULT/host':             value => $host_real;
-    'DEFAULT/port':             value => $port_real;
+    'DEFAULT/host':             value => $host;
+    'DEFAULT/port':             value => $port;
   }
 
-  if $admin_password_real {
+  if $admin_password {
     sahara_config {
-      'keystone_authtoken/auth_uri':          value => $auth_uri_real;
-      'keystone_authtoken/identity_uri':      value => $identity_uri_real;
-      'keystone_authtoken/admin_user':        value => $admin_user_real;
-      'keystone_authtoken/admin_tenant_name': value => $admin_tenant_name_real;
+      'keystone_authtoken/auth_uri':          value => $auth_uri;
+      'keystone_authtoken/identity_uri':      value => $identity_uri;
+      'keystone_authtoken/admin_user':        value => $admin_user;
+      'keystone_authtoken/admin_tenant_name': value => $admin_tenant_name;
       'keystone_authtoken/admin_password':
-        value => $admin_password_real,
+        value => $admin_password,
         secret => true;
     }
   }
