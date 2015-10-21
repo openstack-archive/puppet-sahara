@@ -18,7 +18,6 @@ describe 'sahara::keystone::auth' do
     it { is_expected.to contain_keystone_user('sahara').with(
       :ensure   => 'present',
       :password => 'sahara_password',
-      :tenant   => 'foobar'
     ) }
 
     it { is_expected.to contain_keystone_user_role('sahara@foobar').with(
