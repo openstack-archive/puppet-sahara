@@ -34,6 +34,17 @@ describe 'sahara::db' do
       it { is_expected.to contain_sahara_config('database/max_overflow').with_value('21') }
     end
 
+    context 'with postgresql backend' do
+      let :params do
+        { :database_connection     => 'postgresql://sahara:sahara@localhost/sahara', }
+      end
+
+      it 'install the proper backend package' do
+        is_expected.to contain_package('python-psycopg2').with(:ensure => 'present')
+      end
+
+    end
+
     context 'with incorrect database_connection string' do
       let :params do
         { :database_connection     => 'sqlite://sahara:sahara@localhost/sahara', }
@@ -45,7 +56,10 @@ describe 'sahara::db' do
 
   context 'on Debian platforms' do
     let :facts do
-      { :osfamily => 'Debian' }
+      { :osfamily => 'Debian',
+        :operatingsystem => 'Debian',
+        :operatingsystemrelease => 'jessie',
+      }
     end
 
     it_configures 'sahara::db'
@@ -53,7 +67,9 @@ describe 'sahara::db' do
 
   context 'on Redhat platforms' do
     let :facts do
-      { :osfamily => 'RedHat' }
+      { :osfamily => 'RedHat',
+        :operatingsystemrelease => '7.1',
+      }
     end
 
     it_configures 'sahara::db'

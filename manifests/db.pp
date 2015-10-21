@@ -62,7 +62,7 @@ class sahara::db (
       require mysql::bindings::python
     }
     /^postgresql:\/\//: {
-      $backend_package = $::sahara::params::psycopg_package_name
+      $backend_package = false
       require postgresql::lib::python
     }
     default: {
