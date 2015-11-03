@@ -1,7 +1,16 @@
 #
 # Class to execute sahara dbsync
 #
-class sahara::db::sync {
+# == Parameters
+#
+# [*extra_params*]
+#   (optional) String of extra command line parameters to append
+#   to the sahara-db-manage command.
+#   Defaults to '--config-file /etc/sahara/sahara.conf'
+#
+class sahara::db::sync(
+  $extra_params = '--config-file /etc/sahara/sahara.conf',
+) {
 
   include ::sahara::params
 
@@ -12,7 +21,7 @@ class sahara::db::sync {
   Sahara_config <| title == 'database/connection' |> ~> Exec['sahara-dbmanage']
 
   exec { 'sahara-dbmanage':
-    command     => $::sahara::params::dbmanage_command,
+    command     => "sahara-db-manage ${extra_params} upgrade head",
     path        => '/usr/bin',
     user        => 'sahara',
     refreshonly => true,
