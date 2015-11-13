@@ -36,7 +36,7 @@ describe 'basic sahara' do
         rabbit_password     => 'an_even_bigger_secret',
         rabbit_host         => '127.0.0.1',
         rpc_backend         => 'rabbit',
-        database_connection => 'mysql://sahara:a_big_secret@127.0.0.1/sahara?charset=utf8',
+        database_connection => 'mysql+pymysql://sahara:a_big_secret@127.0.0.1/sahara?charset=utf8',
         admin_password      => 'a_big_secret',
       }
       class { '::sahara::service::api': }
