@@ -6,7 +6,7 @@
 #
 # [*database_connection*]
 #   (Optional) The connection string to use to connect to the database.
-#   Defaults to 'mysql://sahara:secrete@localhost:3306/sahara'
+#   Defaults to 'mysql+pymysql://sahara:secrete@localhost:3306/sahara'
 #
 # [*database_max_retries*]
 #   (Optional) Maximum number of database connection retries during startup.
@@ -34,7 +34,7 @@
 #   Defaults to 20.
 #
 class sahara::db (
-  $database_connection     = 'mysql://sahara:secrete@localhost:3306/sahara',
+  $database_connection     = 'mysql+pymysql://sahara:secrete@localhost:3306/sahara',
   $database_idle_timeout   = 3600,
   $database_min_pool_size  = 1,
   $database_max_pool_size  = 10,
@@ -42,6 +42,8 @@ class sahara::db (
   $database_retry_interval = 10,
   $database_max_overflow   = 20,
 ) {
+
+  include ::sahara::params
 
   # NOTE(degorenko): In order to keep backward compatibility we rely on the pick function
   # to use sahara::<myparam> if sahara::db::<myparam> isn't specified.
@@ -53,13 +55,18 @@ class sahara::db (
   $database_retry_interval_real = pick($::sahara::database_retry_interval, $database_retry_interval)
   $database_max_overflow_real   = pick($::sahara::database_max_overflow, $database_max_overflow)
 
-  validate_re($database_connection_real, '(mysql|postgresql):\/\/(\S+:\S+@\S+\/\S+)?')
+  validate_re($database_connection_real,
+    '^(mysql(\+pymysql)?|postgresql):\/\/(\S+:\S+@\S+\/\S+)?')
 
   case $database_connection_real {
-    /^mysql:\/\//: {
-      $backend_package = false
+    /^mysql(\+pymysql)?:\/\//: {
       require mysql::bindings
       require mysql::bindings::python
+      if $database_connection_real =~ /^mysql\+pymysql/ {
+        $backend_package = $::sahara::params::pymysql_package_name
+      } else {
+        $backend_package = false
+      }
     }
     /^postgresql:\/\//: {
       $backend_package = false
