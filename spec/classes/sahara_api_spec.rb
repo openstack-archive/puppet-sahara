@@ -9,7 +9,7 @@ describe 'sahara::service::api' do
     end
 
     context 'default params' do
-      it { is_expected.to contain_sahara_config('DEFAULT/api_workers').with_value('0') }
+      it { is_expected.to contain_sahara_config('DEFAULT/api_workers').with_value('<SERVICE DEFAULT>') }
     end
 
     context 'passing params' do

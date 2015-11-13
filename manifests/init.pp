@@ -35,11 +35,11 @@
 #
 # [*host*]
 #   (Optional) Hostname for sahara to listen on
-#   Defaults to '0.0.0.0'.
+#   Defaults to $::os_service_default.
 #
 # [*port*]
 #   (Optional) Port for sahara to listen on
-#   Defaults to 8386.
+#   Defaults to $::os_service_default.
 #
 # [*plugins*]
 #   (Optional) List of plugins to be loaded.
@@ -303,12 +303,12 @@ class sahara(
   $use_stderr              = undef,
   $log_facility            = undef,
   $log_dir                 = undef,
-  $host                    = '0.0.0.0',
-  $port                    = '8386',
+  $host                    = $::os_service_default,
+  $port                    = $::os_service_default,
   $plugins                 = $::os_service_default,
-  $use_neutron             = false,
-  $use_floating_ips        = true,
-  $use_ssl                 = false,
+  $use_neutron             = $::os_service_default,
+  $use_floating_ips        = $::os_service_default,
+  $use_ssl                 = $::os_service_default,
   $ca_file                 = $::os_service_default,
   $cert_file               = $::os_service_default,
   $key_file                = $::os_service_default,
@@ -327,43 +327,43 @@ class sahara(
   $auth_uri                = 'http://127.0.0.1:5000/v2.0/',
   $identity_uri            = 'http://127.0.0.1:35357/',
   $rpc_backend             = $::os_service_default,
-  $amqp_durable_queues     = false,
-  $rabbit_ha_queues        = false,
-  $rabbit_host             = 'localhost',
-  $rabbit_hosts            = false,
-  $rabbit_port             = 5672,
-  $rabbit_use_ssl          = false,
-  $rabbit_userid           = 'guest',
-  $rabbit_password         = 'guest',
-  $rabbit_login_method     = 'AMQPLAIN',
-  $rabbit_virtual_host     = '/',
-  $rabbit_retry_interval   = 1,
-  $rabbit_retry_backoff    = 2,
-  $rabbit_max_retries      = 0,
-  $qpid_hostname           = 'localhost',
-  $qpid_port               = 5672,
-  $qpid_hosts              = false,
+  $amqp_durable_queues     = $::os_service_default,
+  $rabbit_ha_queues        = $::os_service_default,
+  $rabbit_host             = $::os_service_default,
+  $rabbit_hosts            = $::os_service_default,
+  $rabbit_port             = $::os_service_default,
+  $rabbit_use_ssl          = $::os_service_default,
+  $rabbit_userid           = $::os_service_default,
+  $rabbit_password         = $::os_service_default,
+  $rabbit_login_method     = $::os_service_default,
+  $rabbit_virtual_host     = $::os_service_default,
+  $rabbit_retry_interval   = $::os_service_default,
+  $rabbit_retry_backoff    = $::os_service_default,
+  $rabbit_max_retries      = $::os_service_default,
+  $qpid_hostname           = $::os_service_default,
+  $qpid_port               = $::os_service_default,
+  $qpid_hosts              = $::os_service_default,
   $qpid_username           = 'guest',
   $qpid_password           = 'guest',
-  $qpid_sasl_mechanisms    = '',
-  $qpid_heartbeat          = 60,
-  $qpid_protocol           = 'tcp',
-  $qpid_tcp_nodelay        = true,
-  $qpid_receiver_capacity  = 1,
-  $qpid_topology_version   = 2,
-  $zeromq_bind_address     = '*',
-  $zeromq_port             = 9501,
-  $zeromq_contexts         = 1,
-  $zeromq_topic_backlog    = 'None',
-  $zeromq_ipc_dir          = '/var/run/openstack',
+  $qpid_sasl_mechanisms    = $::os_service_default,
+  $qpid_heartbeat          = $::os_service_default,
+  $qpid_protocol           = $::os_service_default,
+  $qpid_tcp_nodelay        = $::os_service_default,
+  $qpid_receiver_capacity  = $::os_service_default,
+  $qpid_topology_version   = $::os_service_default,
+  $zeromq_bind_address     = $::os_service_default,
+  $zeromq_contexts         = $::os_service_default,
+  $zeromq_topic_backlog    = $::os_service_default,
+  $zeromq_ipc_dir          = $::os_service_default,
   $zeromq_host             = 'sahara',
-  $cast_timeout            = 30,
+  $cast_timeout            = $::os_service_default,
   $kombu_ssl_version       = $::os_service_default,
   $kombu_ssl_keyfile       = $::os_service_default,
   $kombu_ssl_certfile      = $::os_service_default,
   $kombu_ssl_ca_certs      = $::os_service_default,
-  $kombu_reconnect_delay   = '1.0',
+  $kombu_reconnect_delay   = $::os_service_default,
   # DEPRECATED PARAMETERS
+  $zeromq_port         = undef,
   $manage_service      = undef,
   $enabled             = undef,
 ) {
@@ -401,9 +401,9 @@ class sahara(
   }
 
   if $rpc_backend == 'rabbit' or is_service_default($rpc_backend) {
-    if $rabbit_hosts {
+    if ! is_service_default($rabbit_hosts) and $rabbit_hosts {
       sahara_config {
-        'oslo_messaging_rabbit/rabbit_hosts':     value => join($rabbit_hosts, ',');
+        'oslo_messaging_rabbit/rabbit_hosts':     value => join(any2array($rabbit_hosts), ',');
         'oslo_messaging_rabbit/rabbit_ha_queues': value => true;
       }
     } else {
@@ -411,7 +411,7 @@ class sahara(
         'oslo_messaging_rabbit/rabbit_host':      value => $rabbit_host;
         'oslo_messaging_rabbit/rabbit_port':      value => $rabbit_port;
         'oslo_messaging_rabbit/rabbit_ha_queues': value => $rabbit_ha_queues;
-        'oslo_messaging_rabbit/rabbit_hosts':     value => "${rabbit_host}:${rabbit_port}";
+        'oslo_messaging_rabbit/rabbit_hosts':     ensure => absent;
       }
     }
     sahara_config {
@@ -437,15 +437,17 @@ class sahara(
 
   if $rpc_backend == 'qpid' {
 
-    if $qpid_hosts {
+    warning('Default values for qpid_username and qpid_password parameters are different from OpenStack project defaults')
+
+    if ! is_service_default($qpid_hosts) and $qpid_hosts {
       sahara_config {
-        'oslo_messaging_qpid/qpid_hosts':     value => join($qpid_hosts, ',');
+        'oslo_messaging_qpid/qpid_hosts':     value => join(any2array($qpid_hosts), ',');
       }
     } else {
       sahara_config {
         'oslo_messaging_qpid/qpid_hostname': value => $qpid_hostname;
         'oslo_messaging_qpid/qpid_port':     value => $qpid_port;
-        'oslo_messaging_qpid/qpid_hosts':    value => "${qpid_hostname}:${qpid_port}";
+        'oslo_messaging_qpid/qpid_hosts':    ensure => absent;
       }
     }
 
@@ -466,10 +468,14 @@ class sahara(
   }
 
   if $rpc_backend == 'zmq' {
+
+    if $zeromq_port {
+      warning('The zeromq_port parameter is deprecated and has no effect.')
+    }
+
     sahara_config {
       'DEFAULT/rpc_backend':           value => 'zmq';
       'DEFAULT/rpc_zmq_bind_address':  value => $zeromq_bind_address;
-      'DEFAULT/rpc_zmq_port':          value => $zeromq_port;
       'DEFAULT/rpc_zmq_contexts':      value => $zeromq_contexts;
       'DEFAULT/rpc_zmq_topic_backlog': value => $zeromq_topic_backlog;
       'DEFAULT/rpc_zmq_ipc_dir':       value => $zeromq_ipc_dir;
@@ -478,7 +484,7 @@ class sahara(
     }
   }
 
-  if $use_ssl {
+  if ! is_service_default($use_ssl) and $use_ssl {
     if is_service_default($ca_file) {
       fail('The ca_file parameter is required when use_ssl is set to true')
     }
