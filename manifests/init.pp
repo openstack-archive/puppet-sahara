@@ -44,7 +44,7 @@
 # [*plugins*]
 #   (Optional) List of plugins to be loaded.
 #   Sahara preserves the order of the list when returning it.
-#   Defaults to undef
+#   Defaults to $::os_service_default
 #
 # [*use_neutron*]
 #   (Optional) Whether to use neutron
@@ -60,15 +60,15 @@
 #
 # [*cert_file*]
 #   (optinal) Certificate file to use when starting API server securely
-#   Defaults to undef
+#   Defaults to $::os_service_default
 #
 # [*key_file*]
 #   (optional) Private key file to use when starting API server securely
-#   Defaults to undef
+#   Defaults to $::os_service_default
 #
 # [*ca_file*]
 #   (optional) CA certificate file to use to verify connecting clients
-#   Defaults to undef
+#   Defaults to $::os_service_default
 #
 # == database configuration options
 #
@@ -135,7 +135,7 @@
 #     rabbit (for rabbitmq)
 #     qpid (for qpid)
 #     zmq (for zeromq)
-#   Defaults to undef
+#   Defaults to $::os_service_default
 #
 # [*amqp_durable_queues*]
 #   (optional) Use durable queues in AMQP
@@ -267,19 +267,19 @@
 #    (optional) SSL version to use (valid only if SSL enabled).
 #    Valid values are TLSv1, SSLv23 and SSLv3. SSLv2 may be
 #    available on some distributions.
-#    Defaults to 'TLSv1'
+#    Defaults to $::os_service_default.
 #
 # [*kombu_ssl_keyfile*]
 #   (Optional) SSL key file (valid only if SSL enabled).
-#   Defaults to undef.
+#   Defaults to $::os_service_default.
 #
 # [*kombu_ssl_certfile*]
 #   (Optional) SSL cert file (valid only if SSL enabled).
-#   Defaults to undef.
+#   Defaults to $::os_service_default.
 #
 # [*kombu_ssl_ca_certs*]
 #   (Optional) SSL certification authority file (valid only if SSL enabled).
-#   Defaults to undef
+#   Defaults to $::os_service_default.
 #
 # [*kombu_reconnect_delay*]
 #   (Optional) Backoff on cancel notification (valid only if SSL enabled).
@@ -305,13 +305,13 @@ class sahara(
   $log_dir                 = undef,
   $host                    = '0.0.0.0',
   $port                    = '8386',
-  $plugins                 = undef,
+  $plugins                 = $::os_service_default,
   $use_neutron             = false,
   $use_floating_ips        = true,
   $use_ssl                 = false,
-  $ca_file                 = undef,
-  $cert_file               = undef,
-  $key_file                = undef,
+  $ca_file                 = $::os_service_default,
+  $cert_file               = $::os_service_default,
+  $key_file                = $::os_service_default,
   $database_connection     = undef,
   $database_max_retries    = undef,
   $database_idle_timeout   = undef,
@@ -326,7 +326,7 @@ class sahara(
   $admin_tenant_name       = 'services',
   $auth_uri                = 'http://127.0.0.1:5000/v2.0/',
   $identity_uri            = 'http://127.0.0.1:35357/',
-  $rpc_backend             = undef,
+  $rpc_backend             = $::os_service_default,
   $amqp_durable_queues     = false,
   $rabbit_ha_queues        = false,
   $rabbit_host             = 'localhost',
@@ -358,10 +358,10 @@ class sahara(
   $zeromq_ipc_dir          = '/var/run/openstack',
   $zeromq_host             = 'sahara',
   $cast_timeout            = 30,
-  $kombu_ssl_version       = 'TLSv1',
-  $kombu_ssl_keyfile       = undef,
-  $kombu_ssl_certfile      = undef,
-  $kombu_ssl_ca_certs      = undef,
+  $kombu_ssl_version       = $::os_service_default,
+  $kombu_ssl_keyfile       = $::os_service_default,
+  $kombu_ssl_certfile      = $::os_service_default,
+  $kombu_ssl_ca_certs      = $::os_service_default,
   $kombu_reconnect_delay   = '1.0',
   # DEPRECATED PARAMETERS
   $manage_service      = undef,
@@ -380,17 +380,8 @@ class sahara(
 
   Package['sahara-common'] -> Class['sahara::policy']
 
-  if $plugins {
-    sahara_config {
-      'DEFAULT/plugins': value => join(any2array($plugins),',');
-    }
-  } else {
-    sahara_config {
-      'DEFAULT/plugins': ensure => absent;
-    }
-  }
-
   sahara_config {
+    'DEFAULT/plugins':          value => join(any2array($plugins),',');
     'DEFAULT/use_neutron':      value => $use_neutron;
     'DEFAULT/use_floating_ips': value => $use_floating_ips;
     'DEFAULT/host':             value => $host;
@@ -409,37 +400,7 @@ class sahara(
     }
   }
 
-  if $rpc_backend == 'rabbit' {
-    if $rabbit_use_ssl {
-      if $kombu_ssl_ca_certs {
-        sahara_config { 'oslo_messaging_rabbit/kombu_ssl_ca_certs': value => $kombu_ssl_ca_certs; }
-      } else {
-        sahara_config { 'oslo_messaging_rabbit/kombu_ssl_ca_certs': ensure => absent; }
-      }
-      if $kombu_ssl_certfile or $kombu_ssl_keyfile {
-        sahara_config {
-          'oslo_messaging_rabbit/kombu_ssl_certfile': value => $kombu_ssl_certfile;
-          'oslo_messaging_rabbit/kombu_ssl_keyfile':  value => $kombu_ssl_keyfile;
-        }
-      } else {
-        sahara_config {
-          'oslo_messaging_rabbit/kombu_ssl_certfile': ensure => absent;
-          'oslo_messaging_rabbit/kombu_ssl_keyfile':  ensure => absent;
-        }
-      }
-      if $kombu_ssl_version {
-        sahara_config { 'oslo_messaging_rabbit/kombu_ssl_version':  value => $kombu_ssl_version; }
-      } else {
-        sahara_config { 'oslo_messaging_rabbit/kombu_ssl_version':  ensure => absent; }
-      }
-    } else {
-      sahara_config {
-        'oslo_messaging_rabbit/kombu_ssl_ca_certs': ensure => absent;
-        'oslo_messaging_rabbit/kombu_ssl_certfile': ensure => absent;
-        'oslo_messaging_rabbit/kombu_ssl_keyfile':  ensure => absent;
-        'oslo_messaging_rabbit/kombu_ssl_version':  ensure => absent;
-      }
-    }
+  if $rpc_backend == 'rabbit' or is_service_default($rpc_backend) {
     if $rabbit_hosts {
       sahara_config {
         'oslo_messaging_rabbit/rabbit_hosts':     value => join($rabbit_hosts, ',');
@@ -466,6 +427,10 @@ class sahara(
       'oslo_messaging_rabbit/rabbit_retry_interval': value => $rabbit_retry_interval;
       'oslo_messaging_rabbit/rabbit_retry_backoff':  value => $rabbit_retry_backoff;
       'oslo_messaging_rabbit/rabbit_max_retries':    value => $rabbit_max_retries;
+      'oslo_messaging_rabbit/kombu_ssl_ca_certs':    value => $kombu_ssl_ca_certs;
+      'oslo_messaging_rabbit/kombu_ssl_certfile':    value => $kombu_ssl_certfile;
+      'oslo_messaging_rabbit/kombu_ssl_keyfile':     value => $kombu_ssl_keyfile;
+      'oslo_messaging_rabbit/kombu_ssl_version':     value => $kombu_ssl_version;
       'oslo_messaging_rabbit/kombu_reconnect_delay': value => $kombu_reconnect_delay;
     }
   }
@@ -514,25 +479,19 @@ class sahara(
   }
 
   if $use_ssl {
-    if !$ca_file {
+    if is_service_default($ca_file) {
       fail('The ca_file parameter is required when use_ssl is set to true')
     }
-    if !$cert_file {
+    if is_service_default($cert_file) {
       fail('The cert_file parameter is required when use_ssl is set to true')
     }
-    if !$key_file {
+    if is_service_default($key_file) {
       fail('The key_file parameter is required when use_ssl is set to true')
     }
     sahara_config {
       'ssl/cert_file' : value => $cert_file;
       'ssl/key_file' :  value => $key_file;
       'ssl/ca_file' :   value => $ca_file;
-    }
-  } else {
-    sahara_config {
-      'ssl/cert_file' : ensure => absent;
-      'ssl/key_file' :  ensure => absent;
-      'ssl/ca_file' :   ensure => absent;
     }
   }
 
