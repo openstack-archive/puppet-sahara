@@ -10,10 +10,10 @@ describe 'sahara::service::all' do
 
   context 'on Debian platforms' do
     let :facts do
-      {
+      @default_facts.merge({
         :osfamily => 'Debian',
         :operatingsystem => 'Debian'
-      }
+      })
     end
 
     it_configures 'sahara-all'
@@ -26,7 +26,7 @@ describe 'sahara::service::all' do
 
   context 'on RedHat platforms' do
     let :facts do
-      { :osfamily => 'RedHat' }
+      @default_facts.merge({ :osfamily => 'RedHat' })
     end
 
     it_configures 'sahara-all'

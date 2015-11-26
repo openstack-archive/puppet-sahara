@@ -14,6 +14,7 @@ describe 'sahara' do
   shared_examples_for 'sahara' do
     it { is_expected.to contain_class('sahara::params') }
     it { is_expected.to contain_class('sahara::db') }
+    it { is_expected.to contain_class('sahara::logging') }
     it { is_expected.to contain_class('sahara::policy') }
     it { is_expected.to contain_class('mysql::bindings::python') }
     it { is_expected.to contain_exec('sahara-dbmanage') }
@@ -30,7 +31,7 @@ describe 'sahara' do
       it { is_expected.to contain_sahara_config('keystone_authtoken/admin_user').with_value('sahara') }
       it { is_expected.to contain_sahara_config('keystone_authtoken/admin_tenant_name').with_value('services') }
       it { is_expected.to contain_sahara_config('keystone_authtoken/admin_password').with_value('secrete').with_secret(true) }
-      it { is_expected.to contain_sahara_config('DEFAULT/plugins').with_ensure('absent') }
+      it { is_expected.to contain_sahara_config('DEFAULT/plugins').with_value('<SERVICE DEFAULT>') }
     end
 
     context 'with passing params' do
@@ -106,6 +107,7 @@ describe 'sahara' do
             :kombu_ssl_ca_certs => '/etc/ca.cert',
             :kombu_ssl_certfile => '/etc/certfile',
             :kombu_ssl_keyfile  => '/etc/key',
+            :kombu_ssl_version  => 'TLSv1',
           })
         end
 
@@ -116,34 +118,19 @@ describe 'sahara' do
         it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/kombu_ssl_version').with_value('TLSv1') }
       end
 
-      context 'with rabbit ssl cert parameters' do
-        before do
-          params.merge!({
-            :rabbit_password => 'pass',
-            :rabbit_use_ssl  => 'true',
-          })
-        end
-
-        it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value('true') }
-        it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/kombu_ssl_version').with_value('TLSv1') }
-      end
-
       context 'with rabbit ssl disabled' do
         before do
           params.merge!({
             :rabbit_password    => 'pass',
             :rabbit_use_ssl     => false,
-            :kombu_ssl_ca_certs => 'undef',
-            :kombu_ssl_certfile => 'undef',
-            :kombu_ssl_keyfile  => 'undef'
           })
         end
 
         it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value('false') }
-        it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_ensure('absent') }
-        it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_ensure('absent') }
-        it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_ensure('absent') }
-        it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/kombu_ssl_version').with_ensure('absent') }
+        it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_value('<SERVICE DEFAULT>') }
+        it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_value('<SERVICE DEFAULT>') }
+        it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_value('<SERVICE DEFAULT>') }
+        it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/kombu_ssl_version').with_value('<SERVICE DEFAULT>') }
       end
 
       context 'when passing params for single rabbit host' do
@@ -269,9 +256,9 @@ describe 'sahara' do
 
   shared_examples_for 'sahara ssl' do
     context 'without ssl' do
-      it { is_expected.to contain_sahara_config('ssl/ca_file').with_ensure('absent') }
-      it { is_expected.to contain_sahara_config('ssl/cert_file').with_ensure('absent') }
-      it { is_expected.to contain_sahara_config('ssl/key_file').with_ensure('absent') }
+      it { is_expected.to_not contain_sahara_config('ssl/ca_file') }
+      it { is_expected.to_not contain_sahara_config('ssl/cert_file') }
+      it { is_expected.to_not contain_sahara_config('ssl/key_file') }
     end
 
     context 'with ssl' do
@@ -351,10 +338,10 @@ describe 'sahara' do
 
   context 'on Debian platforms' do
     let :facts do
-      {
+      @default_facts.merge({
         :osfamily => 'Debian',
         :operatingsystem => 'Debian'
-      }
+      })
     end
 
     it_configures 'sahara'
@@ -369,7 +356,7 @@ describe 'sahara' do
 
   context 'on RedHat platforms' do
     let :facts do
-      { :osfamily => 'RedHat' }
+      @default_facts.merge({ :osfamily => 'RedHat' })
     end
 
     it_configures 'sahara'

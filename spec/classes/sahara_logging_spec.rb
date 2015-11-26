@@ -74,7 +74,7 @@ describe 'sahara::logging' do
       end
 
       it { is_expected.to contain_sahara_config('DEFAULT/use_syslog').with_value(true) }
-      it { is_expected.to contain_sahara_config('DEFAULT/syslog_log_facility').with_value('LOG_USER') }
+      it { is_expected.to contain_sahara_config('DEFAULT/syslog_log_facility').with_value('<SERVICE DEFAULT>') }
     end
   end
 
@@ -120,13 +120,13 @@ describe 'sahara::logging' do
      :logging_exception_prefix, :log_config_append, :publish_errors,
      :default_log_levels, :fatal_deprecations, :instance_format,
      :instance_uuid_format, :log_date_format, ].each { |param|
-        it { is_expected.to contain_sahara_config("DEFAULT/#{param}").with_ensure('absent') }
+        it { is_expected.to contain_sahara_config("DEFAULT/#{param}").with_value('<SERVICE DEFAULT>') }
       }
   end
 
   context 'on Debian platforms' do
     let :facts do
-      { :osfamily => 'Debian' }
+      @default_facts.merge({ :osfamily => 'Debian' })
     end
 
     it_configures 'sahara-logging'
@@ -134,7 +134,7 @@ describe 'sahara::logging' do
 
   context 'on RedHat platforms' do
     let :facts do
-      { :osfamily => 'RedHat' }
+      @default_facts.merge({ :osfamily => 'RedHat' })
     end
 
     it_configures 'sahara-logging'
