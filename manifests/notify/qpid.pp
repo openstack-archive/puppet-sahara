@@ -7,15 +7,15 @@
 #
 # [*durable_queues*]
 #   (Optional) Use durable queues in broker.
-#   Defaults to false.
+#   Defaults to $::os_service_default.
 #
 # [*qpid_hostname*]
 #   (Optional) IP or hostname of the qpid server.
-#   Defaults to '127.0.0.1'.
+#   Defaults to $::os_service_default.
 #
 # [*qpid_port*]
 #   (Optional) Port of the qpid server.
-#   Defaults to 5672.
+#   Defaults to $::os_service_default.
 #
 # [*qpid_username*]
 #   (Optional) User to connect to the qpid server.
@@ -27,35 +27,35 @@
 #
 # [*qpid_sasl_mechanisms*]
 #   (Optional) String of SASL mechanisms to use.
-#   Defaults to ''.
+#   Defaults to $::os_service_default.
 #
 # [*qpid_heartbeat*]
 #   (Optional) Seconds between connection keepalive heartbeats.
-#   Defaults to 60.
+#   Defaults to $::os_service_default.
 #
 # [*qpid_protocol*]
 #   (Optional) Protocol to use for qpid (tcp/ssl).
-#   Defaults to tcp.
+#   Defaults to $::os_service_default.
 #
 # [*qpid_tcp_nodelay*]
 #   (Optional) Whether to disable the Nagle algorithm.
-#   Defaults to true.
+#   Defaults to $::os_service_default.
 #
 # [*qpid_receiver_capacity*]
 #   (Optional) Number of prefetched messages to hold.
-#   Defaults to 1.
+#   Defaults to $::os_service_default.
 #
 # [*qpid_topology_version*]
 #   (Optional) Version of qpid toplogy to use.
-#   Defaults to 2.
+#   Defaults to $::os_service_default.
 #
 # [*notification_topics*]
 #   (Optional) Topic to use for notifications.
-#   Defaults to 'notifications'.
+#   Defaults to $::os_service_default.
 #
 # [*control_exchange*]
 #   (Optional) The default exchange to scope topics.
-#   Defaults to 'openstack'.
+#   Defaults to $::os_service_default.
 #
 # == DEPRECATED PARAMETERS
 #
@@ -82,19 +82,19 @@
 #   Defaults to undef
 #
 class sahara::notify::qpid(
-  $durable_queues         = false,
-  $qpid_hostname          = 'localhost',
-  $qpid_port              = 5672,
+  $durable_queues         = $::os_service_default,
+  $qpid_hostname          = $::os_service_default,
+  $qpid_port              = $::os_service_default,
   $qpid_username          = 'guest',
   $qpid_password          = 'guest',
-  $qpid_sasl_mechanisms   = '',
-  $qpid_heartbeat         = 60,
-  $qpid_protocol          = 'tcp',
-  $qpid_tcp_nodelay       = true,
-  $qpid_receiver_capacity = 1,
-  $qpid_topology_version  = 2,
-  $notification_topics    = 'notifications',
-  $control_exchange       = 'openstack',
+  $qpid_sasl_mechanisms   = $::os_service_default,
+  $qpid_heartbeat         = $::os_service_default,
+  $qpid_protocol          = $::os_service_default,
+  $qpid_tcp_nodelay       = $::os_service_default,
+  $qpid_receiver_capacity = $::os_service_default,
+  $qpid_topology_version  = $::os_service_default,
+  $notification_topics    = $::os_service_default,
+  $control_exchange       = $::os_service_default,
   # DEPRECATED PARAMETERS
   $kombu_ssl_version      = undef,
   $kombu_ssl_keyfile      = undef,
@@ -105,6 +105,7 @@ class sahara::notify::qpid(
 
   warning('This class is deprecated. Use sahara::init for configuration rpc options instead')
   warning('This class is deprecated. Use sahara::notify for configuration ceilometer notifications instead')
+  warning('Default values for qpid_username and qpid_password parameters are different from OpenStack project defaults')
 
   if $kombu_ssl_version {
     warning('The kombu_ssl_version parameter is deprecated and has no effect.')
@@ -128,7 +129,6 @@ class sahara::notify::qpid(
 
   sahara_config {
     'DEFAULT/rpc_backend':                        value => 'qpid';
-    'oslo_messaging_qpid/qpid_hosts':             value => '$qpid_hostname:$qpid_port';
 
     'oslo_messaging_qpid/amqp_durable_queues':    value => $durable_queues;
     'oslo_messaging_qpid/qpid_hostname':          value => $qpid_hostname;

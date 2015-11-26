@@ -9,10 +9,6 @@
 #   (Optional) Bind address; wildcard, ethernet, or ip address.
 #   Defaults to '*'.
 #
-# [*zeromq_port*]
-#   (Optional) Receiver listening port.
-#   Defaults to 9501.
-#
 # [*zeromq_contexts*]
 #   (Optional) Number of contexsts for zeromq.
 #   Defaults to 1.
@@ -34,6 +30,10 @@
 #   Defaults to 30.
 #
 # == DEPRECATED PARAMETERS
+#
+#  [*zeromq_port*]
+#   (Optional) Receiver listening port.
+#   Defaults to undef.
 #
 #  [*kombu_ssl_version*]
 #    (optional) SSL version to use (valid only if SSL enabled).
@@ -58,14 +58,14 @@
 #   Defaults to undef
 #
 class sahara::notify::zeromq(
-  $zeromq_bind_address    = '*',
-  $zeromq_port            = 9501,
-  $zeromq_contexts        = 1,
-  $zeromq_topic_backlog   = 'None',
-  $zeromq_ipc_dir         = '/var/run/openstack',
+  $zeromq_bind_address    = $::os_service_default,
+  $zeromq_contexts        = $::os_service_default,
+  $zeromq_topic_backlog   = $::os_service_default,
+  $zeromq_ipc_dir         = $::os_service_default,
   $zeromq_host            = 'sahara',
-  $cast_timeout           = 30,
+  $cast_timeout           = $::os_service_default,
   # DEPRECATED PARAMETERS
+  $zeromq_port            = undef,
   $kombu_ssl_version      = undef,
   $kombu_ssl_keyfile      = undef,
   $kombu_ssl_certfile     = undef,
@@ -74,6 +74,11 @@ class sahara::notify::zeromq(
 ) {
 
   warning('This class is deprecated. Use sahara::init for configuration rpc options instead')
+  warning('The default for zeromq_host parameter is different from OpenStack project default')
+
+  if $zeromq_port {
+    warning('The zeromq_port parameter is deprecated and has no effect.')
+  }
 
   if $kombu_ssl_version {
     warning('The kombu_ssl_version parameter is deprecated and has no effect.')
@@ -98,7 +103,6 @@ class sahara::notify::zeromq(
   sahara_config {
     'DEFAULT/rpc_backend':           value => 'zmq';
     'DEFAULT/rpc_zmq_bind_address':  value => $zeromq_bind_address;
-    'DEFAULT/rpc_zmq_port':          value => $zeromq_port;
     'DEFAULT/rpc_zmq_contexts':      value => $zeromq_contexts;
     'DEFAULT/rpc_zmq_topic_backlog': value => $zeromq_topic_backlog;
     'DEFAULT/rpc_zmq_ipc_dir':       value => $zeromq_ipc_dir;

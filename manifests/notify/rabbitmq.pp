@@ -7,60 +7,60 @@
 #
 # [*durable_queues*]
 #   (Optional) Use durable queues in broker.
-#   Defaults to false.
+#   Defaults to $::os_service_default.
 #
 # [*rabbit_host*]
 #   (Optional) IP or hostname of the rabbit server.
-#   Defaults to '127.0.0.1'.
+#   Defaults to $::os_service_default.
 #
 # [*rabbit_port*]
 #   (Optional) Port of the rabbit server.
-#   Defaults to 5672.
+#   Defaults to $::os_service_default.
 #
 # [*rabbit_hosts*]
 #   (Optional) IP or hostname of the rabbits servers.
 #   comma separated array (ex: ['1.0.0.10:5672','1.0.0.11:5672'])
-#   Defaults to false.
+#   Defaults to $::os_service_default.
 #
 # [*rabbit_use_ssl*]
 #   (Optional) Connect over SSL for RabbitMQ.
-#   Defaults to false.
+#   Defaults to $::os_service_default.
 #
 # [*rabbit_userid*]
 #   (Optional) User to connect to the rabbit server.
-#   Defaults to 'guest'.
+#   Defaults to $::os_service_default.
 #
 # [*rabbit_password*]
 #   (Optional) Password to connect to the rabbit server.
-#   Defaults to 'guest'.
+#   Defaults to $::os_service_default.
 #
 # [*rabbit_login_method*]
 #   (Optional) Method to auth with the rabbit server.
-#   Defaults to 'AMQPLAIN'.
+#   Defaults to $::os_service_default.
 #
 # [*rabbit_virtual_host*]
 #   (Optional) Virtual host to use.
-#   Defaults to '/'.
+#   Defaults to $::os_service_default.
 #
 # [*rabbit_retry_interval*]
 #   (Optional) Reconnection attempt frequency for rabbit.
-#   Defaults to 1.
+#   Defaults to $::os_service_default.
 #
 # [*rabbit_retry_backoff*]
 #   (Optional) Backoff between reconnection attempts for rabbit.
-#   Defaults to 2.
+#   Defaults to $::os_service_default.
 #
 # [*rabbit_max_retries*]
 #   (Optional) Number of times to retry (0 == no limit).
-#   Defaults to 0.
+#   Defaults to $::os_service_default.
 #
 # [*notification_topics*]
 #   (Optional) Topic to use for notifications.
-#   Defaults to 'notifications'.
+#   Defaults to $::os_service_default.
 #
 # [*control_exchange*]
 #   (Optional) The default exchange to scope topics.
-#   Defaults to 'openstack'.
+#   Defaults to $::os_service_default.
 #
 #  [*kombu_ssl_version*]
 #    (optional) SSL version to use (valid only if SSL enabled).
@@ -82,34 +82,34 @@
 #
 # [*kombu_reconnect_delay*]
 #   (Optional) Backoff on cancel notification (valid only if SSL enabled).
-#   Defaults to '1.0'; floating-point value.
+#   Defaults to '$::os_service_default; floating-point value.
 #
 class sahara::notify::rabbitmq(
-  $durable_queues        = false,
-  $rabbit_host           = 'localhost',
-  $rabbit_hosts          = false,
-  $rabbit_port           = 5672,
-  $rabbit_use_ssl        = false,
-  $rabbit_userid         = 'guest',
-  $rabbit_password       = 'guest',
-  $rabbit_login_method   = 'AMQPLAIN',
-  $rabbit_virtual_host   = '/',
-  $rabbit_retry_interval = 1,
-  $rabbit_retry_backoff  = 2,
-  $rabbit_max_retries    = 0,
-  $notification_topics   = 'notifications',
-  $control_exchange      = 'openstack',
+  $durable_queues        = $::os_service_default,
+  $rabbit_host           = $::os_service_default,
+  $rabbit_hosts          = $::os_service_default,
+  $rabbit_port           = $::os_service_default,
+  $rabbit_use_ssl        = $::os_service_default,
+  $rabbit_userid         = $::os_service_default,
+  $rabbit_password       = $::os_service_default,
+  $rabbit_login_method   = $::os_service_default,
+  $rabbit_virtual_host   = $::os_service_default,
+  $rabbit_retry_interval = $::os_service_default,
+  $rabbit_retry_backoff  = $::os_service_default,
+  $rabbit_max_retries    = $::os_service_default,
+  $notification_topics   = $::os_service_default,
+  $control_exchange      = $::os_service_default,
   $kombu_ssl_version     = $::os_service_default,
   $kombu_ssl_keyfile     = $::os_service_default,
   $kombu_ssl_certfile    = $::os_service_default,
   $kombu_ssl_ca_certs    = $::os_service_default,
-  $kombu_reconnect_delay = '1.0',
+  $kombu_reconnect_delay = $::os_service_default,
 ) {
 
   warning('This class is deprecated. Use sahara::init for configuration rpc options instead')
   warning('This class is deprecated. Use sahara::notify for configuration ceilometer notifications instead')
 
-  if $rabbit_hosts {
+  if ! is_service_default($rabbit_hosts) and $rabbit_hosts {
     sahara_config {
       'oslo_messaging_rabbit/rabbit_hosts':     value => join($rabbit_hosts, ',');
       'oslo_messaging_rabbit/rabbit_ha_queues': value => true;
@@ -119,7 +119,7 @@ class sahara::notify::rabbitmq(
       'oslo_messaging_rabbit/rabbit_host':      value => $rabbit_host;
       'oslo_messaging_rabbit/rabbit_port':      value => $rabbit_port;
       'oslo_messaging_rabbit/rabbit_ha_queues': value => false;
-      'oslo_messaging_rabbit/rabbit_hosts':     value => "${rabbit_host}:${rabbit_port}";
+      'oslo_messaging_rabbit/rabbit_hosts':     ensure => absent;
     }
   }
 

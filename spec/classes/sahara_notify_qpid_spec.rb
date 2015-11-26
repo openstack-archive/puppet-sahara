@@ -1,9 +1,9 @@
 require 'spec_helper'
 describe 'sahara::notify::qpid' do
   let :facts do
-    {
+    @default_facts.merge({
       :osfamily => 'Debian'
-    }
+    })
   end
 
   describe 'when default params and qpid_password' do
@@ -12,11 +12,10 @@ describe 'sahara::notify::qpid' do
     end
 
     it { is_expected.to contain_sahara_config('oslo_messaging_qpid/qpid_username').with_value('guest') }
-    it { is_expected.to contain_sahara_config('oslo_messaging_qpid/qpid_password').with_value('pass') }
     it { is_expected.to contain_sahara_config('oslo_messaging_qpid/qpid_password').with_value(params[:qpid_password]).with_secret(true) }
-    it { is_expected.to contain_sahara_config('oslo_messaging_qpid/qpid_hostname').with_value('localhost') }
-    it { is_expected.to contain_sahara_config('oslo_messaging_qpid/qpid_port').with_value('5672') }
-    it { is_expected.to contain_sahara_config('oslo_messaging_qpid/qpid_protocol').with_value('tcp') }
+    it { is_expected.to contain_sahara_config('oslo_messaging_qpid/qpid_hostname').with_value('<SERVICE DEFAULT>') }
+    it { is_expected.to contain_sahara_config('oslo_messaging_qpid/qpid_port').with_value('<SERVICE DEFAULT>') }
+    it { is_expected.to contain_sahara_config('oslo_messaging_qpid/qpid_protocol').with_value('<SERVICE DEFAULT>') }
   end
 
   describe 'when passing params' do
@@ -25,7 +24,8 @@ describe 'sahara::notify::qpid' do
         :qpid_password => 'pass2',
         :qpid_username => 'guest2',
         :qpid_hostname => 'localhost2',
-        :qpid_port     => '5673'
+        :qpid_port     => '5673',
+        :qpid_protocol => 'tcp',
       }
     end
     it { is_expected.to contain_sahara_config('oslo_messaging_qpid/qpid_username').with_value('guest2') }

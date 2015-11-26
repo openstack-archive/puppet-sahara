@@ -6,19 +6,19 @@
 #
 # [*verbose*]
 #   (Optional) Should the daemons log verbose messages
-#   Defaults to 'false'.
+#   Defaults to $::os_service_default.
 #
 # [*debug*]
 #   (Optional) Should the daemons log debug messages
-#   Defaults to 'false'.
+#   Defaults to $::os_service_default.
 #
 # [*use_syslog*]
 #   Use syslog for logging.
-#   (Optional) Defaults to 'false'.
+#   (Optional) Defaults to $::os_service_default.
 #
 # [*use_stderr*]
 #   (optional) Use stderr for logging
-#   Defaults to 'true'
+#   Defaults to $::os_service_default.
 #
 # [*log_facility*]
 #   Syslog facility to receive log lines.
@@ -91,10 +91,10 @@
 #   Example: 'Y-%m-%d %H:%M:%S'
 #
 class sahara::logging(
-  $verbose                       = false,
-  $debug                         = false,
-  $use_syslog                    = false,
-  $use_stderr                    = true,
+  $verbose                       = $::os_service_default,
+  $debug                         = $::os_service_default,
+  $use_syslog                    = $::os_service_default,
+  $use_stderr                    = $::os_service_default,
   $log_facility                  = $::os_service_default,
   $log_dir                       = '/var/log/sahara',
   $logging_context_format_string = $::os_service_default,

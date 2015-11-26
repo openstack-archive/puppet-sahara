@@ -6,41 +6,41 @@
 #
 # [*database_connection*]
 #   (Optional) The connection string to use to connect to the database.
-#   Defaults to 'mysql://sahara:secrete@localhost:3306/sahara'
+#   Defaults to mysql://sahara:secrete@localhost:3306/sahara.
 #
 # [*database_max_retries*]
 #   (Optional) Maximum number of database connection retries during startup.
 #   Set to -1 to specify an infinite retry count.
-#   Defaults to 10.
+#   Defaults to $::os_service_default.
 #
 # [*database_idle_timeout*]
 #   (Optional) Timeout before idle SQL connections are reaped.
-#   Defaults to 3600.
+#   Defaults to $::os_service_default.
 #
 # [*database_retry_interval*]
 #   (optional) Interval between retries of opening a database connection.
-#   Defaults to 10.
+#   Defaults to $::os_service_default.
 #
 # [*database_min_pool_size*]
 #   (optional) Minimum number of SQL connections to keep open in a pool.
-#   Defaults to 1.
+#   Defaults to $::os_service_default.
 #
 # [*database_max_pool_size*]
 #   (optional) Maximum number of SQL connections to keep open in a pool.
-#   Defaults to 10.
+#   Defaults to $::os_service_default.
 #
 # [*database_max_overflow*]
 #   (optional) If set, use this value for max_overflow with sqlalchemy.
-#   Defaults to 20.
+#   Defaults to $::os_service_default.
 #
 class sahara::db (
   $database_connection     = 'mysql://sahara:secrete@localhost:3306/sahara',
-  $database_idle_timeout   = 3600,
-  $database_min_pool_size  = 1,
-  $database_max_pool_size  = 10,
-  $database_max_retries    = 10,
-  $database_retry_interval = 10,
-  $database_max_overflow   = 20,
+  $database_idle_timeout   = $::os_service_default,
+  $database_min_pool_size  = $::os_service_default,
+  $database_max_pool_size  = $::os_service_default,
+  $database_max_retries    = $::os_service_default,
+  $database_retry_interval = $::os_service_default,
+  $database_max_overflow   = $::os_service_default,
 ) {
 
   # NOTE(degorenko): In order to keep backward compatibility we rely on the pick function

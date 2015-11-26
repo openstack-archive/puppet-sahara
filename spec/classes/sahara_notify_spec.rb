@@ -1,19 +1,19 @@
 require 'spec_helper'
 describe 'sahara::notify' do
   let :facts do
-    {
+    @default_facts.merge({
       :osfamily => 'Debian'
-    }
+    })
   end
 
   describe 'when defaults with notify enabled' do
     let :params do
       {:enable_notifications => 'true'}
     end
-    it { is_expected.to contain_sahara_config('DEFAULT/control_exchange').with_value('openstack') }
+    it { is_expected.to contain_sahara_config('DEFAULT/control_exchange').with_value('<SERVICE DEFAULT>') }
     it { is_expected.to contain_sahara_config('DEFAULT/notification_driver').with_value('messaging') }
-    it { is_expected.to contain_sahara_config('DEFAULT/notification_topics').with_value('notifications') }
-    it { is_expected.to contain_sahara_config('DEFAULT/notification_level').with_value('INFO') }
+    it { is_expected.to contain_sahara_config('DEFAULT/notification_topics').with_value('<SERVICE DEFAULT>') }
+    it { is_expected.to contain_sahara_config('DEFAULT/notification_level').with_value('<SERVICE DEFAULT>') }
   end
 
   describe 'when passing params' do
