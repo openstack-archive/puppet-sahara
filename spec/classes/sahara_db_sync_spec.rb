@@ -14,7 +14,26 @@ describe 'sahara::db::sync' do
       )
     end
 
+    describe 'overriding extra_params' do
+      let :params do
+        {
+          :extra_params => '--config-file /etc/sahara/sahara01.conf',
+        }
+      end
+
+      it {
+        is_expected.to contain_exec('sahara-dbmanage').with(
+          :command     => 'sahara-db-manage --config-file /etc/sahara/sahara01.conf upgrade head',
+          :path        => '/usr/bin',
+          :user        => 'sahara',
+          :refreshonly => 'true',
+          :logoutput   => 'on_failure'
+        )
+        }
+      end
+
   end
+
 
   context 'on a RedHat osfamily' do
     let :facts do
