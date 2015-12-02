@@ -22,7 +22,7 @@ class { '::sahara::db::mysql':
 
 # Then the common class
 class { '::sahara':
-  database_connection => 'mysql://sahara:a_big_secret@127.0.0.1:3306/sahara',
+  database_connection => 'mysql+pymysql://sahara:a_big_secret@127.0.0.1:3306/sahara',
   verbose             => true,
   debug               => true,
   admin_user          => 'admin',

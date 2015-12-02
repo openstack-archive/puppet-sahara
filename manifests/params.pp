@@ -14,6 +14,7 @@ class sahara::params {
       $all_service_name     = 'openstack-sahara-all'
       $api_service_name     = 'openstack-sahara-api'
       $engine_service_name  = 'openstack-sahara-engine'
+      $pymysql_package_name = undef
     }
     'Debian': {
       $common_package_name  = 'sahara-common'
@@ -23,6 +24,7 @@ class sahara::params {
       $all_service_name     = 'sahara'
       $api_service_name     = 'sahara-api'
       $engine_service_name  = 'sahara-engine'
+      $pymysql_package_name = 'python-pymysql'
     }
     default: {
       fail("Unsupported osfamily: ${::osfamily} operatingsystem: ${::operatingsystem}")
