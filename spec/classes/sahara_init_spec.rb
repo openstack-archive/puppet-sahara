@@ -305,36 +305,6 @@ describe 'sahara' do
     end
   end
 
-  shared_examples_for 'with deprecated service' do |service|
-    context 'with overridden parameters' do
-      let :params do
-        { :enabled        => true,
-          :manage_service => true }
-      end
-
-      it 'installs package and service' do
-        is_expected.to contain_class('sahara::service::all')
-        is_expected.to contain_package('sahara-all').with({
-          :name   => "#{service[:package_name]}",
-          :notify => ['Service[sahara-all]', 'Exec[sahara-dbmanage]']
-        })
-        is_expected.to contain_service('sahara-all').with({
-          :name      => "#{service[:service_name]}",
-          :ensure    => 'running',
-          :hasstatus => true,
-          :enable    => true
-        })
-      end
-    end
-
-    context 'with default parameters' do
-      it 'does not control service state' do
-        is_expected.to_not contain_service('sahara-all')
-        is_expected.to_not contain_package('sahara-all')
-      end
-    end
-  end
-
   context 'on Debian platforms' do
     let :facts do
       @default_facts.merge({
@@ -348,9 +318,6 @@ describe 'sahara' do
     it_configures 'sahara ssl'
     it_configures 'sahara rpc_backend'
 
-    it_behaves_like 'with deprecated service', {
-       :package_name => 'sahara',
-       :service_name => 'sahara' }
   end
 
   context 'on RedHat platforms' do
@@ -363,8 +330,5 @@ describe 'sahara' do
     it_configures 'sahara ssl'
     it_configures 'sahara rpc_backend'
 
-    it_behaves_like 'with deprecated service', {
-       :package_name => 'openstack-sahara',
-       :service_name => 'openstack-sahara-all' }
   end
 end

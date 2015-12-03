@@ -239,10 +239,6 @@
 #   (Optional) Bind address; wildcard, ethernet, or ip address.
 #   Defaults to '*'.
 #
-# [*zeromq_port*]
-#   (Optional) Receiver listening port.
-#   Defaults to 9501.
-#
 # [*zeromq_contexts*]
 #   (Optional) Number of contexsts for zeromq.
 #   Defaults to 1.
@@ -287,12 +283,8 @@
 #
 # == DEPRECATED PARAMETERS
 #
-# [*manage_service*]
-#   (optional) Whether the service should be managed by Puppet.
-#   Defaults to undef.
-#
-# [*enabled*]
-#   (optional) Should the service be enabled.
+# [*zeromq_port*]
+#   (Optional) Receiver listening port.
 #   Defaults to undef.
 #
 class sahara(
@@ -364,8 +356,6 @@ class sahara(
   $kombu_reconnect_delay   = $::os_service_default,
   # DEPRECATED PARAMETERS
   $zeromq_port         = undef,
-  $manage_service      = undef,
-  $enabled             = undef,
 ) {
   include ::sahara::params
   include ::sahara::logging
@@ -505,13 +495,4 @@ class sahara(
     include ::sahara::db::sync
   }
 
-  if $manage_service or $enabled {
-    warning('Configuring daemon services from init class is deprecated.')
-    warning('Use ::sahara::service::{all|api|engine}.pp for configuring daemon services instead.')
-    class { '::sahara::service::all':
-      enabled        => $enabled,
-      manage_service => $manage_service,
-      package_ensure => $package_ensure,
-    }
-  }
 }
