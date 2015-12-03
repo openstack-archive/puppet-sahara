@@ -190,51 +190,6 @@
 #   (Optional) Number of times to retry (0 == no limit).
 #   Defaults to 0.
 #
-# [*qpid_hostname*]
-#   (Optional) IP or hostname of the qpid server.
-#   Defaults to '127.0.0.1'.
-#
-# [*qpid_port*]
-#   (Optional) Port of the qpid server.
-#   Defaults to 5672.
-#
-# [*qpid_hosts*]
-#   (Optional) Qpid HA cluster host:port pairs..
-#   comma separated array (ex: ['1.0.0.10:5672','1.0.0.11:5672'])
-#   Defaults to false.
-#
-# [*qpid_username*]
-#   (Optional) User to connect to the qpid server.
-#   Defaults to 'guest'.
-#
-# [*qpid_password*]
-#   (Optional) Password to connect to the qpid server.
-#   Defaults to 'guest'.
-#
-# [*qpid_sasl_mechanisms*]
-#   (Optional) String of SASL mechanisms to use.
-#   Defaults to ''.
-#
-# [*qpid_heartbeat*]
-#   (Optional) Seconds between connection keepalive heartbeats.
-#   Defaults to 60.
-#
-# [*qpid_protocol*]
-#   (Optional) Protocol to use for qpid (tcp/ssl).
-#   Defaults to tcp.
-#
-# [*qpid_tcp_nodelay*]
-#   (Optional) Whether to disable the Nagle algorithm.
-#   Defaults to true.
-#
-# [*qpid_receiver_capacity*]
-#   (Optional) Number of prefetched messages to hold.
-#   Defaults to 1.
-#
-# [*qpid_topology_version*]
-#   (Optional) Version of qpid toplogy to use.
-#   Defaults to 2.
-#
 # [*zeromq_bind_address*]
 #   (Optional) Bind address; wildcard, ethernet, or ip address.
 #   Defaults to '*'.
@@ -287,6 +242,51 @@
 #   (Optional) Receiver listening port.
 #   Defaults to undef.
 #
+# [*qpid_hostname*]
+#   (Optional) IP or hostname of the qpid server.
+#   Defaults to undef.
+#
+# [*qpid_port*]
+#   (Optional) Port of the qpid server.
+#   Defaults to undef.
+#
+# [*qpid_hosts*]
+#   (Optional) Qpid HA cluster host:port pairs..
+#   comma separated array (ex: ['1.0.0.10:5672','1.0.0.11:5672'])
+#   Defaults to undef.
+#
+# [*qpid_username*]
+#   (Optional) User to connect to the qpid server.
+#   Defaults to undef.
+#
+# [*qpid_password*]
+#   (Optional) Password to connect to the qpid server.
+#   Defaults to undef.
+#
+# [*qpid_sasl_mechanisms*]
+#   (Optional) String of SASL mechanisms to use.
+#   Defaults to undef.
+#
+# [*qpid_heartbeat*]
+#   (Optional) Seconds between connection keepalive heartbeats.
+#   Defaults to undef.
+#
+# [*qpid_protocol*]
+#   (Optional) Protocol to use for qpid (tcp/ssl).
+#   Defaults to undef.
+#
+# [*qpid_tcp_nodelay*]
+#   (Optional) Whether to disable the Nagle algorithm.
+#   Defaults to undef.
+#
+# [*qpid_receiver_capacity*]
+#   (Optional) Number of prefetched messages to hold.
+#   Defaults to undef.
+#
+# [*qpid_topology_version*]
+#   (Optional) Version of qpid toplogy to use.
+#   Defaults to undef.
+#
 class sahara(
   $package_ensure          = 'present',
   $verbose                 = undef,
@@ -332,17 +332,6 @@ class sahara(
   $rabbit_retry_interval   = $::os_service_default,
   $rabbit_retry_backoff    = $::os_service_default,
   $rabbit_max_retries      = $::os_service_default,
-  $qpid_hostname           = $::os_service_default,
-  $qpid_port               = $::os_service_default,
-  $qpid_hosts              = $::os_service_default,
-  $qpid_username           = 'guest',
-  $qpid_password           = 'guest',
-  $qpid_sasl_mechanisms    = $::os_service_default,
-  $qpid_heartbeat          = $::os_service_default,
-  $qpid_protocol           = $::os_service_default,
-  $qpid_tcp_nodelay        = $::os_service_default,
-  $qpid_receiver_capacity  = $::os_service_default,
-  $qpid_topology_version   = $::os_service_default,
   $zeromq_bind_address     = $::os_service_default,
   $zeromq_contexts         = $::os_service_default,
   $zeromq_topic_backlog    = $::os_service_default,
@@ -355,7 +344,18 @@ class sahara(
   $kombu_ssl_ca_certs      = $::os_service_default,
   $kombu_reconnect_delay   = $::os_service_default,
   # DEPRECATED PARAMETERS
-  $zeromq_port         = undef,
+  $zeromq_port             = undef,
+  $qpid_hostname           = undef,
+  $qpid_port               = undef,
+  $qpid_hosts              = undef,
+  $qpid_username           = undef,
+  $qpid_password           = undef,
+  $qpid_sasl_mechanisms    = undef,
+  $qpid_heartbeat          = undef,
+  $qpid_protocol           = undef,
+  $qpid_tcp_nodelay        = undef,
+  $qpid_receiver_capacity  = undef,
+  $qpid_topology_version   = undef,
 ) {
   include ::sahara::params
   include ::sahara::logging
@@ -426,35 +426,7 @@ class sahara(
   }
 
   if $rpc_backend == 'qpid' {
-
-    warning('Default values for qpid_username and qpid_password parameters are different from OpenStack project defaults')
-
-    if ! is_service_default($qpid_hosts) and $qpid_hosts {
-      sahara_config {
-        'oslo_messaging_qpid/qpid_hosts':     value => join(any2array($qpid_hosts), ',');
-      }
-    } else {
-      sahara_config {
-        'oslo_messaging_qpid/qpid_hostname': value => $qpid_hostname;
-        'oslo_messaging_qpid/qpid_port':     value => $qpid_port;
-        'oslo_messaging_qpid/qpid_hosts':    ensure => absent;
-      }
-    }
-
-    sahara_config {
-      'DEFAULT/rpc_backend':                     value => 'qpid';
-      'oslo_messaging_qpid/amqp_durable_queues': value => $amqp_durable_queues;
-      'oslo_messaging_qpid/qpid_username':       value => $qpid_username;
-      'oslo_messaging_qpid/qpid_password':
-        value => $qpid_password,
-        secret => true;
-      'oslo_messaging_qpid/qpid_sasl_mechanisms':   value => $qpid_sasl_mechanisms;
-      'oslo_messaging_qpid/qpid_heartbeat':         value => $qpid_heartbeat;
-      'oslo_messaging_qpid/qpid_protocol':          value => $qpid_protocol;
-      'oslo_messaging_qpid/qpid_tcp_nodelay':       value => $qpid_tcp_nodelay;
-      'oslo_messaging_qpid/qpid_receiver_capacity': value => $qpid_receiver_capacity;
-      'oslo_messaging_qpid/qpid_topology_version':  value => $qpid_topology_version;
-    }
+    warning('Qpid driver is removed from Oslo.messaging in the Mitaka release')
   }
 
   if $rpc_backend == 'zmq' {

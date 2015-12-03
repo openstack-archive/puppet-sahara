@@ -169,57 +169,6 @@ describe 'sahara' do
       end
     end
 
-    context 'with qpid rpc' do
-      before do
-        params.merge!({ :rpc_backend => 'qpid' })
-      end
-
-      it { is_expected.to contain_sahara_config('DEFAULT/rpc_backend').with_value('qpid') }
-
-      context 'when default params' do
-        it { is_expected.to contain_sahara_config('oslo_messaging_qpid/qpid_username').with_value('guest') }
-        it { is_expected.to contain_sahara_config('oslo_messaging_qpid/qpid_password').with_value('guest').with_secret(true) }
-        it { is_expected.to contain_sahara_config('oslo_messaging_qpid/qpid_hostname').with_value('<SERVICE DEFAULT>') }
-        it { is_expected.to contain_sahara_config('oslo_messaging_qpid/qpid_port').with_value('<SERVICE DEFAULT>') }
-        it { is_expected.to contain_sahara_config('oslo_messaging_qpid/qpid_protocol').with_value('<SERVICE DEFAULT>') }
-        it { is_expected.to contain_sahara_config('oslo_messaging_qpid/amqp_durable_queues').with_value('<SERVICE DEFAULT>') }
-        it { is_expected.to contain_sahara_config('oslo_messaging_qpid/qpid_hosts').with_ensure('absent') }
-      end
-
-      context 'when passing params' do
-        before do
-          params.merge!({
-            :qpid_password       => 'pass',
-            :qpid_username       => 'guest2',
-            :qpid_hostname       => 'localhost2',
-            :qpid_port           => '5673',
-            :rpc_backend         => 'qpid',
-            :amqp_durable_queues => 'true',
-          })
-        end
-
-        it { is_expected.to contain_sahara_config('oslo_messaging_qpid/qpid_username').with_value('guest2') }
-        it { is_expected.to contain_sahara_config('oslo_messaging_qpid/qpid_password').with_value('pass').with_secret(true) }
-        it { is_expected.to contain_sahara_config('oslo_messaging_qpid/qpid_hostname').with_value('localhost2') }
-        it { is_expected.to contain_sahara_config('oslo_messaging_qpid/qpid_port').with_value('5673') }
-        it { is_expected.to contain_sahara_config('oslo_messaging_qpid/amqp_durable_queues').with_value('true') }
-        it { is_expected.to contain_sahara_config('oslo_messaging_qpid/qpid_hosts').with_ensure('absent') }
-      end
-
-      context 'when passing params for multiple qpid hosts' do
-        before do
-          params.merge!({
-            :qpid_hosts  => ['nonlocalhost3:5673', 'nonlocalhost4:5673'],
-            :rpc_backend  => 'qpid',
-          })
-        end
-
-        it { is_expected.to contain_sahara_config('oslo_messaging_qpid/qpid_hosts').with_value('nonlocalhost3:5673,nonlocalhost4:5673') }
-        it { is_expected.to_not contain_sahara_config('oslo_messaging_qpid/qpid_port') }
-        it { is_expected.to_not contain_sahara_config('oslo_messaging_qpid/qpid_hostname') }
-      end
-    end
-
     context 'with zmq rpc' do
       before do
         params.merge!({ :rpc_backend => 'zmq' })
