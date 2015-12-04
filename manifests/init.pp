@@ -44,31 +44,31 @@
 # [*plugins*]
 #   (Optional) List of plugins to be loaded.
 #   Sahara preserves the order of the list when returning it.
-#   Defaults to $::os_service_default
+#   Defaults to $::os_service_default.
 #
 # [*use_neutron*]
 #   (Optional) Whether to use neutron
-#   Defaults to 'false'.
+#   Defaults to $::os_service_default.
 #
 # [*use_floating_ips*]
 #   (Optional) Whether to use floating IPs to communicate with instances.
-#   Defaults to 'true'.
+#   Defaults to $::os_service_default.
 #
 # [*use_ssl*]
 #   (optional) Enable SSL on the API server
-#   Defaults to false, not set
+#   Defaults to $::os_service_default, not set.
 #
 # [*cert_file*]
 #   (optinal) Certificate file to use when starting API server securely
-#   Defaults to $::os_service_default
+#   Defaults to $::os_service_default.
 #
 # [*key_file*]
 #   (optional) Private key file to use when starting API server securely
-#   Defaults to $::os_service_default
+#   Defaults to $::os_service_default.
 #
 # [*ca_file*]
 #   (optional) CA certificate file to use to verify connecting clients
-#   Defaults to $::os_service_default
+#   Defaults to $::os_service_default.
 #
 # == database configuration options
 #
@@ -135,76 +135,76 @@
 #     rabbit (for rabbitmq)
 #     qpid (for qpid)
 #     zmq (for zeromq)
-#   Defaults to $::os_service_default
+#   Defaults to $::os_service_default.
 #
 # [*amqp_durable_queues*]
 #   (optional) Use durable queues in AMQP
-#   Defaults to false.
+#   Defaults to $::os_service_default.
 #
 # [*rabbit_ha_queues*]
 #   (Optional) Use durable queues in RabbitMQ.
-#   Defaults to false.
+#   Defaults to $::os_service_default.
 #
 # [*rabbit_host*]
 #   (Optional) IP or hostname of the rabbit server.
-#   Defaults to '127.0.0.1'.
+#   Defaults to $::os_service_default.
 #
 # [*rabbit_port*]
 #   (Optional) Port of the rabbit server.
-#   Defaults to 5672.
+#   Defaults to $::os_service_default.
 #
 # [*rabbit_hosts*]
 #   (Optional) IP or hostname of the rabbits servers.
 #   comma separated array (ex: ['1.0.0.10:5672','1.0.0.11:5672'])
-#   Defaults to false.
+#   Defaults to $::os_service_default.
 #
 # [*rabbit_use_ssl*]
 #   (Optional) Connect over SSL for RabbitMQ.
-#   Defaults to false.
+#   Defaults to $::os_service_default.
 #
 # [*rabbit_userid*]
 #   (Optional) User to connect to the rabbit server.
-#   Defaults to 'guest'.
+#   Defaults to $::os_service_default.
 #
 # [*rabbit_password*]
 #   (Optional) Password to connect to the rabbit server.
-#   Defaults to 'guest'.
+#   Defaults to $::os_service_default.
 #
 # [*rabbit_login_method*]
 #   (Optional) Method to auth with the rabbit server.
-#   Defaults to 'AMQPLAIN'.
+#   Defaults to $::os_service_default.
 #
 # [*rabbit_virtual_host*]
 #   (Optional) Virtual host to use.
-#   Defaults to '/'.
+#   Defaults to $::os_service_default.
 #
 # [*rabbit_retry_interval*]
 #   (Optional) Reconnection attempt frequency for rabbit.
-#   Defaults to 1.
+#   Defaults to $::os_service_default.
 #
 # [*rabbit_retry_backoff*]
 #   (Optional) Backoff between reconnection attempts for rabbit.
-#   Defaults to 2.
+#   Defaults to $::os_service_default.
 #
 # [*rabbit_max_retries*]
 #   (Optional) Number of times to retry (0 == no limit).
-#   Defaults to 0.
+#   Defaults to $::os_service_default.
 #
 # [*zeromq_bind_address*]
 #   (Optional) Bind address; wildcard, ethernet, or ip address.
-#   Defaults to '*'.
+#   Defaults to $::os_service_default.
 #
 # [*zeromq_contexts*]
 #   (Optional) Number of contexsts for zeromq.
-#   Defaults to 1.
+#   Defaults to $::os_service_default.
 #
 # [*zeromq_topic_backlog*]
 #   (Optional) Number of incoming messages to buffer.
-#   Defaults to 'None'.
+#   Defaults to $::os_service_default.
 #
 # [*zeromq_ipc_dir*]
 #   (Optional) Directory for zeromq IPC.
-#   Defaults to '/var/run/openstack'.
+#   Defaults to $::os_service_default.
 #
 # [*zeromq_host*]
 #   (Optional) Name of the current node: hostname, FQDN, or IP.
@@ -212,7 +212,7 @@
 #
 # [*cast_timeout*]
 #   (Optional) TTL for zeromq messages.
-#   Defaults to 30.
+#   Defaults to $::os_service_default.
 #
 #  [*kombu_ssl_version*]
 #    (optional) SSL version to use (valid only if SSL enabled).
