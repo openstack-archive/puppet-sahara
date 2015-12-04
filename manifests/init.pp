@@ -472,6 +472,8 @@ class sahara(
 
   if $rpc_backend == 'qpid' {
 
+    warning('Qpid driver is removed from Oslo.messaging in the Mitaka release')
+
     if $qpid_hosts {
       sahara_config {
         'oslo_messaging_qpid/qpid_hosts':     value => join($qpid_hosts, ',');

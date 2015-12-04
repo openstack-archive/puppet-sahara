@@ -105,6 +105,7 @@ class sahara::notify::qpid(
 
   warning('This class is deprecated. Use sahara::init for configuration rpc options instead')
   warning('This class is deprecated. Use sahara::notify for configuration ceilometer notifications instead')
+  warning('Qpid driver is removed from Oslo.messaging in the Mitaka release')
 
   if $kombu_ssl_version {
     warning('The kombu_ssl_version parameter is deprecated and has no effect.')
