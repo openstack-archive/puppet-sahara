@@ -4,10 +4,6 @@ describe 'sahara::service::api' do
 
   shared_examples_for 'sahara-api' do
 
-    context 'require main class' do
-      it { is_expected.to contain_class('sahara') }
-    end
-
     context 'default params' do
       it { is_expected.to contain_sahara_config('DEFAULT/api_workers').with_value('<SERVICE DEFAULT>') }
     end

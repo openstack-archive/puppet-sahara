@@ -22,10 +22,9 @@ class sahara::service::engine (
   $package_ensure = 'present',
 ) {
 
-  require ::sahara
+  include ::sahara::params
 
   Sahara_config<||> ~> Service['sahara-engine']
-  Class['sahara::policy'] ~> Service['sahara-engine']
 
   package { 'sahara-engine':
     ensure => $package_ensure,

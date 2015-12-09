@@ -22,7 +22,8 @@ class sahara::service::all (
   $package_ensure        = 'present',
 ) {
 
-  require ::sahara
+  include ::sahara::policy
+  include ::sahara::params
 
   Sahara_config<||> ~> Service['sahara-all']
   Class['sahara::policy'] ~> Service['sahara-all']
