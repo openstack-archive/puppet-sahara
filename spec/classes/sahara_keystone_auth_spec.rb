@@ -25,13 +25,12 @@ describe 'sahara::keystone::auth' do
       :roles   => ['admin']
     )}
 
-    it { is_expected.to contain_keystone_service('sahara').with(
+    it { is_expected.to contain_keystone_service('sahara::data-processing').with(
       :ensure      => 'present',
-      :type        => 'data-processing',
       :description => 'Sahara Data Processing'
     ) }
 
-    it { is_expected.to contain_keystone_endpoint('RegionOne/sahara').with(
+    it { is_expected.to contain_keystone_endpoint('RegionOne/sahara::data-processing').with(
       :ensure       => 'present',
       :public_url   => "http://127.0.0.1:8386/v1.1/%(tenant_id)s",
       :admin_url    => "http://127.0.0.1:8386/v1.1/%(tenant_id)s",
@@ -58,7 +57,7 @@ describe 'sahara::keystone::auth' do
         :admin_url    => 'http://10.10.10.12:81/v1.1/%(tenant_id)s' }
     end
 
-    it { is_expected.to contain_keystone_endpoint('RegionOne/sahara').with(
+    it { is_expected.to contain_keystone_endpoint('RegionOne/sahara::data-processing').with(
       :ensure       => 'present',
       :public_url   => 'https://10.10.10.10:80/v1.1/%(tenant_id)s',
       :internal_url => 'http://10.10.10.11:81/v1.1/%(tenant_id)s',
@@ -74,7 +73,7 @@ describe 'sahara::keystone::auth' do
 
     it { is_expected.to contain_keystone_user('saharay') }
     it { is_expected.to contain_keystone_user_role('saharay@services') }
-    it { is_expected.to contain_keystone_service('saharay') }
-    it { is_expected.to contain_keystone_endpoint('RegionOne/saharay') }
+    it { is_expected.to contain_keystone_service('saharay::data-processing') }
+    it { is_expected.to contain_keystone_endpoint('RegionOne/saharay::data-processing') }
   end
 end
