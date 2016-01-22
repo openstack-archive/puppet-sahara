@@ -305,7 +305,6 @@ class sahara(
   $cert_file               = $::os_service_default,
   $key_file                = $::os_service_default,
   $database_connection     = undef,
-  $database_max_retries    = undef,
   $database_idle_timeout   = undef,
   $database_min_pool_size  = undef,
   $database_max_pool_size  = undef,
