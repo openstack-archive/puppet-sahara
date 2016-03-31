@@ -223,20 +223,10 @@ describe 'sahara' do
       it { is_expected.to contain_sahara_config('ssl/key_file').with_value('/tmp/key_file') }
     end
 
-    context 'with ssl but without ca_file' do
-      let :params do
-      {
-        :use_ssl   => 'true',
-      }
-      end
-      it_raises 'a Puppet::Error', /The ca_file parameter is required when use_ssl is set to true/
-    end
-
     context 'with ssl but without cert_file' do
       let :params do
       {
         :use_ssl   => 'true',
-        :ca_file   => '/tmp/ca_file',
       }
       end
       it_raises 'a Puppet::Error', /The cert_file parameter is required when use_ssl is set to true/
@@ -246,7 +236,6 @@ describe 'sahara' do
       let :params do
       {
         :use_ssl   => 'true',
-        :ca_file   => '/tmp/ca_file',
         :cert_file => '/tmp/cert_file',
       }
       end
