@@ -27,26 +27,33 @@ describe 'basic sahara' do
         require              => Class['rabbitmq'],
       }
 
-      # Sahara resources
-      class { '::sahara::db::mysql':
-        password => 'a_big_secret',
-      }
-      class { '::sahara':
-        rabbit_userid       => 'sahara',
-        rabbit_password     => 'an_even_bigger_secret',
-        rabbit_host         => '127.0.0.1',
-        rpc_backend         => 'rabbit',
-        database_connection => 'mysql+pymysql://sahara:a_big_secret@127.0.0.1/sahara?charset=utf8',
-        admin_password      => 'a_big_secret',
-      }
-      class { '::sahara::service::api': }
-      class { '::sahara::service::engine': }
-      class { '::sahara::keystone::auth':
-        password => 'a_big_secret',
-      }
-      class { '::sahara::client': }
-      class { '::sahara::notify':
-        enable_notifications => true,
+      case $::osfamily {
+        'Debian': {
+          warning('Sahara is not tested on Ubuntu anymore, too unstable for now.')
+        }
+        'RedHat': {
+          # Sahara resources
+          class { '::sahara::db::mysql':
+            password => 'a_big_secret',
+          }
+          class { '::sahara':
+            rabbit_userid       => 'sahara',
+            rabbit_password     => 'an_even_bigger_secret',
+            rabbit_host         => '127.0.0.1',
+            rpc_backend         => 'rabbit',
+            database_connection => 'mysql+pymysql://sahara:a_big_secret@127.0.0.1/sahara?charset=utf8',
+            admin_password      => 'a_big_secret',
+          }
+          class { '::sahara::service::api': }
+          class { '::sahara::service::engine': }
+          class { '::sahara::keystone::auth':
+            password => 'a_big_secret',
+          }
+          class { '::sahara::client': }
+          class { '::sahara::notify':
+            enable_notifications => true,
+          }
+        }
       }
       EOS
 
@@ -56,8 +63,10 @@ describe 'basic sahara' do
       apply_manifest(pp, :catch_changes => true)
     end
 
-    describe port(8386) do
-      it { is_expected.to be_listening.with('tcp') }
+    if os[:family].casecmp('RedHat') == 0
+      describe port(8386) do
+        it { is_expected.to be_listening.with('tcp') }
+      end
     end
 
   end
