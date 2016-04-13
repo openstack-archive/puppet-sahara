@@ -76,7 +76,7 @@ describe 'sahara' do
          it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('<SERVICE DEFAULT>') }
          it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_virtual_host').with_value('<SERVICE DEFAULT>') }
          it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/amqp_durable_queues').with_value('<SERVICE DEFAULT>') }
-         it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_hosts').with_ensure('absent') }
+         it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_hosts').with_value('<SERVICE DEFAULT>') }
       end
 
       context 'when passing params' do
@@ -97,14 +97,14 @@ describe 'sahara' do
         it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_port').with_value('5673') }
         it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('true') }
         it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/amqp_durable_queues').with_value('true') }
-        it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_hosts').with_ensure('absent') }
+        it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_hosts').with_value('<SERVICE DEFAULT>') }
       end
 
       context 'with rabbit ssl cert parameters' do
         before do
           params.merge!({
             :rabbit_password    => 'pass',
-            :rabbit_use_ssl     => 'true',
+            :rabbit_use_ssl     => true,
             :kombu_ssl_ca_certs => '/etc/ca.cert',
             :kombu_ssl_certfile => '/etc/certfile',
             :kombu_ssl_keyfile  => '/etc/key',
@@ -149,7 +149,7 @@ describe 'sahara' do
         it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_host').with_value('localhost2') }
         it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_port').with_value('5673') }
         it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('true') }
-        it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_hosts').with_ensure('absent') }
+        it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_hosts').with_value('<SERVICE DEFAULT>') }
       end
 
       context 'when passing params for multiple rabbit hosts' do
@@ -164,8 +164,8 @@ describe 'sahara' do
         it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_userid').with_value('guest3') }
         it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_hosts').with_value('nonlocalhost3:5673,nonlocalhost4:5673') }
         it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('true') }
-        it { is_expected.to_not contain_sahara_config('oslo_messaging_rabbit/rabbit_port') }
-        it { is_expected.to_not contain_sahara_config('oslo_messaging_rabbit/rabbit_host') }
+        it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_port').with_value('<SERVICE DEFAULT>') }
+        it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_host').with_value('<SERVICE DEFAULT>') }
       end
     end
 
@@ -212,7 +212,7 @@ describe 'sahara' do
     context 'with ssl' do
       let :params do
       {
-        :use_ssl   => 'true',
+        :use_ssl   => true,
         :ca_file   => '/tmp/ca_file',
         :cert_file => '/tmp/cert_file',
         :key_file  => '/tmp/key_file',
@@ -226,7 +226,7 @@ describe 'sahara' do
     context 'with ssl but without cert_file' do
       let :params do
       {
-        :use_ssl   => 'true',
+        :use_ssl   => true,
       }
       end
       it_raises 'a Puppet::Error', /The cert_file parameter is required when use_ssl is set to true/
@@ -235,7 +235,7 @@ describe 'sahara' do
     context 'with ssl but without key_file' do
       let :params do
       {
-        :use_ssl   => 'true',
+        :use_ssl   => true,
         :cert_file => '/tmp/cert_file',
       }
       end

@@ -85,7 +85,7 @@ describe 'sahara::db' do
         { :database_connection     => 'mysql+pymysql://sahara:sahara@localhost/sahara' }
       end
 
-      it { is_expected.to contain_package('sahara-backend-package').with({ :ensure => 'present', :name => 'python-pymysql' }) }
+      it { is_expected.to contain_package('db_backend_package').with({ :ensure => 'present', :name => 'python-pymysql' }) }
     end
 
   end
@@ -104,7 +104,7 @@ describe 'sahara::db' do
         { :database_connection     => 'mysql+pymysql://sahara:sahara@localhost/sahara' }
       end
 
-      it { is_expected.not_to contain_package('sahara-backend-package') }
+      it { is_expected.not_to contain_package('db_backend_package') }
     end
   end
 

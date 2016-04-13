@@ -20,6 +20,7 @@ describe 'sahara::policy' do
         :key   => 'context_is_admin',
         :value => 'foo:bar'
       })
+      is_expected.to contain_sahara_config('oslo_policy/policy_file').with_value('/etc/sahara/policy.json')
     end
   end
 

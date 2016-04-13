@@ -33,12 +33,18 @@ class sahara::notify (
   $notification_level   = $::os_service_default,
 ) {
 
+  oslo::messaging::notifications { 'sahara_config':
+    driver => $notification_driver,
+    topics => $notification_topics,
+  }
+
+  oslo::messaging::default { 'sahara_config':
+    control_exchange => $control_exchange
+  }
+
   sahara_config {
-    'DEFAULT/control_exchange':     value => $control_exchange;
-    'DEFAULT/enable_notifications': value => $enable_notifications;
-    'DEFAULT/notification_driver':  value => $notification_driver;
-    'DEFAULT/notification_topics':  value => $notification_topics;
-    'DEFAULT/notification_level':   value => $notification_level;
+    'oslo_messaging_notifications/enable': value => $enable_notifications;
+    'oslo_messaging_notifications/level':  value => $notification_level;
   }
 
 }

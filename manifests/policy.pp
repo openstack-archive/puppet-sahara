@@ -36,4 +36,6 @@ class sahara::policy (
 
   create_resources('openstacklib::policy::base', $policies)
 
+  oslo::policy { 'sahara_config': policy_file => $policy_path }
+
 }

@@ -390,37 +390,25 @@ class sahara(
   }
 
   if $rpc_backend == 'rabbit' or is_service_default($rpc_backend) {
-    if ! is_service_default($rabbit_hosts) and $rabbit_hosts {
-      sahara_config {
-        'oslo_messaging_rabbit/rabbit_hosts':     value => join(any2array($rabbit_hosts), ',');
-        'oslo_messaging_rabbit/rabbit_ha_queues': value => true;
-      }
-    } else {
-      sahara_config {
-        'oslo_messaging_rabbit/rabbit_host':      value => $rabbit_host;
-        'oslo_messaging_rabbit/rabbit_port':      value => $rabbit_port;
-        'oslo_messaging_rabbit/rabbit_ha_queues': value => $rabbit_ha_queues;
-        'oslo_messaging_rabbit/rabbit_hosts':     ensure => absent;
-      }
-    }
-    sahara_config {
-      'DEFAULT/rpc_backend':                       value => 'rabbit';
-      'oslo_messaging_rabbit/amqp_durable_queues': value => $amqp_durable_queues;
-      'oslo_messaging_rabbit/rabbit_use_ssl':      value => $rabbit_use_ssl;
-      'oslo_messaging_rabbit/rabbit_userid':       value => $rabbit_userid;
-      'oslo_messaging_rabbit/rabbit_password':
-        value => $rabbit_password,
-        secret => true;
-      'oslo_messaging_rabbit/rabbit_login_method':   value => $rabbit_login_method;
-      'oslo_messaging_rabbit/rabbit_virtual_host':   value => $rabbit_virtual_host;
-      'oslo_messaging_rabbit/rabbit_retry_interval': value => $rabbit_retry_interval;
-      'oslo_messaging_rabbit/rabbit_retry_backoff':  value => $rabbit_retry_backoff;
-      'oslo_messaging_rabbit/rabbit_max_retries':    value => $rabbit_max_retries;
-      'oslo_messaging_rabbit/kombu_ssl_ca_certs':    value => $kombu_ssl_ca_certs;
-      'oslo_messaging_rabbit/kombu_ssl_certfile':    value => $kombu_ssl_certfile;
-      'oslo_messaging_rabbit/kombu_ssl_keyfile':     value => $kombu_ssl_keyfile;
-      'oslo_messaging_rabbit/kombu_ssl_version':     value => $kombu_ssl_version;
-      'oslo_messaging_rabbit/kombu_reconnect_delay': value => $kombu_reconnect_delay;
+    oslo::messaging::rabbit { 'sahara_config':
+      rabbit_userid         => $rabbit_userid,
+      rabbit_password       => $rabbit_password,
+      rabbit_virtual_host   => $rabbit_virtual_host,
+      rabbit_host           => $rabbit_host,
+      rabbit_port           => $rabbit_port,
+      rabbit_hosts          => $rabbit_hosts,
+      rabbit_ha_queues      => $rabbit_ha_queues,
+      rabbit_use_ssl        => $rabbit_use_ssl,
+      kombu_reconnect_delay => $kombu_reconnect_delay,
+      kombu_ssl_version     => $kombu_ssl_version,
+      kombu_ssl_keyfile     => $kombu_ssl_keyfile,
+      kombu_ssl_certfile    => $kombu_ssl_certfile,
+      kombu_ssl_ca_certs    => $kombu_ssl_ca_certs,
+      amqp_durable_queues   => $amqp_durable_queues,
+      rabbit_login_method   => $rabbit_login_method,
+      rabbit_retry_interval => $rabbit_retry_interval,
+      rabbit_retry_backoff  => $rabbit_retry_backoff,
+      rabbit_max_retries    => $rabbit_max_retries,
     }
   }
 
