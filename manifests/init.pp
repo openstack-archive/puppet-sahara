@@ -133,7 +133,6 @@
 # [*rpc_backend*]
 #   (optional) The rpc backend implementation to use, can be:
 #     rabbit (for rabbitmq)
-#     qpid (for qpid)
 #     zmq (for zeromq)
 #   Defaults to $::os_service_default.
 #
@@ -242,51 +241,6 @@
 #   (Optional) Receiver listening port.
 #   Defaults to undef.
 #
-# [*qpid_hostname*]
-#   (Optional) IP or hostname of the qpid server.
-#   Defaults to undef.
-#
-# [*qpid_port*]
-#   (Optional) Port of the qpid server.
-#   Defaults to undef.
-#
-# [*qpid_hosts*]
-#   (Optional) Qpid HA cluster host:port pairs..
-#   comma separated array (ex: ['1.0.0.10:5672','1.0.0.11:5672'])
-#   Defaults to undef.
-#
-# [*qpid_username*]
-#   (Optional) User to connect to the qpid server.
-#   Defaults to undef.
-#
-# [*qpid_password*]
-#   (Optional) Password to connect to the qpid server.
-#   Defaults to undef.
-#
-# [*qpid_sasl_mechanisms*]
-#   (Optional) String of SASL mechanisms to use.
-#   Defaults to undef.
-#
-# [*qpid_heartbeat*]
-#   (Optional) Seconds between connection keepalive heartbeats.
-#   Defaults to undef.
-#
-# [*qpid_protocol*]
-#   (Optional) Protocol to use for qpid (tcp/ssl).
-#   Defaults to undef.
-#
-# [*qpid_tcp_nodelay*]
-#   (Optional) Whether to disable the Nagle algorithm.
-#   Defaults to undef.
-#
-# [*qpid_receiver_capacity*]
-#   (Optional) Number of prefetched messages to hold.
-#   Defaults to undef.
-#
-# [*qpid_topology_version*]
-#   (Optional) Version of qpid toplogy to use.
-#   Defaults to undef.
-#
 class sahara(
   $package_ensure          = 'present',
   $verbose                 = undef,
@@ -344,17 +298,6 @@ class sahara(
   $kombu_reconnect_delay   = $::os_service_default,
   # DEPRECATED PARAMETERS
   $zeromq_port             = undef,
-  $qpid_hostname           = undef,
-  $qpid_port               = undef,
-  $qpid_hosts              = undef,
-  $qpid_username           = undef,
-  $qpid_password           = undef,
-  $qpid_sasl_mechanisms    = undef,
-  $qpid_heartbeat          = undef,
-  $qpid_protocol           = undef,
-  $qpid_tcp_nodelay        = undef,
-  $qpid_receiver_capacity  = undef,
-  $qpid_topology_version   = undef,
 ) {
   include ::sahara::params
   include ::sahara::logging
@@ -410,10 +353,6 @@ class sahara(
       rabbit_retry_backoff  => $rabbit_retry_backoff,
       rabbit_max_retries    => $rabbit_max_retries,
     }
-  }
-
-  if $rpc_backend == 'qpid' {
-    warning('Qpid driver is removed from Oslo.messaging in the Mitaka release')
   }
 
   if $rpc_backend == 'zmq' {
