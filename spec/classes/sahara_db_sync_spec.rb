@@ -34,30 +34,19 @@ describe 'sahara::db::sync' do
 
   end
 
+  on_supported_os({
+    :supported_os   => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge(OSDefaults.get_facts({
+          :processorcount => 8,
+          :concat_basedir => '/var/lib/puppet/concat'
+        }))
+      end
 
-  context 'on a RedHat osfamily' do
-    let :facts do
-      {
-        :osfamily                 => 'RedHat',
-        :operatingsystemrelease   => '7.0',
-        :concat_basedir => '/var/lib/puppet/concat'
-      }
+      it_configures 'sahara-dbsync'
     end
-
-    it_configures 'sahara-dbsync'
-  end
-
-  context 'on a Debian osfamily' do
-    let :facts do
-      {
-        :operatingsystemrelease => '7.8',
-        :operatingsystem        => 'Debian',
-        :osfamily               => 'Debian',
-        :concat_basedir => '/var/lib/puppet/concat'
-      }
-    end
-
-    it_configures 'sahara-dbsync'
   end
 
 end
