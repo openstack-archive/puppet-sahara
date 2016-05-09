@@ -4,6 +4,11 @@
 #
 # == Parameters
 #
+# [*database_db_max_retries*]
+#   (optional) Maximum retries in case of connection error or deadlock error
+#   before error is raised. Set to -1 to specify an infinite retry count.
+#   Defaults to $::os_service_default
+#
 # [*database_connection*]
 #   (Optional) The connection string to use to connect to the database.
 #   Defaults to 'mysql+pymysql://sahara:secrete@localhost:3306/sahara'
@@ -34,6 +39,7 @@
 #   Defaults to $::os_service_default.
 #
 class sahara::db (
+  $database_db_max_retries = $::os_service_default,
   $database_connection     = 'mysql+pymysql://sahara:secrete@localhost:3306/sahara',
   $database_idle_timeout   = $::os_service_default,
   $database_min_pool_size  = $::os_service_default,
@@ -57,6 +63,7 @@ class sahara::db (
     '^(mysql(\+pymysql)?|postgresql):\/\/(\S+:\S+@\S+\/\S+)?')
 
   oslo::db { 'sahara_config':
+    db_max_retries => $database_db_max_retries,
     connection     => $database_connection_real,
     idle_timeout   => $database_idle_timeout_real,
     min_pool_size  => $database_min_pool_size_real,
