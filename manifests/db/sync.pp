@@ -26,6 +26,7 @@ class sahara::db::sync(
     user        => 'sahara',
     refreshonly => true,
     logoutput   => on_failure,
+    tag         => 'openstack-db',
   }
 
 }

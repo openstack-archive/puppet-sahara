@@ -10,7 +10,8 @@ describe 'sahara::db::sync' do
         :path        => '/usr/bin',
         :user        => 'sahara',
         :refreshonly => 'true',
-        :logoutput   => 'on_failure'
+        :logoutput   => 'on_failure',
+        :tag         => 'openstack-db',
       )
     end
 
@@ -27,7 +28,8 @@ describe 'sahara::db::sync' do
           :path        => '/usr/bin',
           :user        => 'sahara',
           :refreshonly => 'true',
-          :logoutput   => 'on_failure'
+          :logoutput   => 'on_failure',
+          :tag         => 'openstack-db',
         )
         }
       end
