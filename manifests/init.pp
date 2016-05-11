@@ -132,6 +132,7 @@
 #
 # [*rpc_backend*]
 #   (optional) The rpc backend implementation to use, can be:
+#     amqp (for AMQP 1.0)
 #     rabbit (for rabbitmq)
 #     zmq (for zeromq)
 #   Defaults to $::os_service_default.
@@ -248,6 +249,70 @@
 #   (string value)
 #   Defaults to $::os_service_default.
 #
+# [*amqp_server_request_prefix*]
+#   (Optional) Address prefix used when sending to a specific server
+#   Defaults to $::os_service_default.
+#
+# [*amqp_broadcast_prefix*]
+#   (Optional) address prefix used when broadcasting to all servers
+#   Defaults to $::os_service_default.
+#
+# [*amqp_group_request_prefix*]
+#   (Optional) address prefix when sending to any server in group
+#   Defaults to $::os_service_default.
+#
+# [*amqp_container_name*]
+#   (Optional) Name for the AMQP container
+#   Defaults to $::os_service_default.
+#
+# [*amqp_idle_timeout*]
+#   (Optional) Timeout for inactive connections
+#   Defaults to $::os_service_default.
+#
+# [*amqp_trace*]
+#   (Optional) Debug: dump AMQP frames to stdout
+#   Defaults to $::os_service_default.
+#
+# [*amqp_ssl_ca_file*]
+#   (Optional) CA certificate PEM file to verify server certificate
+#   Defaults to $::os_service_default.
+#
+# [*amqp_ssl_cert_file*]
+#   (Optional) Identifying certificate PEM file to present to clients
+#   Defaults to $::os_service_default.
+#
+# [*amqp_ssl_key_file*]
+#   (Optional) Private key PEM file used to sign cert_file certificate
+#   Defaults to $::os_service_default.
+#
+# [*amqp_ssl_key_password*]
+#   (Optional) Password for decrypting ssl_key_file (if encrypted)
+#   Defaults to $::os_service_default.
+#
+# [*amqp_allow_insecure_clients*]
+#   (Optional) Accept clients using either SSL or plain TCP
+#   Defaults to $::os_service_default.
+#
+# [*amqp_sasl_mechanisms*]
+#   (Optional) Space separated list of acceptable SASL mechanisms
+#   Defaults to $::os_service_default.
+#
+# [*amqp_sasl_config_dir*]
+#   (Optional) Path to directory that contains the SASL configuration
+#   Defaults to $::os_service_default.
+#
+# [*amqp_sasl_config_name*]
+#   (Optional) Name of configuration file (without .conf suffix)
+#   Defaults to $::os_service_default.
+#
+# [*amqp_username*]
+#   (Optional) User name for message broker authentication
+#   Defaults to $::os_service_default.
+#
+# [*amqp_password*]
+#   (Optional) Password for message broker authentication
+#   Defaults to $::os_service_default.
+#
 # == DEPRECATED PARAMETERS
 #
 # [*zeromq_port*]
@@ -255,64 +320,80 @@
 #   Defaults to undef.
 #
 class sahara(
-  $package_ensure          = 'present',
-  $verbose                 = undef,
-  $debug                   = undef,
-  $use_syslog              = undef,
-  $use_stderr              = undef,
-  $log_facility            = undef,
-  $log_dir                 = undef,
-  $host                    = $::os_service_default,
-  $port                    = $::os_service_default,
-  $plugins                 = $::os_service_default,
-  $use_neutron             = $::os_service_default,
-  $use_floating_ips        = $::os_service_default,
-  $use_ssl                 = $::os_service_default,
-  $ca_file                 = $::os_service_default,
-  $cert_file               = $::os_service_default,
-  $key_file                = $::os_service_default,
-  $database_connection     = undef,
-  $database_idle_timeout   = undef,
-  $database_min_pool_size  = undef,
-  $database_max_pool_size  = undef,
-  $database_max_retries    = undef,
-  $database_retry_interval = undef,
-  $database_max_overflow   = undef,
-  $sync_db                 = true,
-  $admin_user              = 'sahara',
-  $admin_password          = false,
-  $admin_tenant_name       = 'services',
-  $auth_uri                = 'http://127.0.0.1:5000/v2.0/',
-  $identity_uri            = 'http://127.0.0.1:35357/',
-  $rpc_backend             = $::os_service_default,
-  $amqp_durable_queues     = $::os_service_default,
-  $rabbit_ha_queues        = $::os_service_default,
-  $rabbit_host             = $::os_service_default,
-  $rabbit_hosts            = $::os_service_default,
-  $rabbit_port             = $::os_service_default,
-  $rabbit_use_ssl          = $::os_service_default,
-  $rabbit_userid           = $::os_service_default,
-  $rabbit_password         = $::os_service_default,
-  $rabbit_login_method     = $::os_service_default,
-  $rabbit_virtual_host     = $::os_service_default,
-  $rabbit_retry_interval   = $::os_service_default,
-  $rabbit_retry_backoff    = $::os_service_default,
-  $rabbit_max_retries      = $::os_service_default,
-  $zeromq_bind_address     = $::os_service_default,
-  $zeromq_contexts         = $::os_service_default,
-  $zeromq_topic_backlog    = $::os_service_default,
-  $zeromq_ipc_dir          = $::os_service_default,
-  $zeromq_host             = 'sahara',
-  $cast_timeout            = $::os_service_default,
-  $kombu_ssl_version       = $::os_service_default,
-  $kombu_ssl_keyfile       = $::os_service_default,
-  $kombu_ssl_certfile      = $::os_service_default,
-  $kombu_ssl_ca_certs      = $::os_service_default,
-  $kombu_reconnect_delay   = $::os_service_default,
-  $kombu_failover_strategy = $::os_service_default,
-  $kombu_compression       = $::os_service_default,
+  $package_ensure              = 'present',
+  $verbose                     = undef,
+  $debug                       = undef,
+  $use_syslog                  = undef,
+  $use_stderr                  = undef,
+  $log_facility                = undef,
+  $log_dir                     = undef,
+  $host                        = $::os_service_default,
+  $port                        = $::os_service_default,
+  $plugins                     = $::os_service_default,
+  $use_neutron                 = $::os_service_default,
+  $use_floating_ips            = $::os_service_default,
+  $use_ssl                     = $::os_service_default,
+  $ca_file                     = $::os_service_default,
+  $cert_file                   = $::os_service_default,
+  $key_file                    = $::os_service_default,
+  $database_connection         = undef,
+  $database_idle_timeout       = undef,
+  $database_min_pool_size      = undef,
+  $database_max_pool_size      = undef,
+  $database_max_retries        = undef,
+  $database_retry_interval     = undef,
+  $database_max_overflow       = undef,
+  $sync_db                     = true,
+  $admin_user                  = 'sahara',
+  $admin_password              = false,
+  $admin_tenant_name           = 'services',
+  $auth_uri                    = 'http://127.0.0.1:5000/v2.0/',
+  $identity_uri                = 'http://127.0.0.1:35357/',
+  $rpc_backend                 = $::os_service_default,
+  $amqp_durable_queues         = $::os_service_default,
+  $rabbit_ha_queues            = $::os_service_default,
+  $rabbit_host                 = $::os_service_default,
+  $rabbit_hosts                = $::os_service_default,
+  $rabbit_port                 = $::os_service_default,
+  $rabbit_use_ssl              = $::os_service_default,
+  $rabbit_userid               = $::os_service_default,
+  $rabbit_password             = $::os_service_default,
+  $rabbit_login_method         = $::os_service_default,
+  $rabbit_virtual_host         = $::os_service_default,
+  $rabbit_retry_interval       = $::os_service_default,
+  $rabbit_retry_backoff        = $::os_service_default,
+  $rabbit_max_retries          = $::os_service_default,
+  $zeromq_bind_address         = $::os_service_default,
+  $zeromq_contexts             = $::os_service_default,
+  $zeromq_topic_backlog        = $::os_service_default,
+  $zeromq_ipc_dir              = $::os_service_default,
+  $zeromq_host                 = 'sahara',
+  $cast_timeout                = $::os_service_default,
+  $kombu_ssl_version           = $::os_service_default,
+  $kombu_ssl_keyfile           = $::os_service_default,
+  $kombu_ssl_certfile          = $::os_service_default,
+  $kombu_ssl_ca_certs          = $::os_service_default,
+  $kombu_reconnect_delay       = $::os_service_default,
+  $kombu_failover_strategy     = $::os_service_default,
+  $kombu_compression           = $::os_service_default,
+  $amqp_server_request_prefix  = $::os_service_default,
+  $amqp_broadcast_prefix       = $::os_service_default,
+  $amqp_group_request_prefix   = $::os_service_default,
+  $amqp_container_name         = $::os_service_default,
+  $amqp_idle_timeout           = $::os_service_default,
+  $amqp_trace                  = $::os_service_default,
+  $amqp_ssl_ca_file            = $::os_service_default,
+  $amqp_ssl_cert_file          = $::os_service_default,
+  $amqp_ssl_key_file           = $::os_service_default,
+  $amqp_ssl_key_password       = $::os_service_default,
+  $amqp_allow_insecure_clients = $::os_service_default,
+  $amqp_sasl_mechanisms        = $::os_service_default,
+  $amqp_sasl_config_dir        = $::os_service_default,
+  $amqp_sasl_config_name       = $::os_service_default,
+  $amqp_username               = $::os_service_default,
+  $amqp_password               = $::os_service_default,
   # DEPRECATED PARAMETERS
-  $zeromq_port             = undef,
+  $zeromq_port                 = undef,
 ) {
   include ::sahara::params
   include ::sahara::logging
@@ -386,6 +467,27 @@ class sahara(
       'DEFAULT/rpc_zmq_ipc_dir':       value => $zeromq_ipc_dir;
       'DEFAULT/rpc_zmq_host':          value => $zeromq_host;
       'DEFAULT/rpc_cast_timeout':      value => $cast_timeout;
+    }
+  }
+
+  if $rpc_backend == 'amqp' {
+    oslo::messaging::amqp { 'sahara_config':
+      server_request_prefix  => $amqp_server_request_prefix,
+      broadcast_prefix       => $amqp_broadcast_prefix,
+      group_request_prefix   => $amqp_group_request_prefix,
+      container_name         => $amqp_container_name,
+      idle_timeout           => $amqp_idle_timeout,
+      trace                  => $amqp_trace,
+      ssl_ca_file            => $amqp_ssl_ca_file,
+      ssl_cert_file          => $amqp_ssl_cert_file,
+      ssl_key_file           => $amqp_ssl_key_file,
+      ssl_key_password       => $amqp_ssl_key_password,
+      allow_insecure_clients => $amqp_allow_insecure_clients,
+      sasl_mechanisms        => $amqp_sasl_mechanisms,
+      sasl_config_dir        => $amqp_sasl_config_dir,
+      sasl_config_name       => $amqp_sasl_config_name,
+      username               => $amqp_username,
+      password               => $amqp_password,
     }
   }
 
