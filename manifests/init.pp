@@ -233,7 +233,20 @@
 #
 # [*kombu_reconnect_delay*]
 #   (Optional) Backoff on cancel notification (valid only if SSL enabled).
-#   Defaults to '1.0'; floating-point value.
+#   (floating-point value)
+#   Defaults to $::os_service_default.
+#
+# [*kombu_failover_strategy*]
+#   (Optional) Determines how the next RabbitMQ node is chosen in case the one
+#   we are currently connected to becomes unavailable. Takes effect only if
+#   more than one RabbitMQ node is provided in config. (string value)
+#   Defaults to $::os_service_default.
+#
+# [*kombu_compression*]
+#   (optional) Possible values are: gzip, bz2. If not set compression will not
+#   be used. This option may notbe available in future versions. EXPERIMENTAL.
+#   (string value)
+#   Defaults to $::os_service_default.
 #
 # == DEPRECATED PARAMETERS
 #
@@ -296,6 +309,8 @@ class sahara(
   $kombu_ssl_certfile      = $::os_service_default,
   $kombu_ssl_ca_certs      = $::os_service_default,
   $kombu_reconnect_delay   = $::os_service_default,
+  $kombu_failover_strategy = $::os_service_default,
+  $kombu_compression       = $::os_service_default,
   # DEPRECATED PARAMETERS
   $zeromq_port             = undef,
 ) {
@@ -334,24 +349,26 @@ class sahara(
 
   if $rpc_backend == 'rabbit' or is_service_default($rpc_backend) {
     oslo::messaging::rabbit { 'sahara_config':
-      rabbit_userid         => $rabbit_userid,
-      rabbit_password       => $rabbit_password,
-      rabbit_virtual_host   => $rabbit_virtual_host,
-      rabbit_host           => $rabbit_host,
-      rabbit_port           => $rabbit_port,
-      rabbit_hosts          => $rabbit_hosts,
-      rabbit_ha_queues      => $rabbit_ha_queues,
-      rabbit_use_ssl        => $rabbit_use_ssl,
-      kombu_reconnect_delay => $kombu_reconnect_delay,
-      kombu_ssl_version     => $kombu_ssl_version,
-      kombu_ssl_keyfile     => $kombu_ssl_keyfile,
-      kombu_ssl_certfile    => $kombu_ssl_certfile,
-      kombu_ssl_ca_certs    => $kombu_ssl_ca_certs,
-      amqp_durable_queues   => $amqp_durable_queues,
-      rabbit_login_method   => $rabbit_login_method,
-      rabbit_retry_interval => $rabbit_retry_interval,
-      rabbit_retry_backoff  => $rabbit_retry_backoff,
-      rabbit_max_retries    => $rabbit_max_retries,
+      rabbit_userid           => $rabbit_userid,
+      rabbit_password         => $rabbit_password,
+      rabbit_virtual_host     => $rabbit_virtual_host,
+      rabbit_host             => $rabbit_host,
+      rabbit_port             => $rabbit_port,
+      rabbit_hosts            => $rabbit_hosts,
+      rabbit_ha_queues        => $rabbit_ha_queues,
+      rabbit_use_ssl          => $rabbit_use_ssl,
+      kombu_failover_strategy => $kombu_failover_strategy,
+      kombu_compression       => $kombu_compression,
+      kombu_reconnect_delay   => $kombu_reconnect_delay,
+      kombu_ssl_version       => $kombu_ssl_version,
+      kombu_ssl_keyfile       => $kombu_ssl_keyfile,
+      kombu_ssl_certfile      => $kombu_ssl_certfile,
+      kombu_ssl_ca_certs      => $kombu_ssl_ca_certs,
+      amqp_durable_queues     => $amqp_durable_queues,
+      rabbit_login_method     => $rabbit_login_method,
+      rabbit_retry_interval   => $rabbit_retry_interval,
+      rabbit_retry_backoff    => $rabbit_retry_backoff,
+      rabbit_max_retries      => $rabbit_max_retries,
     }
   }
 

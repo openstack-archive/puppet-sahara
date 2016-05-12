@@ -32,6 +32,9 @@ describe 'sahara' do
       it { is_expected.to contain_sahara_config('keystone_authtoken/admin_tenant_name').with_value('services') }
       it { is_expected.to contain_sahara_config('keystone_authtoken/admin_password').with_value('secrete').with_secret(true) }
       it { is_expected.to contain_sahara_config('DEFAULT/plugins').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/kombu_compression').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/kombu_failover_strategy').with_value('<SERVICE DEFAULT>') }
     end
 
     context 'with passing params' do
@@ -82,12 +85,15 @@ describe 'sahara' do
       context 'when passing params' do
         before do
           params.merge!({
-            :rabbit_password     => 'pass',
-            :rabbit_userid       => 'guest2',
-            :rabbit_host         => 'localhost2',
-            :rabbit_port         => '5673',
-            :rabbit_ha_queues    => 'true',
-            :amqp_durable_queues => 'true',
+            :rabbit_password         => 'pass',
+            :rabbit_userid           => 'guest2',
+            :rabbit_host             => 'localhost2',
+            :rabbit_port             => '5673',
+            :rabbit_ha_queues        => 'true',
+            :amqp_durable_queues     => 'true',
+            :kombu_reconnect_delay   => '1.0',
+            :kombu_compression       => 'gzip',
+            :kombu_failover_strategy => 'round-robin',
           })
         end
 
@@ -98,6 +104,9 @@ describe 'sahara' do
         it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('true') }
         it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/amqp_durable_queues').with_value('true') }
         it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_hosts').with_value('<SERVICE DEFAULT>') }
+        it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('1.0') }
+        it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/kombu_compression').with_value('gzip') }
+        it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/kombu_failover_strategy').with_value('round-robin') }
       end
 
       context 'with rabbit ssl cert parameters' do
