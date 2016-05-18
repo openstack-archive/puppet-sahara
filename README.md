@@ -62,12 +62,12 @@ configuration and extra functionality through types and providers.
 The `sahara_config` provider is a children of the ini_setting provider. It allows one to write an entry in the `/etc/sahara/sahara.conf` file.
 
 ```puppet
-sahara_config { 'DEFAULT/verbose' :
-  value => true,
+sahara_config { 'DEFAULT/use_neutron' :
+  value => True,
 }
 ```
 
-This will write `verbose=true` in the `[DEFAULT]` section.
+This will write `use_neutron=True` in the `[DEFAULT]` section.
 
 ##### name
 
