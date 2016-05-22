@@ -8,10 +8,6 @@
 #   (Optional) Should the daemons log debug messages
 #   Defaults to $::os_service_default.
 #
-# [*use_syslog*]
-#   Use syslog for logging.
-#   (Optional) Defaults to $::os_service_default.
-#
 # [*use_stderr*]
 #   (optional) Use stderr for logging
 #   Defaults to $::os_service_default.
@@ -91,9 +87,12 @@
 #   (Optional) Deprecated. Should the daemons log verbose messages
 #   Defaults to undef
 #
+# [*use_syslog*]
+#   (Optional) Deprecated Use syslog for logging.
+#   Defaults to undef
+#
 class sahara::logging(
   $debug                         = $::os_service_default,
-  $use_syslog                    = $::os_service_default,
   $use_stderr                    = $::os_service_default,
   $log_facility                  = $::os_service_default,
   $log_dir                       = '/var/log/sahara',
@@ -110,11 +109,11 @@ class sahara::logging(
   $log_date_format               = $::os_service_default,
   # Deprecated
   $verbose                       = undef,
+  $use_syslog                    = undef,
 ) {
 
   # NOTE(degorenko): In order to keep backward compatibility we rely on the pick function
   # to use sahara::<myparam> if sahara::logging::<myparam> isn't specified.
-  $use_syslog_real   = pick($::sahara::use_syslog, $use_syslog)
   $use_stderr_real   = pick($::sahara::use_stderr, $use_stderr)
   $log_facility_real = pick($::sahara::log_facility, $log_facility)
   $log_dir_real      = pick($::sahara::log_dir, $log_dir)
@@ -124,9 +123,11 @@ class sahara::logging(
     warning('verbose is deprecated, has no effect and will be removed after Newton cycle.')
   }
 
+  if $use_syslog {
+    warning('use_syslog is deprecated, has no effect and will be removed in a future release')
+  }
   oslo::log { 'sahara_config':
     debug                         => $debug_real,
-    use_syslog                    => $use_syslog_real,
     use_stderr                    => $use_stderr_real,
     log_dir                       => $log_dir_real,
     syslog_log_facility           => $log_facility_real,

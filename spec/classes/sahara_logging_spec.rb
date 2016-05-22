@@ -10,7 +10,6 @@ describe 'sahara::logging' do
   let :log_params do
     {
       :debug                         => 'true',
-      :use_syslog                    => 'true',
       :use_stderr                    => 'false',
       :log_facility                  => 'LOG_LOCAL0',
       :log_dir                       => '/tmp/sahara',
@@ -60,17 +59,11 @@ describe 'sahara::logging' do
   shared_examples_for 'basic logging options defaults' do
     context 'with defaults' do
       it { is_expected.to contain_sahara_config('DEFAULT/use_stderr').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_sahara_config('DEFAULT/use_syslog').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_sahara_config('DEFAULT/debug').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_sahara_config('DEFAULT/log_dir').with_value('/var/log/sahara') }
     end
 
     context 'with syslog enabled and default log facility' do
-      let :params do
-        { :use_syslog   => 'true' }
-      end
-
-      it { is_expected.to contain_sahara_config('DEFAULT/use_syslog').with_value(true) }
       it { is_expected.to contain_sahara_config('DEFAULT/syslog_log_facility').with_value('<SERVICE DEFAULT>') }
     end
   end
@@ -78,7 +71,6 @@ describe 'sahara::logging' do
   shared_examples_for 'basic logging options passed' do
     context 'with passed params' do
       it { is_expected.to contain_sahara_config('DEFAULT/debug').with_value(true) }
-      it { is_expected.to contain_sahara_config('DEFAULT/use_syslog').with_value(true) }
       it { is_expected.to contain_sahara_config('DEFAULT/use_stderr').with_value(false) }
       it { is_expected.to contain_sahara_config('DEFAULT/syslog_log_facility').with_value('LOG_LOCAL0') }
       it { is_expected.to contain_sahara_config('DEFAULT/log_dir').with_value('/tmp/sahara') }
