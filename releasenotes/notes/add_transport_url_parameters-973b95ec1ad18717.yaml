@@ -1,0 +1,7 @@
+---
+features:
+  - Add oslo.messaging transport_url parameters via puppet-oslo resource
+deprecations:
+  - control_exchange moved to sahara class definition as it is intrinsic to
+    default messaging configuration. It can no longer be set via the
+    notify class and will be removed in a future release.

@@ -35,6 +35,8 @@ describe 'sahara' do
       it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/kombu_compression').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/kombu_failover_strategy').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_sahara_config('DEFAULT/transport_url').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_sahara_config('DEFAULT/control_exchange').with_value('<SERVICE DEFAULT>') }
     end
 
     context 'with passing params' do
@@ -48,6 +50,8 @@ describe 'sahara' do
         :admin_tenant_name     => 'sahara-tenant',
         :admin_password        => 'new_password',
         :plugins               => ['plugin1', 'plugin2'],
+        :default_transport_url => 'rabbit://guest2:pass@localhost2:5673',
+        :control_exchange      => 'openstack',
       }
       end
 
@@ -60,6 +64,8 @@ describe 'sahara' do
       it { is_expected.to contain_sahara_config('keystone_authtoken/admin_tenant_name').with_value('sahara-tenant') }
       it { is_expected.to contain_sahara_config('keystone_authtoken/admin_password').with_value('new_password').with_secret(true) }
       it { is_expected.to contain_sahara_config('DEFAULT/plugins').with_value('plugin1,plugin2') }
+      it { is_expected.to contain_sahara_config('DEFAULT/transport_url').with_value('rabbit://guest2:pass@localhost2:5673') }
+      it { is_expected.to contain_sahara_config('DEFAULT/control_exchange').with_value('openstack') }
     end
 
   end
@@ -85,15 +91,15 @@ describe 'sahara' do
       context 'when passing params' do
         before do
           params.merge!({
-            :rabbit_password         => 'pass',
-            :rabbit_userid           => 'guest2',
-            :rabbit_host             => 'localhost2',
-            :rabbit_port             => '5673',
-            :rabbit_ha_queues        => 'true',
-            :amqp_durable_queues     => 'true',
-            :kombu_reconnect_delay   => '1.0',
-            :kombu_compression       => 'gzip',
-            :kombu_failover_strategy => 'round-robin',
+            :rabbit_password            => 'pass',
+            :rabbit_userid              => 'guest2',
+            :rabbit_host                => 'localhost2',
+            :rabbit_port                => '5673',
+            :rabbit_ha_queues           => 'true',
+            :amqp_durable_queues        => 'true',
+            :kombu_reconnect_delay      => '1.0',
+            :kombu_compression          => 'gzip',
+            :kombu_failover_strategy    => 'round-robin',
           })
         end
 
