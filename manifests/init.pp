@@ -12,6 +12,10 @@
 #   (Optional) Should the daemons log debug messages
 #   Defaults to undef.
 #
+# [*use_syslog*]
+#   Use syslog for logging.
+#   (Optional) Defaults to undef.
+#
 # [*use_stderr*]
 #   (optional) Use stderr for logging
 #   Defaults to undef
@@ -315,13 +319,10 @@
 #   (Optional) Deprecated. Should the daemons log verbose messages
 #   Defaults to undef.
 #
-# [*use_syslog*]
-#   DEPRECATED. Use syslog for logging.
-#   (Optional) Defaults to undef.
-#
 class sahara(
   $package_ensure              = 'present',
   $debug                       = undef,
+  $use_syslog                  = undef,
   $use_stderr                  = undef,
   $log_facility                = undef,
   $log_dir                     = undef,
@@ -393,7 +394,6 @@ class sahara(
   # DEPRECATED PARAMETERS
   $zeromq_port                 = undef,
   $verbose                     = undef,
-  $use_syslog                  = undef,
 ) {
   include ::sahara::params
   include ::sahara::logging
@@ -402,10 +402,6 @@ class sahara(
 
   if $verbose {
     warning('verbose is deprecated, has no effect and will be removed after Newton cycle.')
-  }
-
-  if $use_syslog {
-    warning('use_syslog is deprecated, has no effect and will be removed in a future release')
   }
 
   package { 'sahara-common':
