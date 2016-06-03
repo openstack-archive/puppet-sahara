@@ -24,19 +24,16 @@ describe 'sahara::policy' do
     end
   end
 
-  context 'on Debian platforms' do
-    let :facts do
-      { :osfamily => 'Debian' }
-    end
+  on_supported_os({
+    :supported_os   => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge(OSDefaults.get_facts({:processorcount => 8}))
+      end
 
-    it_configures 'sahara policies'
+      it_configures 'sahara policies'
+    end
   end
 
-  context 'on RedHat platforms' do
-    let :facts do
-      { :osfamily => 'RedHat' }
-    end
-
-    it_configures 'sahara policies'
-  end
 end
