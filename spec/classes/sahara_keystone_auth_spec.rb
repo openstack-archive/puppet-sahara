@@ -73,7 +73,7 @@ describe 'sahara::keystone::auth' do
 
     it { is_expected.to contain_keystone_user('saharay') }
     it { is_expected.to contain_keystone_user_role('saharay@services') }
-    it { is_expected.to contain_keystone_service('saharay::data-processing') }
-    it { is_expected.to contain_keystone_endpoint('RegionOne/saharay::data-processing') }
+    it { is_expected.to contain_keystone_service('sahara::data-processing') }
+    it { is_expected.to contain_keystone_endpoint('RegionOne/sahara::data-processing') }
   end
 end

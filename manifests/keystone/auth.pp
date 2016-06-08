@@ -9,7 +9,7 @@
 #
 # [*service_name*]
 #   (Optional) Name of the service.
-#   Defaults to the value of auth_name.
+#   Defaults to 'sahara'
 #
 # [*auth_name*]
 #   (Optional) Username for sahara service.
@@ -66,7 +66,7 @@
 #
 class sahara::keystone::auth(
   $password,
-  $service_name        = undef,
+  $service_name        = 'sahara',
   $auth_name           = 'sahara',
   $email               = 'sahara@localhost',
   $tenant              = 'services',
@@ -79,14 +79,14 @@ class sahara::keystone::auth(
   $internal_url        = 'http://127.0.0.1:8386/v1.1/%(tenant_id)s',
 ) {
 
-  $real_service_name = pick($service_name, $auth_name)
-
-  keystone::resource::service_identity { $real_service_name:
+  keystone::resource::service_identity { 'sahara':
     configure_user      => true,
     configure_user_role => true,
     configure_endpoint  => $configure_endpoint,
     service_type        => $service_type,
     service_description => $service_description,
+    service_name        => $service_name,
+    auth_name           => $auth_name,
     region              => $region,
     password            => $password,
     email               => $email,
