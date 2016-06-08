@@ -7,7 +7,8 @@ describe 'sahara' do
 
   let :params do
     {
-      :admin_password => 'secrete'
+      :admin_password => 'secrete',
+      :purge_config   => false,
     }
   end
 
@@ -18,6 +19,12 @@ describe 'sahara' do
     it { is_expected.to contain_class('sahara::policy') }
     it { is_expected.to contain_class('mysql::bindings::python') }
     it { is_expected.to contain_exec('sahara-dbmanage') }
+
+    it 'passes purge to resource' do
+      is_expected.to contain_resources('sahara_config').with({
+        :purge => false
+      })
+    end
   end
 
   shared_examples_for 'sahara config' do

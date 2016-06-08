@@ -309,6 +309,11 @@
 #   (Optional) Password for message broker authentication
 #   Defaults to $::os_service_default.
 #
+# [*purge_config*]
+#   (optional) Whether to set only the specified config options
+#   in the sahara config.
+#   Defaults to false.
+#
 # == DEPRECATED PARAMETERS
 #
 # [*zeromq_port*]
@@ -391,6 +396,7 @@ class sahara(
   $amqp_sasl_config_name       = $::os_service_default,
   $amqp_username               = $::os_service_default,
   $amqp_password               = $::os_service_default,
+  $purge_config                = false,
   # DEPRECATED PARAMETERS
   $zeromq_port                 = undef,
   $verbose                     = undef,
@@ -411,6 +417,10 @@ class sahara(
   }
 
   Package['sahara-common'] -> Class['sahara::policy']
+
+  resources { 'sahara_config':
+    purge => $purge_config,
+  }
 
   sahara_config {
     'DEFAULT/plugins':          value => join(any2array($plugins),',');
