@@ -4,13 +4,15 @@
 #
 # === Parameters
 #
-# [*control_exchange*]
-#   (Optional) The default exchange to scope topics.
-#   Defaults to $::os_service_default.
-#
 # [*enable_notifications*]
 #   (Optional) Enables sending notifications to Ceilometer.
 #   Defaults to $::os_service_default.
+#
+# [*notification_transport_url*]
+#   (optional) A URL representing the messaging driver to use for notifications
+#   and its full configuration. Transport URLs take the form:
+#     transport://user:pass@host1:port[,hostN:portN]/virtual_host
+#   Defaults to $::os_service_default
 #
 # [*notification_driver*]
 #   (Optional) Notification driver to use.
@@ -24,22 +26,31 @@
 #   (Optional) Notification level for outgoing notifications.
 #   Defaults to $::os_service_default.
 #
+# == DEPRECATED PARAMETERS
+#
+# [*control_exchange*]
+#   (Optional) Moved to init.pp. The default exchange to scope topics.
+#   Defaults to undef.
+#
 
 class sahara::notify (
-  $control_exchange     = $::os_service_default,
-  $enable_notifications = $::os_service_default,
-  $notification_driver  = $::os_service_default,
-  $notification_topics  = $::os_service_default,
-  $notification_level   = $::os_service_default,
+  $enable_notifications       = $::os_service_default,
+  $notification_transport_url = $::os_service_default,
+  $notification_driver        = $::os_service_default,
+  $notification_topics        = $::os_service_default,
+  $notification_level         = $::os_service_default,
+# DEPRECATED PARAMETERS
+  $control_exchange           = undef,
 ) {
 
-  oslo::messaging::notifications { 'sahara_config':
-    driver => $notification_driver,
-    topics => $notification_topics,
+  if $control_exchange {
+    warning('control_exchange is moved to ::sahara and will be removed from sahara::notify in a future release')
   }
 
-  oslo::messaging::default { 'sahara_config':
-    control_exchange => $control_exchange
+  oslo::messaging::notifications { 'sahara_config':
+    transport_url => $notification_transport_url,
+    driver        => $notification_driver,
+    topics        => $notification_topics,
   }
 
   sahara_config {

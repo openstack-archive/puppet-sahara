@@ -126,6 +126,16 @@
 #
 # == rpc backend options
 #
+# [*default_transport_url*]
+#    (optional) A URL representing the messaging driver to use and its full
+#    configuration. Transport URLs take the form:
+#      transport://user:pass@host1:port[,hostN:portN]/virtual_host
+#    Defaults to $::os_service_default
+#
+# [*control_exchange*]
+#   (Optional) The default exchange to scope topics.
+#   Defaults to $::os_service_default.
+#
 # [*rpc_backend*]
 #   (optional) The rpc backend implementation to use, can be:
 #     amqp (for AMQP 1.0)
@@ -353,6 +363,8 @@ class sahara(
   $admin_tenant_name           = 'services',
   $auth_uri                    = 'http://127.0.0.1:5000/v2.0/',
   $identity_uri                = 'http://127.0.0.1:35357/',
+  $default_transport_url       = $::os_service_default,
+  $control_exchange            = $::os_service_default,
   $rpc_backend                 = $::os_service_default,
   $amqp_durable_queues         = $::os_service_default,
   $rabbit_ha_queues            = $::os_service_default,
@@ -440,6 +452,11 @@ class sahara(
         value => $admin_password,
         secret => true;
     }
+  }
+
+  oslo::messaging::default { 'sahara_config':
+    transport_url    => $default_transport_url,
+    control_exchange => $control_exchange,
   }
 
   if $rpc_backend == 'rabbit' or is_service_default($rpc_backend) {
