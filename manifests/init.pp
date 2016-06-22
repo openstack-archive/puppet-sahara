@@ -326,10 +326,6 @@
 #
 # == DEPRECATED PARAMETERS
 #
-# [*zeromq_port*]
-#   (Optional) Receiver listening port.
-#   Defaults to undef.
-#
 # [*verbose*]
 #   (Optional) Deprecated. Should the daemons log verbose messages
 #   Defaults to undef.
@@ -410,7 +406,6 @@ class sahara(
   $amqp_password               = $::os_service_default,
   $purge_config                = false,
   # DEPRECATED PARAMETERS
-  $zeromq_port                 = undef,
   $verbose                     = undef,
 ) {
   include ::sahara::params
@@ -485,19 +480,13 @@ class sahara(
   }
 
   if $rpc_backend == 'zmq' {
-
-    if $zeromq_port {
-      warning('The zeromq_port parameter is deprecated and has no effect.')
-    }
-
-    sahara_config {
-      'DEFAULT/rpc_backend':           value => 'zmq';
-      'DEFAULT/rpc_zmq_bind_address':  value => $zeromq_bind_address;
-      'DEFAULT/rpc_zmq_contexts':      value => $zeromq_contexts;
-      'DEFAULT/rpc_zmq_topic_backlog': value => $zeromq_topic_backlog;
-      'DEFAULT/rpc_zmq_ipc_dir':       value => $zeromq_ipc_dir;
-      'DEFAULT/rpc_zmq_host':          value => $zeromq_host;
-      'DEFAULT/rpc_cast_timeout':      value => $cast_timeout;
+    oslo::messaging::zmq { 'sahara_config':
+      rpc_zmq_bind_address  => $zeromq_bind_address,
+      rpc_zmq_contexts      => $zeromq_contexts,
+      rpc_zmq_topic_backlog => $zeromq_topic_backlog,
+      rpc_zmq_ipc_dir       => $zeromq_ipc_dir,
+      rpc_zmq_host          => $zeromq_host,
+      rpc_cast_timeout      => $cast_timeout,
     }
   }
 
