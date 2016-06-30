@@ -128,6 +128,11 @@
 #   This should specify the unversioned root endpoint.
 #   Defaults to 'http://127.0.0.1:35357/'.
 #
+# [*memcached_servers*]
+#   (optinal) a list of memcached server(s) to use for caching. If left
+#   undefined, tokens will instead be cached in-process.
+#   Defaults to $::os_service_default.
+#
 # == rpc backend options
 #
 # [*rpc_backend*]
@@ -317,6 +322,7 @@ class sahara(
   $admin_tenant_name       = 'services',
   $auth_uri                = 'http://127.0.0.1:5000/v2.0/',
   $identity_uri            = 'http://127.0.0.1:35357/',
+  $memcached_servers       = $::os_service_default,
   $rpc_backend             = $::os_service_default,
   $amqp_durable_queues     = $::os_service_default,
   $rabbit_ha_queues        = $::os_service_default,
@@ -386,6 +392,7 @@ class sahara(
       'keystone_authtoken/admin_password':
         value => $admin_password,
         secret => true;
+      'keystone_authtoken/memcached_servers': value => join(any2array($memcached_servers), ',');
     }
   }
 

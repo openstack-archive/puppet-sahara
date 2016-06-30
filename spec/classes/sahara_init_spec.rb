@@ -31,6 +31,7 @@ describe 'sahara' do
       it { is_expected.to contain_sahara_config('keystone_authtoken/admin_user').with_value('sahara') }
       it { is_expected.to contain_sahara_config('keystone_authtoken/admin_tenant_name').with_value('services') }
       it { is_expected.to contain_sahara_config('keystone_authtoken/admin_password').with_value('secrete').with_secret(true) }
+      it { is_expected.to contain_sahara_config('keystone_authtoken/memcached_servers').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_sahara_config('DEFAULT/plugins').with_value('<SERVICE DEFAULT>') }
     end
 
@@ -44,6 +45,7 @@ describe 'sahara' do
         :admin_user            => 'sahara-user',
         :admin_tenant_name     => 'sahara-tenant',
         :admin_password        => 'new_password',
+        :memcached_servers     => '1.1.1.1:11211',
         :plugins               => ['plugin1', 'plugin2'],
       }
       end
@@ -56,6 +58,7 @@ describe 'sahara' do
       it { is_expected.to contain_sahara_config('keystone_authtoken/admin_user').with_value('sahara-user') }
       it { is_expected.to contain_sahara_config('keystone_authtoken/admin_tenant_name').with_value('sahara-tenant') }
       it { is_expected.to contain_sahara_config('keystone_authtoken/admin_password').with_value('new_password').with_secret(true) }
+      it { is_expected.to contain_sahara_config('keystone_authtoken/memcached_servers').with_value('1.1.1.1:11211') }
       it { is_expected.to contain_sahara_config('DEFAULT/plugins').with_value('plugin1,plugin2') }
     end
 
