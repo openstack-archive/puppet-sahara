@@ -38,6 +38,7 @@ describe 'sahara' do
       it { is_expected.to contain_sahara_config('keystone_authtoken/admin_user').with_value('sahara') }
       it { is_expected.to contain_sahara_config('keystone_authtoken/admin_tenant_name').with_value('services') }
       it { is_expected.to contain_sahara_config('keystone_authtoken/admin_password').with_value('secrete').with_secret(true) }
+      it { is_expected.to contain_sahara_config('keystone_authtoken/memcached_servers').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_sahara_config('DEFAULT/plugins').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/kombu_compression').with_value('<SERVICE DEFAULT>') }
@@ -56,6 +57,7 @@ describe 'sahara' do
         :admin_user            => 'sahara-user',
         :admin_tenant_name     => 'sahara-tenant',
         :admin_password        => 'new_password',
+        :memcached_servers     => '1.1.1.1:11211',
         :plugins               => ['plugin1', 'plugin2'],
         :default_transport_url => 'rabbit://guest2:pass@localhost2:5673',
         :control_exchange      => 'openstack',
@@ -70,6 +72,7 @@ describe 'sahara' do
       it { is_expected.to contain_sahara_config('keystone_authtoken/admin_user').with_value('sahara-user') }
       it { is_expected.to contain_sahara_config('keystone_authtoken/admin_tenant_name').with_value('sahara-tenant') }
       it { is_expected.to contain_sahara_config('keystone_authtoken/admin_password').with_value('new_password').with_secret(true) }
+      it { is_expected.to contain_sahara_config('keystone_authtoken/memcached_servers').with_value('1.1.1.1:11211') }
       it { is_expected.to contain_sahara_config('DEFAULT/plugins').with_value('plugin1,plugin2') }
       it { is_expected.to contain_sahara_config('DEFAULT/transport_url').with_value('rabbit://guest2:pass@localhost2:5673') }
       it { is_expected.to contain_sahara_config('DEFAULT/control_exchange').with_value('openstack') }
