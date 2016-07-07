@@ -3,6 +3,7 @@
 # Parameters for puppet-sahara
 #
 class sahara::params {
+  include ::openstacklib::defaults
   $client_package_name = 'python-saharaclient'
 
   case $::osfamily {
