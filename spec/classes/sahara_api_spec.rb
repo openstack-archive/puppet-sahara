@@ -20,33 +20,30 @@ describe 'sahara::service::api' do
 
   end
 
-  context 'on Debian platforms' do
-    let :facts do
-      @default_facts.merge({
-        :osfamily => 'Debian',
-        :operatingsystem => 'Debian'
-      })
+  on_supported_os({
+    :supported_os   => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge(OSDefaults.get_facts)
+      end
+
+      case facts[:osfamily]
+      when 'Debian'
+        platform_params = {
+          :name         => 'sahara-api',
+          :package_name => 'sahara-api',
+          :service_name => 'sahara-api' }
+      when 'RedHat'
+        platform_params = {
+          :name         => 'sahara-api',
+          :package_name => 'openstack-sahara-api',
+          :service_name => 'openstack-sahara-api' }
+      end
+
+      it_configures 'sahara-api'
+      it_behaves_like 'generic sahara service', platform_params
     end
-
-    it_configures 'sahara-api'
-
-    it_behaves_like 'generic sahara service', {
-       :name         => 'sahara-api',
-       :package_name => 'sahara-api',
-       :service_name => 'sahara-api' }
-  end
-
-  context 'on RedHat platforms' do
-    let :facts do
-      @default_facts.merge({ :osfamily => 'RedHat' })
-    end
-
-    it_configures 'sahara-api'
-
-    it_behaves_like 'generic sahara service', {
-       :name         => 'sahara-api',
-       :package_name => 'openstack-sahara-api',
-       :service_name => 'openstack-sahara-api' }
   end
 
 end
