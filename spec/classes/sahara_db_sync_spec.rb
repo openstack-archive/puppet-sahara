@@ -4,18 +4,20 @@ describe 'sahara::db::sync' do
 
   shared_examples_for 'sahara-dbsync' do
 
-    it 'runs sahara-dbmanage' do
-      is_expected.to contain_exec('sahara-dbmanage').with(
-        :command     => 'sahara-db-manage --config-file /etc/sahara/sahara.conf upgrade head',
-        :path        => '/usr/bin',
-        :user        => 'sahara',
-        :refreshonly => 'true',
-        :logoutput   => 'on_failure',
-        :tag         => 'openstack-db',
-      )
+    context 'default patameters' do
+      it 'runs sahara-dbmanage' do
+        is_expected.to contain_exec('sahara-dbmanage').with(
+          :command     => 'sahara-db-manage --config-file /etc/sahara/sahara.conf upgrade head',
+          :path        => '/usr/bin',
+          :user        => 'sahara',
+          :refreshonly => 'true',
+          :logoutput   => 'on_failure',
+          :tag         => 'openstack-db',
+        )
+      end
     end
 
-    describe 'overriding extra_params' do
+    context 'overriding extra_params' do
       let :params do
         {
           :extra_params => '--config-file /etc/sahara/sahara01.conf',

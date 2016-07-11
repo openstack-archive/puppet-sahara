@@ -317,30 +317,19 @@ describe 'sahara' do
     end
   end
 
-  context 'on Debian platforms' do
-    let :facts do
-      @default_facts.merge({
-        :osfamily => 'Debian',
-        :operatingsystem => 'Debian'
-      })
+  on_supported_os({
+    :supported_os   => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge(OSDefaults.get_facts)
+      end
+
+      it_configures 'sahara'
+      it_configures 'sahara config'
+      it_configures 'sahara ssl'
+      it_configures 'sahara rpc_backend'
     end
-
-    it_configures 'sahara'
-    it_configures 'sahara config'
-    it_configures 'sahara ssl'
-    it_configures 'sahara rpc_backend'
-
   end
 
-  context 'on RedHat platforms' do
-    let :facts do
-      @default_facts.merge({ :osfamily => 'RedHat' })
-    end
-
-    it_configures 'sahara'
-    it_configures 'sahara config'
-    it_configures 'sahara ssl'
-    it_configures 'sahara rpc_backend'
-
-  end
 end
