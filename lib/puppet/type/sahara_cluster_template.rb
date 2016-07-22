@@ -51,4 +51,11 @@ Puppet::Type.newtype(:sahara_cluster_template) do
     [ 'sahara-api', 'sahara-all', 'sahara-engine' ]
   end
 
+  autorequire(:sahara_node_group_template) do
+    templates = []
+    self[:node_groups].each do |template|
+      templates.push(template.split(':')[0])
+    end
+    templates
+  end
 end

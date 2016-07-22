@@ -31,7 +31,7 @@ describe Puppet::Type.type(:sahara_cluster_template) do
     expect { Puppet::Type.type(:sahara_cluster_template).new(incorrect_input) }.to raise_error(Puppet::ResourceError, /Node group count should be an integer/)
   end
 
-  it 'should autorequire cinder-api service' do
+  it 'should autorequire sahara-api service' do
     catalog = Puppet::Resource::Catalog.new
     service = Puppet::Type.type(:service).new(:name => 'sahara-api')
     correct_input = {
@@ -44,5 +44,25 @@ describe Puppet::Type.type(:sahara_cluster_template) do
     expect(dependency.size).to eq(1)
     expect(dependency[0].target).to eq(sahara_cluster_template)
     expect(dependency[0].source).to eq(service)
+  end
+
+  it 'should autorequire sahara_node_group_template' do
+    catalog = Puppet::Resource::Catalog.new
+    sahara_node_group_template = Puppet::Type.type(:sahara_node_group_template).new({
+      :name           => 'test_type',
+      :plugin         => 'plugin',
+      :plugin_version => 'version',
+      :flavor         => 'flavor',
+      :node_processes => [ 'process1', 'process2' ]
+    })
+    sahara_cluster_template = Puppet::Type.type(:sahara_cluster_template).new({
+      :name        => 'test_cluster_type',
+      :node_groups => [ 'test_type:1' ]
+    })
+    catalog.add_resource sahara_node_group_template, sahara_cluster_template
+    dependency = sahara_cluster_template.autorequire
+    expect(dependency.size).to eq(1)
+    expect(dependency[0].target).to eq(sahara_cluster_template)
+    expect(dependency[0].source).to eq(sahara_node_group_template)
   end
 end
