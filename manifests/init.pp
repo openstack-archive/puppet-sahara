@@ -450,7 +450,7 @@ class sahara(
       'keystone_authtoken/admin_user':        value => $admin_user;
       'keystone_authtoken/admin_tenant_name': value => $admin_tenant_name;
       'keystone_authtoken/admin_password':
-        value => $admin_password,
+        value  => $admin_password,
         secret => true;
       'keystone_authtoken/memcached_servers': value => join(any2array($memcached_servers), ',');
     }
