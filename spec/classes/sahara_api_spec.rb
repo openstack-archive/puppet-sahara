@@ -5,17 +5,17 @@ describe 'sahara::service::api' do
   shared_examples_for 'sahara-api' do
 
     context 'default params' do
-      it { is_expected.to contain_sahara_config('DEFAULT/api_workers').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_sahara_config('DEFAULT/api_workers').with_value(2) }
     end
 
     context 'passing params' do
       let :params do
       {
-        :api_workers => '2',
+        :api_workers => '4',
       }
       end
 
-      it { is_expected.to contain_sahara_config('DEFAULT/api_workers').with_value('2') }
+      it { is_expected.to contain_sahara_config('DEFAULT/api_workers').with_value(4) }
     end
 
   end

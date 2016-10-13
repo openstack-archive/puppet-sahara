@@ -7,7 +7,7 @@
 # [*api_workers*]
 #   (Optional) Number of workers for Sahara API service
 #   0 means all-in-one-thread configuration
-#   Defaults to $::os_service_default
+#   Defaults to $::os_workers
 #
 # [*enabled*]
 #   (Optional) Should the service be enabled.
@@ -22,7 +22,7 @@
 #   Defaults to 'present'
 #
 class sahara::service::api (
-  $api_workers    = $::os_service_default,
+  $api_workers    = $::os_workers,
   $enabled        = true,
   $manage_service = true,
   $package_ensure = 'present',
