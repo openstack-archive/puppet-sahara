@@ -329,12 +329,6 @@
 #   in the sahara config.
 #   Defaults to false.
 #
-# == DEPRECATED PARAMETERS
-#
-# [*verbose*]
-#   (Optional) Deprecated. Should the daemons log verbose messages
-#   Defaults to undef.
-#
 class sahara(
   $package_ensure              = 'present',
   $debug                       = undef,
@@ -412,16 +406,11 @@ class sahara(
   $amqp_password               = $::os_service_default,
   $purge_config                = false,
   # DEPRECATED PARAMETERS
-  $verbose                     = undef,
 ) {
   include ::sahara::params
   include ::sahara::logging
   include ::sahara::db
   include ::sahara::policy
-
-  if $verbose {
-    warning('verbose is deprecated, has no effect and will be removed after Newton cycle.')
-  }
 
   package { 'sahara-common':
     ensure => $package_ensure,
