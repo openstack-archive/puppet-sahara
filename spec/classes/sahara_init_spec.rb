@@ -45,6 +45,7 @@ describe 'sahara' do
       it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/kombu_failover_strategy').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_sahara_config('DEFAULT/transport_url').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_sahara_config('DEFAULT/control_exchange').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_sahara_config('DEFAULT/default_ntp_server').with_value('<SERVICE DEFAULT>') }
     end
 
     context 'with passing params' do
@@ -61,6 +62,7 @@ describe 'sahara' do
         :plugins               => ['plugin1', 'plugin2'],
         :default_transport_url => 'rabbit://guest2:pass@localhost2:5673',
         :control_exchange      => 'openstack',
+        :default_ntp_server    => 'pool.ntp.org',
       }
       end
 
@@ -76,6 +78,7 @@ describe 'sahara' do
       it { is_expected.to contain_sahara_config('DEFAULT/plugins').with_value('plugin1,plugin2') }
       it { is_expected.to contain_sahara_config('DEFAULT/transport_url').with_value('rabbit://guest2:pass@localhost2:5673') }
       it { is_expected.to contain_sahara_config('DEFAULT/control_exchange').with_value('openstack') }
+      it { is_expected.to contain_sahara_config('DEFAULT/default_ntp_server').with_value('pool.ntp.org') }
     end
 
   end

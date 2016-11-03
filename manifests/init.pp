@@ -329,6 +329,10 @@
 #   in the sahara config.
 #   Defaults to false.
 #
+# [*default_ntp_server*]
+#   (optional) default ntp server to be used by the cluster instances
+#   Defaults to $::os_service_default
+#
 class sahara(
   $package_ensure              = 'present',
   $debug                       = undef,
@@ -405,6 +409,7 @@ class sahara(
   $amqp_username               = $::os_service_default,
   $amqp_password               = $::os_service_default,
   $purge_config                = false,
+  $default_ntp_server          = $::os_service_default,
   # DEPRECATED PARAMETERS
 ) {
   include ::sahara::params
@@ -425,11 +430,12 @@ class sahara(
   }
 
   sahara_config {
-    'DEFAULT/plugins':          value => join(any2array($plugins),',');
-    'DEFAULT/use_neutron':      value => $use_neutron;
-    'DEFAULT/use_floating_ips': value => $use_floating_ips;
-    'DEFAULT/host':             value => $host;
-    'DEFAULT/port':             value => $port;
+    'DEFAULT/plugins':            value => join(any2array($plugins),',');
+    'DEFAULT/use_neutron':        value => $use_neutron;
+    'DEFAULT/use_floating_ips':   value => $use_floating_ips;
+    'DEFAULT/host':               value => $host;
+    'DEFAULT/port':               value => $port;
+    'DEFAULT/default_ntp_server': value => $default_ntp_server;
   }
 
   if $admin_password {
