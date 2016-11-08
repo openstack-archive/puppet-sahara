@@ -156,37 +156,12 @@
 #   (Optional) Use durable queues in RabbitMQ.
 #   Defaults to $::os_service_default.
 #
-# [*rabbit_host*]
-#   (Optional) IP or hostname of the rabbit server.
-#   Defaults to $::os_service_default.
-#
-# [*rabbit_port*]
-#   (Optional) Port of the rabbit server.
-#   Defaults to $::os_service_default.
-#
-# [*rabbit_hosts*]
-#   (Optional) IP or hostname of the rabbits servers.
-#   comma separated array (ex: ['1.0.0.10:5672','1.0.0.11:5672'])
-#   Defaults to $::os_service_default.
-#
 # [*rabbit_use_ssl*]
 #   (Optional) Connect over SSL for RabbitMQ.
 #   Defaults to $::os_service_default.
 #
-# [*rabbit_userid*]
-#   (Optional) User to connect to the rabbit server.
-#   Defaults to $::os_service_default.
-#
-# [*rabbit_password*]
-#   (Optional) Password to connect to the rabbit server.
-#   Defaults to $::os_service_default.
-#
 # [*rabbit_login_method*]
 #   (Optional) Method to auth with the rabbit server.
-#   Defaults to $::os_service_default.
-#
-# [*rabbit_virtual_host*]
-#   (Optional) Virtual host to use.
 #   Defaults to $::os_service_default.
 #
 # [*rabbit_retry_interval*]
@@ -333,6 +308,33 @@
 #   (optional) default ntp server to be used by the cluster instances
 #   Defaults to $::os_service_default
 #
+# === DEPRECATED PARAMETERS
+#
+# [*rabbit_host*]
+#   (Optional) IP or hostname of the rabbit server.
+#   Defaults to $::os_service_default.
+#
+# [*rabbit_port*]
+#   (Optional) Port of the rabbit server.
+#   Defaults to $::os_service_default.
+#
+# [*rabbit_hosts*]
+#   (Optional) IP or hostname of the rabbits servers.
+#   comma separated array (ex: ['1.0.0.10:5672','1.0.0.11:5672'])
+#   Defaults to $::os_service_default.
+#
+# [*rabbit_userid*]
+#   (Optional) User to connect to the rabbit server.
+#   Defaults to $::os_service_default.
+#
+# [*rabbit_password*]
+#   (Optional) Password to connect to the rabbit server.
+#   Defaults to $::os_service_default.
+#
+# [*rabbit_virtual_host*]
+#   (Optional) Virtual host to use.
+#   Defaults to $::os_service_default.
+#
 class sahara(
   $package_ensure              = 'present',
   $debug                       = undef,
@@ -368,14 +370,8 @@ class sahara(
   $rpc_backend                 = $::os_service_default,
   $amqp_durable_queues         = $::os_service_default,
   $rabbit_ha_queues            = $::os_service_default,
-  $rabbit_host                 = $::os_service_default,
-  $rabbit_hosts                = $::os_service_default,
-  $rabbit_port                 = $::os_service_default,
   $rabbit_use_ssl              = $::os_service_default,
-  $rabbit_userid               = $::os_service_default,
-  $rabbit_password             = $::os_service_default,
   $rabbit_login_method         = $::os_service_default,
-  $rabbit_virtual_host         = $::os_service_default,
   $rabbit_retry_interval       = $::os_service_default,
   $rabbit_retry_backoff        = $::os_service_default,
   $rabbit_max_retries          = $::os_service_default,
@@ -411,11 +407,28 @@ class sahara(
   $purge_config                = false,
   $default_ntp_server          = $::os_service_default,
   # DEPRECATED PARAMETERS
+  $rabbit_host                 = $::os_service_default,
+  $rabbit_hosts                = $::os_service_default,
+  $rabbit_port                 = $::os_service_default,
+  $rabbit_userid               = $::os_service_default,
+  $rabbit_password             = $::os_service_default,
+  $rabbit_virtual_host         = $::os_service_default,
 ) {
   include ::sahara::params
   include ::sahara::logging
   include ::sahara::db
   include ::sahara::policy
+
+  if !is_service_default($rabbit_host) or
+    !is_service_default($rabbit_hosts) or
+    !is_service_default($rabbit_password) or
+    !is_service_default($rabbit_port) or
+    !is_service_default($rabbit_userid) or
+    !is_service_default($rabbit_virtual_host) {
+    warning("sahara::rabbit_host, sahara::rabbit_hosts, sahara::rabbit_password, \
+sahara::rabbit_port, sahara::rabbit_userid and sahara::rabbit_virtual_host are \
+deprecated. Please use sahara::default_transport_url instead.")
+  }
 
   package { 'sahara-common':
     ensure => $package_ensure,

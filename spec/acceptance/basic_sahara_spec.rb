@@ -32,12 +32,10 @@ describe 'basic sahara' do
         password => 'a_big_secret',
       }
       class { '::sahara':
-        rabbit_userid       => 'sahara',
-        rabbit_password     => 'an_even_bigger_secret',
-        rabbit_host         => '127.0.0.1',
-        rpc_backend         => 'rabbit',
-        database_connection => 'mysql+pymysql://sahara:a_big_secret@127.0.0.1/sahara?charset=utf8',
-        admin_password      => 'a_big_secret',
+        default_transport_url => 'rabbit://sahara:an_even_bigger_secret@127.0.0.1:5672/',
+        rpc_backend           => 'rabbit',
+        database_connection   => 'mysql+pymysql://sahara:a_big_secret@127.0.0.1/sahara?charset=utf8',
+        admin_password        => 'a_big_secret',
       }
       class { '::sahara::service::api': }
       class { '::sahara::service::engine': }
