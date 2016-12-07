@@ -32,7 +32,7 @@ class sahara::db::postgresql(
   $privileges = 'ALL',
 ) {
 
-  Class['sahara::db::postgresql'] -> Service<| title == 'sahara' |>
+  include ::sahara::deps
 
   ::openstacklib::db::postgresql { 'sahara':
     password_hash => postgresql_password($user, $password),
@@ -42,6 +42,8 @@ class sahara::db::postgresql(
     privileges    => $privileges,
   }
 
-  ::Openstacklib::Db::Postgresql['sahara'] ~> Exec<| title == 'sahara-dbmanage' |>
+  Anchor['sahara::db::begin']
+  ~> Class['sahara::db::postgresql']
+  ~> Anchor['sahara::db::end']
 
 }

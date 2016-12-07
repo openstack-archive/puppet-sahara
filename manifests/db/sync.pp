@@ -12,13 +12,8 @@ class sahara::db::sync(
   $extra_params = '--config-file /etc/sahara/sahara.conf',
 ) {
 
+  include ::sahara::deps
   include ::sahara::params
-
-  Package <| tag == 'sahara-package' |> ~> Exec['sahara-dbmanage']
-  Exec['sahara-dbmanage'] ~> Service <| tag == 'sahara-service' |>
-
-  Sahara_config <||> -> Exec['sahara-dbmanage']
-  Sahara_config <| title == 'database/connection' |> ~> Exec['sahara-dbmanage']
 
   exec { 'sahara-dbmanage':
     command     => "sahara-db-manage ${extra_params} upgrade head",
@@ -28,6 +23,12 @@ class sahara::db::sync(
     try_sleep   => 5,
     tries       => 10,
     logoutput   => on_failure,
+    subscribe   => [
+      Anchor['sahara::install::end'],
+      Anchor['sahara::config::end'],
+      Anchor['sahara::dbsync::begin']
+    ],
+    notify      => Anchor['sahara::dbsync::end'],
     tag         => 'openstack-db',
   }
 

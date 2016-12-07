@@ -28,17 +28,14 @@ class sahara::service::api (
   $package_ensure = 'present',
 ) {
 
+  include ::sahara::deps
   include ::sahara::policy
   include ::sahara::params
-
-  Sahara_config<||> ~> Service['sahara-api']
-  Class['sahara::policy'] ~> Service['sahara-api']
 
   package { 'sahara-api':
     ensure => $package_ensure,
     name   => $::sahara::params::api_package_name,
     tag    => ['openstack', 'sahara-package'],
-    notify => Service['sahara-api'],
   }
 
   sahara_config {
@@ -59,7 +56,6 @@ class sahara::service::api (
     enable     => $enabled,
     hasstatus  => true,
     hasrestart => true,
-    require    => Package['sahara-api'],
     tag        => 'sahara-service',
   }
 

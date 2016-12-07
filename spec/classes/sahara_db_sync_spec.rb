@@ -14,6 +14,10 @@ describe 'sahara::db::sync' do
           :try_sleep   => 5,
           :tries       => 10,
           :logoutput   => 'on_failure',
+          :subscribe   => ['Anchor[sahara::install::end]',
+                           'Anchor[sahara::config::end]',
+                           'Anchor[sahara::dbsync::begin]'],
+          :notify      => 'Anchor[sahara::dbsync::end]',
           :tag         => 'openstack-db',
         )
       end
@@ -35,6 +39,10 @@ describe 'sahara::db::sync' do
           :try_sleep   => 5,
           :tries       => 10,
           :logoutput   => 'on_failure',
+          :subscribe   => ['Anchor[sahara::install::end]',
+                           'Anchor[sahara::config::end]',
+                           'Anchor[sahara::dbsync::begin]'],
+          :notify      => 'Anchor[sahara::dbsync::end]',
           :tag         => 'openstack-db',
         )
         }

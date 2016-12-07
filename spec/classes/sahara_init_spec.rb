@@ -13,6 +13,7 @@ describe 'sahara' do
   end
 
   shared_examples_for 'sahara' do
+    it { is_expected.to contain_class('sahara::deps') }
     it { is_expected.to contain_class('sahara::params') }
     it { is_expected.to contain_class('sahara::db') }
     it { is_expected.to contain_class('sahara::logging') }

@@ -43,6 +43,8 @@ class sahara::notify (
   $control_exchange           = undef,
 ) {
 
+  include ::sahara::deps
+
   if $control_exchange {
     warning('control_exchange is moved to ::sahara and will be removed from sahara::notify in a future release')
   }

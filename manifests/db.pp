@@ -49,6 +49,8 @@ class sahara::db (
   $database_max_overflow   = $::os_service_default,
 ) {
 
+  include ::sahara::deps
+
   # NOTE(degorenko): In order to keep backward compatibility we rely on the pick function
   # to use sahara::<myparam> if sahara::db::<myparam> isn't specified.
   $database_connection_real     = pick($::sahara::database_connection, $database_connection)

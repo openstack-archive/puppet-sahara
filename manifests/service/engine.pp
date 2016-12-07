@@ -22,15 +22,13 @@ class sahara::service::engine (
   $package_ensure = 'present',
 ) {
 
+  include ::sahara::deps
   include ::sahara::params
-
-  Sahara_config<||> ~> Service['sahara-engine']
 
   package { 'sahara-engine':
     ensure => $package_ensure,
     name   => $::sahara::params::engine_package_name,
     tag    => ['openstack', 'sahara-package'],
-    notify => Service['sahara-engine'],
   }
 
   if $manage_service {
@@ -47,7 +45,6 @@ class sahara::service::engine (
     enable     => $enabled,
     hasstatus  => true,
     hasrestart => true,
-    require    => Package['sahara-engine'],
     tag        => 'sahara-service',
   }
 

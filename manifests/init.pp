@@ -414,6 +414,8 @@ class sahara(
   $rabbit_password             = $::os_service_default,
   $rabbit_virtual_host         = $::os_service_default,
 ) {
+
+  include ::sahara::deps
   include ::sahara::params
   include ::sahara::logging
   include ::sahara::db
@@ -435,8 +437,6 @@ deprecated. Please use sahara::default_transport_url instead.")
     name   => $::sahara::params::common_package_name,
     tag    => ['openstack', 'sahara-package'],
   }
-
-  Package['sahara-common'] -> Class['sahara::policy']
 
   resources { 'sahara_config':
     purge => $purge_config,

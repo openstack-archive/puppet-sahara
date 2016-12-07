@@ -28,6 +28,8 @@ class sahara::policy (
   $policy_path = '/etc/sahara/policy.json',
 ) {
 
+  include ::sahara::deps
+
   validate_hash($policies)
 
   Openstacklib::Policy::Base {

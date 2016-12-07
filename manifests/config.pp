@@ -28,6 +28,8 @@ class sahara::config (
   $sahara_api_paste_ini = {},
 ) {
 
+  include ::sahara::deps
+
   validate_hash($sahara_config)
   validate_hash($sahara_api_paste_ini)
 

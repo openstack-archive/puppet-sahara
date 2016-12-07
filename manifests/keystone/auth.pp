@@ -79,6 +79,8 @@ class sahara::keystone::auth(
   $internal_url        = 'http://127.0.0.1:8386/v1.1/%(tenant_id)s',
 ) {
 
+  include ::sahara::deps
+
   keystone::resource::service_identity { 'sahara':
     configure_user      => true,
     configure_user_role => true,

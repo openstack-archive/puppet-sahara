@@ -104,6 +104,8 @@ class sahara::logging(
   $log_date_format               = $::os_service_default,
 ) {
 
+  include ::sahara::deps
+
   # NOTE(degorenko): In order to keep backward compatibility we rely on the pick function
   # to use sahara::<myparam> if sahara::logging::<myparam> isn't specified.
   $use_syslog_real   = pick($::sahara::use_syslog, $use_syslog)

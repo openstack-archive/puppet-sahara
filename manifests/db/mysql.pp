@@ -42,6 +42,8 @@ class sahara::db::mysql(
   $collate       = 'utf8_general_ci',
 ) {
 
+  include ::sahara::deps
+
   validate_string($password)
 
   ::openstacklib::db::mysql{ 'sahara':
@@ -54,5 +56,8 @@ class sahara::db::mysql(
     allowed_hosts => $allowed_hosts,
   }
 
-  ::Openstacklib::Db::Mysql['sahara'] ~> Exec<| title == 'sahara-dbmanage' |>
+  Anchor['sahara::db::begin']
+  ~> Class['sahara::db::mysql']
+  ~> Anchor['sahara::db::end']
+
 }

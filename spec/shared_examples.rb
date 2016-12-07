@@ -11,7 +11,6 @@ shared_examples 'generic sahara service' do |service|
       is_expected.to contain_package(service[:name]).with({
         :name   => service[:package_name],
         :ensure => 'present',
-        :notify => "Service[#{service[:name]}]"
       })
       is_expected.to contain_service(service[:name]).with({
         :name      => service[:service_name],
@@ -32,7 +31,6 @@ shared_examples 'generic sahara service' do |service|
       is_expected.to contain_package(service[:name]).with({
         :name   => service[:package_name],
         :ensure => '2014.2-1',
-        :notify => "Service[#{service[:name]}]"
       })
       is_expected.to contain_service(service[:name]).with({
         :name      => service[:service_name],
