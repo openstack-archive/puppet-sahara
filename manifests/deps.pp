@@ -29,6 +29,10 @@ class sahara::deps {
   -> Openstacklib::Policy::Base<||>
   ~> Anchor['sahara::config::end']
 
+  # all db settings should be applied and all packages should be installed
+  # before dbsync starts
+  Oslo::Db<||> -> Anchor['sahara::dbsync::begin']
+
   # Installation or config changes will always restart services.
   Anchor['sahara::install::end'] ~> Anchor['sahara::service::begin']
   Anchor['sahara::config::end']  ~> Anchor['sahara::service::begin']
