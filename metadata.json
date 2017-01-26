@@ -1,6 +1,6 @@
 {
   "name": "openstack-sahara",
-  "version": "10.1.0",
+  "version": "10.2.1",
   "author": "Red Hat and OpenStack Contributors",
   "summary": "Puppet module for OpenStack Sahara",
   "license": "Apache-2.0",
@@ -52,7 +52,7 @@
     },
     {
       "name": "openstack/keystone",
-      "version_requirement": ">=10.1.0 <11.0.0"
+      "version_requirement": ">=10.2.0 <11.0.0"
     },
     {
       "name": "puppetlabs/inifile",
@@ -68,11 +68,11 @@
     },
     {
       "name": "openstack/openstacklib",
-      "version_requirement": ">=10.1.0 <11.0.0"
+      "version_requirement": ">=10.2.0 <11.0.0"
     },
     {
       "name": "openstack/oslo",
-      "version_requirement": ">=10.1.0 <11.0.0"
+      "version_requirement": ">=10.2.0 <11.0.0"
     }
   ]
 }
