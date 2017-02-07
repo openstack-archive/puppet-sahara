@@ -137,6 +137,10 @@
 #      transport://user:pass@host1:port[,hostN:portN]/virtual_host
 #    Defaults to $::os_service_default
 #
+# [*rpc_response_timeout*]
+#  (Optional) Seconds to wait for a response from a call.
+#  Defaults to $::os_service_default
+#
 # [*control_exchange*]
 #   (Optional) The default exchange to scope topics.
 #   Defaults to $::os_service_default.
@@ -366,6 +370,7 @@ class sahara(
   $identity_uri                = 'http://127.0.0.1:35357/',
   $memcached_servers           = $::os_service_default,
   $default_transport_url       = $::os_service_default,
+  $rpc_response_timeout        = $::os_service_default,
   $control_exchange            = $::os_service_default,
   $rpc_backend                 = $::os_service_default,
   $amqp_durable_queues         = $::os_service_default,
@@ -465,8 +470,9 @@ deprecated. Please use sahara::default_transport_url instead.")
   }
 
   oslo::messaging::default { 'sahara_config':
-    transport_url    => $default_transport_url,
-    control_exchange => $control_exchange,
+    transport_url        => $default_transport_url,
+    rpc_response_timeout => $rpc_response_timeout,
+    control_exchange     => $control_exchange,
   }
 
   if $rpc_backend == 'rabbit' or is_service_default($rpc_backend) {
