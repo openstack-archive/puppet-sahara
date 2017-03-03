@@ -101,34 +101,6 @@
 #   (Optional) Enable dbsync
 #   Defaults to true.
 #
-# == keystone authentication options
-#
-# [*admin_user*]
-#   (Optional) Service user name
-#   Defaults to 'sahara'.
-#
-# [*admin_password*]
-#   (Optional) Service user password.
-#   Defaults to false.
-#
-# [*admin_tenant_name*]
-#   (Optional) Service tenant name.
-#   Defaults to 'services'.
-#
-# [*auth_uri*]
-#   (Optional) Complete public Identity API endpoint.
-#   Defaults to 'http://127.0.0.1:5000/v2.0/'.
-#
-# [*identity_uri*]
-#   (Optional) Complete admin Identity API endpoint.
-#   This should specify the unversioned root endpoint.
-#   Defaults to 'http://127.0.0.1:35357/'.
-#
-# [*memcached_servers*]
-#   (optinal) a list of memcached server(s) to use for caching. If left
-#   undefined, tokens will instead be cached in-process.
-#   Defaults to $::os_service_default.
-#
 # == rpc backend options
 #
 # [*default_transport_url*]
@@ -339,6 +311,32 @@
 #   (Optional) Virtual host to use.
 #   Defaults to $::os_service_default.
 #
+# [*admin_user*]
+#   (Optional) Service user name
+#   Defaults to undef.
+#
+# [*admin_password*]
+#   (Optional) Service user password.
+#   Defaults to undef.
+#
+# [*admin_tenant_name*]
+#   (Optional) Service tenant name.
+#   Defaults to undef.
+#
+# [*auth_uri*]
+#   (Optional) Complete public Identity API endpoint.
+#   Defaults to undef.
+#
+# [*identity_uri*]
+#   (Optional) Complete admin Identity API endpoint.
+#   This should specify the unversioned root endpoint.
+#   Defaults to undef.
+#
+# [*memcached_servers*]
+#   (optinal) a list of memcached server(s) to use for caching. If left
+#   undefined, tokens will instead be cached in-process.
+#   Defaults to undef.
+#
 class sahara(
   $package_ensure              = 'present',
   $debug                       = undef,
@@ -363,12 +361,6 @@ class sahara(
   $database_retry_interval     = undef,
   $database_max_overflow       = undef,
   $sync_db                     = true,
-  $admin_user                  = 'sahara',
-  $admin_password              = false,
-  $admin_tenant_name           = 'services',
-  $auth_uri                    = 'http://127.0.0.1:5000/v2.0/',
-  $identity_uri                = 'http://127.0.0.1:35357/',
-  $memcached_servers           = $::os_service_default,
   $default_transport_url       = $::os_service_default,
   $rpc_response_timeout        = $::os_service_default,
   $control_exchange            = $::os_service_default,
@@ -418,6 +410,12 @@ class sahara(
   $rabbit_userid               = $::os_service_default,
   $rabbit_password             = $::os_service_default,
   $rabbit_virtual_host         = $::os_service_default,
+  $admin_user                  = undef,
+  $admin_password              = undef,
+  $admin_tenant_name           = undef,
+  $auth_uri                    = undef,
+  $identity_uri                = undef,
+  $memcached_servers           = undef,
 ) {
 
   include ::sahara::deps
@@ -437,6 +435,18 @@ sahara::rabbit_port, sahara::rabbit_userid and sahara::rabbit_virtual_host are \
 deprecated. Please use sahara::default_transport_url instead.")
   }
 
+  if $admin_user or $admin_password or
+    $admin_tenant_name or $auth_uri or
+    $identity_uri or $memcached_servers {
+    warning("sahara::admin_user, sahara::admin_password, sahara::auth_uri, \
+sahara::identity_uri, sahara::admin_tenant_name and sahara::memcached_servers are \
+deprecated. Please use sahara::keystone::authtoken::* parameters instead.")
+  }
+
+  if $admin_password {
+    include ::sahara::keystone::authtoken
+  }
+
   package { 'sahara-common':
     ensure => $package_ensure,
     name   => $::sahara::params::common_package_name,
@@ -454,19 +464,6 @@ deprecated. Please use sahara::default_transport_url instead.")
     'DEFAULT/host':               value => $host;
     'DEFAULT/port':               value => $port;
     'DEFAULT/default_ntp_server': value => $default_ntp_server;
-  }
-
-  if $admin_password {
-    sahara_config {
-      'keystone_authtoken/auth_uri':          value => $auth_uri;
-      'keystone_authtoken/identity_uri':      value => $identity_uri;
-      'keystone_authtoken/admin_user':        value => $admin_user;
-      'keystone_authtoken/admin_tenant_name': value => $admin_tenant_name;
-      'keystone_authtoken/admin_password':
-        value  => $admin_password,
-        secret => true;
-      'keystone_authtoken/memcached_servers': value => join(any2array($memcached_servers), ',');
-    }
   }
 
   oslo::messaging::default { 'sahara_config':

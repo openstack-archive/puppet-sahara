@@ -34,12 +34,7 @@ describe 'sahara' do
       it { is_expected.to contain_sahara_config('DEFAULT/use_floating_ips').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_sahara_config('DEFAULT/host').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_sahara_config('DEFAULT/port').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_sahara_config('keystone_authtoken/auth_uri').with_value('http://127.0.0.1:5000/v2.0/') }
-      it { is_expected.to contain_sahara_config('keystone_authtoken/identity_uri').with_value('http://127.0.0.1:35357/') }
-      it { is_expected.to contain_sahara_config('keystone_authtoken/admin_user').with_value('sahara') }
-      it { is_expected.to contain_sahara_config('keystone_authtoken/admin_tenant_name').with_value('services') }
-      it { is_expected.to contain_sahara_config('keystone_authtoken/admin_password').with_value('secrete').with_secret(true) }
-      it { is_expected.to contain_sahara_config('keystone_authtoken/memcached_servers').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_sahara_config('keystone_authtoken/auth_uri').with_value('http://127.0.0.1:5000/') }
       it { is_expected.to contain_sahara_config('DEFAULT/plugins').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/kombu_compression').with_value('<SERVICE DEFAULT>') }
@@ -55,12 +50,6 @@ describe 'sahara' do
         :use_neutron           => 'true',
         :host                  => 'localhost',
         :port                  => '8387',
-        :auth_uri              => 'http://8.8.8.8:5000/v2.0/',
-        :identity_uri          => 'http://8.8.8.8:35357/',
-        :admin_user            => 'sahara-user',
-        :admin_tenant_name     => 'sahara-tenant',
-        :admin_password        => 'new_password',
-        :memcached_servers     => '1.1.1.1:11211',
         :plugins               => ['plugin1', 'plugin2'],
         :default_transport_url => 'rabbit://guest2:pass@localhost2:5673',
         :rpc_response_timeout  => '120',
@@ -71,13 +60,6 @@ describe 'sahara' do
 
       it { is_expected.to contain_sahara_config('DEFAULT/use_neutron').with_value('true') }
       it { is_expected.to contain_sahara_config('DEFAULT/host').with_value('localhost') }
-      it { is_expected.to contain_sahara_config('DEFAULT/port').with_value('8387') }
-      it { is_expected.to contain_sahara_config('keystone_authtoken/auth_uri').with_value('http://8.8.8.8:5000/v2.0/') }
-      it { is_expected.to contain_sahara_config('keystone_authtoken/identity_uri').with_value('http://8.8.8.8:35357/') }
-      it { is_expected.to contain_sahara_config('keystone_authtoken/admin_user').with_value('sahara-user') }
-      it { is_expected.to contain_sahara_config('keystone_authtoken/admin_tenant_name').with_value('sahara-tenant') }
-      it { is_expected.to contain_sahara_config('keystone_authtoken/admin_password').with_value('new_password').with_secret(true) }
-      it { is_expected.to contain_sahara_config('keystone_authtoken/memcached_servers').with_value('1.1.1.1:11211') }
       it { is_expected.to contain_sahara_config('DEFAULT/plugins').with_value('plugin1,plugin2') }
       it { is_expected.to contain_sahara_config('DEFAULT/transport_url').with_value('rabbit://guest2:pass@localhost2:5673') }
       it { is_expected.to contain_sahara_config('DEFAULT/rpc_response_timeout').with_value('120') }

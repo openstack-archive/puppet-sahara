@@ -24,14 +24,14 @@ class { '::sahara::db::mysql':
 class { '::sahara':
   database_connection => 'mysql+pymysql://sahara:a_big_secret@127.0.0.1:3306/sahara',
   debug               => true,
-  admin_user          => 'admin',
-  admin_password      => 'secrets_everywhere',
-  admin_tenant_name   => 'admin',
-  auth_uri            => 'http://127.0.0.1:5000/v2.0/',
-  identity_uri        => 'http://127.0.0.1:35357/',
   host                => '0.0.0.0',
   port                => 8386,
   use_floating_ips    => true,
+}
+
+# Keystone authtoken parameters
+class { '::sahara::keystone::authtoken':
+  password => 'a_big_secret',
 }
 
 # Please note, that if you enabled 'all' service, then you should not enable 'api' and 'engine'. And vice versa.
