@@ -45,9 +45,7 @@ describe 'basic sahara' do
         password => 'a_big_secret',
       }
       class { '::sahara::client': }
-      class { '::sahara::notify':
-        enable_notifications => true,
-      }
+      class { '::sahara::notify': }
       EOS
 
 
