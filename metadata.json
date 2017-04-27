@@ -1,6 +1,6 @@
 {
   "name": "openstack-sahara",
-  "version": "10.3.0",
+  "version": "10.3.1",
   "author": "Red Hat and OpenStack Contributors",
   "summary": "Puppet module for OpenStack Sahara",
   "license": "Apache-2.0",
