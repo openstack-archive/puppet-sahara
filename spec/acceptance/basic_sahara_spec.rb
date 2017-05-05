@@ -32,6 +32,7 @@ describe 'basic sahara' do
         password => 'a_big_secret',
       }
       class { '::sahara':
+        debug                 => true,
         default_transport_url => 'rabbit://sahara:an_even_bigger_secret@127.0.0.1:5672/',
         rpc_backend           => 'rabbit',
         database_connection   => 'mysql+pymysql://sahara:a_big_secret@127.0.0.1/sahara?charset=utf8',
