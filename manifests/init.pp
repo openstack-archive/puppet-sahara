@@ -148,10 +148,6 @@
 #   (Optional) Backoff between reconnection attempts for rabbit.
 #   Defaults to $::os_service_default.
 #
-# [*rabbit_max_retries*]
-#   (Optional) Number of times to retry (0 == no limit).
-#   Defaults to $::os_service_default.
-#
 # [*zeromq_bind_address*]
 #   (Optional) Bind address; wildcard, ethernet, or ip address.
 #   Defaults to $::os_service_default.
@@ -337,6 +333,10 @@
 #   undefined, tokens will instead be cached in-process.
 #   Defaults to undef.
 #
+# [*rabbit_max_retries*]
+#   (Optional) Number of times to retry (0 == no limit).
+#   Defaults to undef.
+#
 class sahara(
   $package_ensure              = 'present',
   $debug                       = undef,
@@ -371,7 +371,6 @@ class sahara(
   $rabbit_login_method         = $::os_service_default,
   $rabbit_retry_interval       = $::os_service_default,
   $rabbit_retry_backoff        = $::os_service_default,
-  $rabbit_max_retries          = $::os_service_default,
   $zeromq_bind_address         = $::os_service_default,
   $zeromq_contexts             = $::os_service_default,
   $zeromq_topic_backlog        = $::os_service_default,
@@ -416,6 +415,7 @@ class sahara(
   $auth_uri                    = undef,
   $identity_uri                = undef,
   $memcached_servers           = undef,
+  $rabbit_max_retries          = undef,
 ) {
 
   include ::sahara::deps
@@ -423,6 +423,10 @@ class sahara(
   include ::sahara::logging
   include ::sahara::db
   include ::sahara::policy
+
+  if $rabbit_max_retries {
+    warning('The rabbit_max_retries parameter has been deprecated and will be removed in the future release.')
+  }
 
   if !is_service_default($rabbit_host) or
     !is_service_default($rabbit_hosts) or
@@ -493,7 +497,6 @@ deprecated. Please use sahara::keystone::authtoken::* parameters instead.")
       rabbit_login_method     => $rabbit_login_method,
       rabbit_retry_interval   => $rabbit_retry_interval,
       rabbit_retry_backoff    => $rabbit_retry_backoff,
-      rabbit_max_retries      => $rabbit_max_retries,
     }
   }
 
