@@ -185,12 +185,6 @@
 #   (in seconds). Set to -1 to disable caching completely. Integer value
 #   Defaults to $::os_service_default.
 #
-# DEPRECATED PARAMETERS
-#
-# [*signing_dir*]
-#   (Optional) Directory used to cache files related to PKI tokens.
-#   Defaults to undef
-#
 class sahara::keystone::authtoken(
   $username                       = 'sahara',
   $password                       = $::os_service_default,
