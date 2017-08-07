@@ -117,13 +117,6 @@
 #   (Optional) The default exchange to scope topics.
 #   Defaults to $::os_service_default.
 #
-# [*rpc_backend*]
-#   (optional) The rpc backend implementation to use, can be:
-#     amqp (for AMQP 1.0)
-#     rabbit (for rabbitmq)
-#     zmq (for zeromq)
-#   Defaults to $::os_service_default.
-#
 # [*amqp_durable_queues*]
 #   (optional) Use durable queues in AMQP
 #   Defaults to $::os_service_default.
@@ -337,6 +330,13 @@
 #   (Optional) Number of times to retry (0 == no limit).
 #   Defaults to undef.
 #
+# [*rpc_backend*]
+#   (optional) The rpc backend implementation to use, can be:
+#     amqp (for AMQP 1.0)
+#     rabbit (for rabbitmq)
+#     zmq (for zeromq)
+#   Defaults to $::os_service_default.
+#
 class sahara(
   $package_ensure              = 'present',
   $debug                       = undef,
@@ -364,7 +364,6 @@ class sahara(
   $default_transport_url       = $::os_service_default,
   $rpc_response_timeout        = $::os_service_default,
   $control_exchange            = $::os_service_default,
-  $rpc_backend                 = $::os_service_default,
   $amqp_durable_queues         = $::os_service_default,
   $rabbit_ha_queues            = $::os_service_default,
   $rabbit_use_ssl              = $::os_service_default,
@@ -416,6 +415,7 @@ class sahara(
   $identity_uri                = undef,
   $memcached_servers           = undef,
   $rabbit_max_retries          = undef,
+  $rpc_backend                 = $::os_service_default,
 ) {
 
   include ::sahara::deps
@@ -433,10 +433,11 @@ class sahara(
     !is_service_default($rabbit_password) or
     !is_service_default($rabbit_port) or
     !is_service_default($rabbit_userid) or
-    !is_service_default($rabbit_virtual_host) {
+    !is_service_default($rabbit_virtual_host) or
+    !is_service_default($rpc_backend) {
     warning("sahara::rabbit_host, sahara::rabbit_hosts, sahara::rabbit_password, \
-sahara::rabbit_port, sahara::rabbit_userid and sahara::rabbit_virtual_host are \
-deprecated. Please use sahara::default_transport_url instead.")
+sahara::rabbit_port, sahara::rabbit_userid and sahara::rabbit_virtual_host and \
+sahara::rpc_backend are deprecated. Please use sahara::default_transport_url instead.")
   }
 
   if $admin_user or $admin_password or
@@ -476,60 +477,54 @@ deprecated. Please use sahara::keystone::authtoken::* parameters instead.")
     control_exchange     => $control_exchange,
   }
 
-  if $rpc_backend == 'rabbit' or is_service_default($rpc_backend) {
-    oslo::messaging::rabbit { 'sahara_config':
-      rabbit_userid           => $rabbit_userid,
-      rabbit_password         => $rabbit_password,
-      rabbit_virtual_host     => $rabbit_virtual_host,
-      rabbit_host             => $rabbit_host,
-      rabbit_port             => $rabbit_port,
-      rabbit_hosts            => $rabbit_hosts,
-      rabbit_ha_queues        => $rabbit_ha_queues,
-      rabbit_use_ssl          => $rabbit_use_ssl,
-      kombu_failover_strategy => $kombu_failover_strategy,
-      kombu_compression       => $kombu_compression,
-      kombu_reconnect_delay   => $kombu_reconnect_delay,
-      kombu_ssl_version       => $kombu_ssl_version,
-      kombu_ssl_keyfile       => $kombu_ssl_keyfile,
-      kombu_ssl_certfile      => $kombu_ssl_certfile,
-      kombu_ssl_ca_certs      => $kombu_ssl_ca_certs,
-      amqp_durable_queues     => $amqp_durable_queues,
-      rabbit_login_method     => $rabbit_login_method,
-      rabbit_retry_interval   => $rabbit_retry_interval,
-      rabbit_retry_backoff    => $rabbit_retry_backoff,
-    }
+  oslo::messaging::rabbit { 'sahara_config':
+    rabbit_userid           => $rabbit_userid,
+    rabbit_password         => $rabbit_password,
+    rabbit_virtual_host     => $rabbit_virtual_host,
+    rabbit_host             => $rabbit_host,
+    rabbit_port             => $rabbit_port,
+    rabbit_hosts            => $rabbit_hosts,
+    rabbit_ha_queues        => $rabbit_ha_queues,
+    rabbit_use_ssl          => $rabbit_use_ssl,
+    kombu_failover_strategy => $kombu_failover_strategy,
+    kombu_compression       => $kombu_compression,
+    kombu_reconnect_delay   => $kombu_reconnect_delay,
+    kombu_ssl_version       => $kombu_ssl_version,
+    kombu_ssl_keyfile       => $kombu_ssl_keyfile,
+    kombu_ssl_certfile      => $kombu_ssl_certfile,
+    kombu_ssl_ca_certs      => $kombu_ssl_ca_certs,
+    amqp_durable_queues     => $amqp_durable_queues,
+    rabbit_login_method     => $rabbit_login_method,
+    rabbit_retry_interval   => $rabbit_retry_interval,
+    rabbit_retry_backoff    => $rabbit_retry_backoff,
   }
 
-  if $rpc_backend == 'zmq' {
-    oslo::messaging::zmq { 'sahara_config':
-      rpc_zmq_bind_address  => $zeromq_bind_address,
-      rpc_zmq_contexts      => $zeromq_contexts,
-      rpc_zmq_topic_backlog => $zeromq_topic_backlog,
-      rpc_zmq_ipc_dir       => $zeromq_ipc_dir,
-      rpc_zmq_host          => $zeromq_host,
-      rpc_cast_timeout      => $cast_timeout,
-    }
+  oslo::messaging::zmq { 'sahara_config':
+    rpc_zmq_bind_address  => $zeromq_bind_address,
+    rpc_zmq_contexts      => $zeromq_contexts,
+    rpc_zmq_topic_backlog => $zeromq_topic_backlog,
+    rpc_zmq_ipc_dir       => $zeromq_ipc_dir,
+    rpc_zmq_host          => $zeromq_host,
+    rpc_cast_timeout      => $cast_timeout,
   }
 
-  if $rpc_backend == 'amqp' {
-    oslo::messaging::amqp { 'sahara_config':
-      server_request_prefix  => $amqp_server_request_prefix,
-      broadcast_prefix       => $amqp_broadcast_prefix,
-      group_request_prefix   => $amqp_group_request_prefix,
-      container_name         => $amqp_container_name,
-      idle_timeout           => $amqp_idle_timeout,
-      trace                  => $amqp_trace,
-      ssl_ca_file            => $amqp_ssl_ca_file,
-      ssl_cert_file          => $amqp_ssl_cert_file,
-      ssl_key_file           => $amqp_ssl_key_file,
-      ssl_key_password       => $amqp_ssl_key_password,
-      allow_insecure_clients => $amqp_allow_insecure_clients,
-      sasl_mechanisms        => $amqp_sasl_mechanisms,
-      sasl_config_dir        => $amqp_sasl_config_dir,
-      sasl_config_name       => $amqp_sasl_config_name,
-      username               => $amqp_username,
-      password               => $amqp_password,
-    }
+  oslo::messaging::amqp { 'sahara_config':
+    server_request_prefix  => $amqp_server_request_prefix,
+    broadcast_prefix       => $amqp_broadcast_prefix,
+    group_request_prefix   => $amqp_group_request_prefix,
+    container_name         => $amqp_container_name,
+    idle_timeout           => $amqp_idle_timeout,
+    trace                  => $amqp_trace,
+    ssl_ca_file            => $amqp_ssl_ca_file,
+    ssl_cert_file          => $amqp_ssl_cert_file,
+    ssl_key_file           => $amqp_ssl_key_file,
+    ssl_key_password       => $amqp_ssl_key_password,
+    allow_insecure_clients => $amqp_allow_insecure_clients,
+    sasl_mechanisms        => $amqp_sasl_mechanisms,
+    sasl_config_dir        => $amqp_sasl_config_dir,
+    sasl_config_name       => $amqp_sasl_config_name,
+    username               => $amqp_username,
+    password               => $amqp_password,
   }
 
   if ! is_service_default($use_ssl) and $use_ssl {
