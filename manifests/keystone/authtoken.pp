@@ -172,18 +172,20 @@
 #   (Optional) The region in which the identity server can be found.
 #   Defaults to $::os_service_default.
 #
-# [*revocation_cache_time*]
-#   (Optional) Determines the frequency at which the list of revoked tokens is
-#   retrieved from the Identity service (in seconds). A high number of
-#   revocation events combined with a low cache duration may significantly
-#   reduce performance. Only valid for PKI tokens. Integer value
-#   Defaults to $::os_service_default.
-#
 # [*token_cache_time*]
 #   (Optional) In order to prevent excessive effort spent validating tokens,
 #   the middleware caches previously-seen tokens for a configurable duration
 #   (in seconds). Set to -1 to disable caching completely. Integer value
 #   Defaults to $::os_service_default.
+#
+# DEPRECATED PARAMETERS
+#
+# [*revocation_cache_time*]
+#   (Optional) Determines the frequency at which the list of revoked tokens is
+#   retrieved from the Identity service (in seconds). A high number of
+#   revocation events combined with a low cache duration may significantly
+#   reduce performance. Only valid for PKI tokens. Integer value
+#   Defaults to undef
 #
 class sahara::keystone::authtoken(
   $username                       = 'sahara',
@@ -219,17 +221,22 @@ class sahara::keystone::authtoken(
   $memcached_servers              = $::os_service_default,
   $manage_memcache_package        = false,
   $region_name                    = $::os_service_default,
-  $revocation_cache_time          = $::os_service_default,
   $token_cache_time               = $::os_service_default,
+  # DEPRECATED PARAMETERS
+  $revocation_cache_time          = undef,
 ) {
 
-#NOTE(emilien): Use pick to keep backward compatibility
-$username_real = pick($::sahara::admin_user,$username)
-$password_real = pick($::sahara::admin_password,$password)
-$project_name_real = pick($::sahara::admin_tenant_name,$project_name)
-$memcached_servers_real = pick($::sahara::memcached_servers,$memcached_servers)
-$auth_uri_real = pick($::sahara::auth_uri,$auth_uri)
-$auth_url_real = pick($::sahara::identity_uri,$auth_url)
+  #NOTE(emilien): Use pick to keep backward compatibility
+  $username_real = pick($::sahara::admin_user,$username)
+  $password_real = pick($::sahara::admin_password,$password)
+  $project_name_real = pick($::sahara::admin_tenant_name,$project_name)
+  $memcached_servers_real = pick($::sahara::memcached_servers,$memcached_servers)
+  $auth_uri_real = pick($::sahara::auth_uri,$auth_uri)
+  $auth_url_real = pick($::sahara::identity_uri,$auth_url)
+
+  if $revocation_cache_time {
+    warning('revocation_cache_time parameter is deprecated, has no effect and will be removed in the future.')
+  }
 
   keystone::resource::authtoken { 'sahara_config':
     username                       => $username_real,
@@ -265,7 +272,6 @@ $auth_url_real = pick($::sahara::identity_uri,$auth_url)
     memcached_servers              => $memcached_servers_real,
     manage_memcache_package        => $manage_memcache_package,
     region_name                    => $region_name,
-    revocation_cache_time          => $revocation_cache_time,
     token_cache_time               => $token_cache_time,
   }
 }
