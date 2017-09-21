@@ -226,6 +226,8 @@ class sahara::keystone::authtoken(
   $revocation_cache_time          = undef,
 ) {
 
+  include ::sahara::deps
+
   #NOTE(emilien): Use pick to keep backward compatibility
   $username_real = pick($::sahara::admin_user,$username)
   $password_real = pick($::sahara::admin_password,$password)
