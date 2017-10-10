@@ -7,7 +7,7 @@ Puppet::Type.type(:sahara_cluster_template).provide(
 
   desc 'Provider for managing Sahara cluster templates.'
 
-  @credentials = Puppet::Provider::Openstack::CredentialsV2_0.new
+  @credentials = Puppet::Provider::Openstack::CredentialsV3.new
 
   mk_resource_methods
 
