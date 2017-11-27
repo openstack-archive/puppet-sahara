@@ -30,7 +30,6 @@ describe 'sahara' do
 
   shared_examples_for 'sahara config' do
     context 'with default params' do
-      it { is_expected.to contain_sahara_config('DEFAULT/use_neutron').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_sahara_config('DEFAULT/use_floating_ips').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_sahara_config('DEFAULT/host').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_sahara_config('DEFAULT/port').with_value('<SERVICE DEFAULT>') }
@@ -47,7 +46,6 @@ describe 'sahara' do
 
     context 'with passing params' do
       let :params do {
-        :use_neutron           => 'true',
         :host                  => 'localhost',
         :port                  => '8387',
         :plugins               => ['plugin1', 'plugin2'],
@@ -58,7 +56,6 @@ describe 'sahara' do
       }
       end
 
-      it { is_expected.to contain_sahara_config('DEFAULT/use_neutron').with_value('true') }
       it { is_expected.to contain_sahara_config('DEFAULT/host').with_value('localhost') }
       it { is_expected.to contain_sahara_config('DEFAULT/plugins').with_value('plugin1,plugin2') }
       it { is_expected.to contain_sahara_config('DEFAULT/transport_url').with_value('rabbit://guest2:pass@localhost2:5673') }

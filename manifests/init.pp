@@ -42,10 +42,6 @@
 #   Sahara preserves the order of the list when returning it.
 #   Defaults to $::os_service_default.
 #
-# [*use_neutron*]
-#   (Optional) Whether to use neutron
-#   Defaults to $::os_service_default.
-#
 # [*use_floating_ips*]
 #   (Optional) Whether to use floating IPs to communicate with instances.
 #   Defaults to $::os_service_default.
@@ -337,6 +333,10 @@
 #     zmq (for zeromq)
 #   Defaults to $::os_service_default.
 #
+# [*use_neutron*]
+#   (Optional) Whether to use neutron
+#   Defaults to undef.
+#
 class sahara(
   $package_ensure              = 'present',
   $debug                       = undef,
@@ -347,7 +347,6 @@ class sahara(
   $host                        = $::os_service_default,
   $port                        = $::os_service_default,
   $plugins                     = $::os_service_default,
-  $use_neutron                 = $::os_service_default,
   $use_floating_ips            = $::os_service_default,
   $use_ssl                     = $::os_service_default,
   $ca_file                     = $::os_service_default,
@@ -416,6 +415,7 @@ class sahara(
   $memcached_servers           = undef,
   $rabbit_max_retries          = undef,
   $rpc_backend                 = $::os_service_default,
+  $use_neutron                 = undef,
 ) {
 
   include ::sahara::deps
@@ -426,6 +426,10 @@ class sahara(
 
   if $rabbit_max_retries {
     warning('The rabbit_max_retries parameter has been deprecated and will be removed in the future release.')
+  }
+
+  if $use_neutron {
+    warning('The use_neutron parameter has been deprecated and will be removed in the future release.')
   }
 
   if !is_service_default($rabbit_host) or
@@ -464,7 +468,6 @@ deprecated. Please use sahara::keystone::authtoken::* parameters instead.")
 
   sahara_config {
     'DEFAULT/plugins':            value => join(any2array($plugins),',');
-    'DEFAULT/use_neutron':        value => $use_neutron;
     'DEFAULT/use_floating_ips':   value => $use_floating_ips;
     'DEFAULT/host':               value => $host;
     'DEFAULT/port':               value => $port;
