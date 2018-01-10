@@ -5,6 +5,7 @@
 class sahara::params {
   include ::openstacklib::defaults
   $client_package_name = 'python-saharaclient'
+  $group               = 'sahara'
 
   case $::osfamily {
     'RedHat': {

@@ -11,11 +11,11 @@
 #       'sahara-context_is_admin' => {
 #         'key' => 'context_is_admin',
 #         'value' => 'true'
-#        },
-#        'sahara-default' => {
-#          'key' => 'default',
-#          'value' => 'rule:admin_or_owner'
-#        }
+#       },
+#       'sahara-default' => {
+#         'key' => 'default',
+#         'value' => 'rule:admin_or_owner'
+#       }
 #     }
 #   Defaults to empty hash.
 #
@@ -29,11 +29,14 @@ class sahara::policy (
 ) {
 
   include ::sahara::deps
+  include ::sahara::params
 
   validate_hash($policies)
 
   Openstacklib::Policy::Base {
-    file_path => $policy_path,
+    file_path  => $policy_path,
+    file_user  => 'root',
+    file_group => $::sahara::params::group,
   }
 
   create_resources('openstacklib::policy::base', $policies)
