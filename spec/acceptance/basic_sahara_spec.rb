@@ -11,42 +11,9 @@ describe 'basic sahara' do
       include ::openstack_integration::rabbitmq
       include ::openstack_integration::mysql
       include ::openstack_integration::keystone
-
-      rabbitmq_user { 'sahara':
-        admin    => true,
-        password => 'an_even_bigger_secret',
-        provider => 'rabbitmqctl',
-        require  => Class['rabbitmq'],
+      class { '::openstack_integration::sahara':
+        integration_enable => false,
       }
-
-      rabbitmq_user_permissions { 'sahara@/':
-        configure_permission => '.*',
-        write_permission     => '.*',
-        read_permission      => '.*',
-        provider             => 'rabbitmqctl',
-        require              => Class['rabbitmq'],
-      }
-
-      # Sahara resources
-      class { '::sahara::db::mysql':
-        password => 'a_big_secret',
-      }
-      class { '::sahara':
-        debug                 => true,
-        default_transport_url => 'rabbit://sahara:an_even_bigger_secret@127.0.0.1:5672/',
-        rpc_backend           => 'rabbit',
-        database_connection   => 'mysql+pymysql://sahara:a_big_secret@127.0.0.1/sahara?charset=utf8',
-      }
-      class { '::sahara::keystone::authtoken':
-        password => 'a_big_secret',
-      }
-      class { '::sahara::service::api': }
-      class { '::sahara::service::engine': }
-      class { '::sahara::keystone::auth':
-        password => 'a_big_secret',
-      }
-      class { '::sahara::client': }
-      class { '::sahara::notify': }
       EOS
 
 
