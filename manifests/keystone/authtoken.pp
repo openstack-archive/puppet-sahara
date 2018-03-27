@@ -178,15 +178,6 @@
 #   (in seconds). Set to -1 to disable caching completely. Integer value
 #   Defaults to $::os_service_default.
 #
-# DEPRECATED PARAMETERS
-#
-# [*revocation_cache_time*]
-#   (Optional) Determines the frequency at which the list of revoked tokens is
-#   retrieved from the Identity service (in seconds). A high number of
-#   revocation events combined with a low cache duration may significantly
-#   reduce performance. Only valid for PKI tokens. Integer value
-#   Defaults to undef
-#
 class sahara::keystone::authtoken(
   $username                       = 'sahara',
   $password                       = $::os_service_default,
@@ -222,8 +213,6 @@ class sahara::keystone::authtoken(
   $manage_memcache_package        = false,
   $region_name                    = $::os_service_default,
   $token_cache_time               = $::os_service_default,
-  # DEPRECATED PARAMETERS
-  $revocation_cache_time          = undef,
 ) {
 
   include ::sahara::deps
@@ -235,10 +224,6 @@ class sahara::keystone::authtoken(
   $memcached_servers_real = pick($::sahara::memcached_servers,$memcached_servers)
   $auth_uri_real = pick($::sahara::auth_uri,$auth_uri)
   $auth_url_real = pick($::sahara::identity_uri,$auth_url)
-
-  if $revocation_cache_time {
-    warning('revocation_cache_time parameter is deprecated, has no effect and will be removed in the future.')
-  }
 
   keystone::resource::authtoken { 'sahara_config':
     username                       => $username_real,
