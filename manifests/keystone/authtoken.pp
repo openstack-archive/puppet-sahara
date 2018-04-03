@@ -42,7 +42,7 @@
 #   (Optional) Authentication type to load
 #   Defaults to $::os_service_default
 #
-# [*auth_uri*]
+# [*www_authenticate_uri*]
 #   (Optional) Complete public Identity API endpoint.
 #   Defaults to 'http://127.0.0.1:5000/'.
 #
@@ -178,6 +178,12 @@
 #   (in seconds). Set to -1 to disable caching completely. Integer value
 #   Defaults to $::os_service_default.
 #
+# DEPRECATED PARAMETERS
+#
+# [*auth_uri*]
+#   (Optional) Complete public Identity API endpoint.
+#   Defaults to undef
+#
 class sahara::keystone::authtoken(
   $username                       = 'sahara',
   $password                       = $::os_service_default,
@@ -188,7 +194,7 @@ class sahara::keystone::authtoken(
   $insecure                       = $::os_service_default,
   $auth_section                   = $::os_service_default,
   $auth_type                      = 'password',
-  $auth_uri                       = 'http://127.0.0.1:5000/',
+  $www_authenticate_uri           = 'http://127.0.0.1:5000/',
   $auth_version                   = $::os_service_default,
   $cache                          = $::os_service_default,
   $cafile                         = $::os_service_default,
@@ -213,16 +219,22 @@ class sahara::keystone::authtoken(
   $manage_memcache_package        = false,
   $region_name                    = $::os_service_default,
   $token_cache_time               = $::os_service_default,
+  # DEPRECATED PARAMETERS
+  $auth_uri                       = undef,
 ) {
 
   include ::sahara::deps
+
+  if $auth_uri {
+    warning('The auth_uri parameter is deprecated. Please use www_authenticate_uri instead.')
+  }
 
   #NOTE(emilien): Use pick to keep backward compatibility
   $username_real = pick($::sahara::admin_user,$username)
   $password_real = pick($::sahara::admin_password,$password)
   $project_name_real = pick($::sahara::admin_tenant_name,$project_name)
   $memcached_servers_real = pick($::sahara::memcached_servers,$memcached_servers)
-  $auth_uri_real = pick($::sahara::auth_uri,$auth_uri)
+  $www_authenticate_uri_real = pick($::sahara::auth_uri,$auth_uri,$www_authenticate_uri)
   $auth_url_real = pick($::sahara::identity_uri,$auth_url)
 
   keystone::resource::authtoken { 'sahara_config':
@@ -230,7 +242,7 @@ class sahara::keystone::authtoken(
     password                       => $password_real,
     project_name                   => $project_name_real,
     auth_url                       => $auth_url_real,
-    auth_uri                       => $auth_uri_real,
+    www_authenticate_uri           => $www_authenticate_uri_real,
     auth_version                   => $auth_version,
     auth_type                      => $auth_type,
     auth_section                   => $auth_section,
