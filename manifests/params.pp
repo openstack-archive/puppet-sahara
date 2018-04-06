@@ -4,7 +4,13 @@
 #
 class sahara::params {
   include ::openstacklib::defaults
-  $client_package_name = 'python-saharaclient'
+
+  if ($::os_package_type == 'debian') {
+    $pyvers = '3'
+  } else {
+    $pyvers = ''
+  }
+  $client_package_name = "python${pyvers}-saharaclient"
   $group               = 'sahara'
 
   case $::osfamily {
