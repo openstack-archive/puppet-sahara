@@ -13,7 +13,6 @@ class sahara::db::sync(
 ) {
 
   include ::sahara::deps
-  include ::sahara::params
 
   exec { 'sahara-dbmanage':
     command     => "sahara-db-manage ${extra_params} upgrade head",
