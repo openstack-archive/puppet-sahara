@@ -21,6 +21,7 @@ describe 'sahara::client' do
       end
       it { is_expected.to contain_package('python-saharaclient').with(
         :ensure => false,
+        :name   => platform_params[:client_package_name],
         :tag    => 'openstack',
         )
       }
@@ -34,6 +35,19 @@ describe 'sahara::client' do
     context "on #{os}" do
       let (:facts) do
         facts.merge(OSDefaults.get_facts)
+      end
+
+      let(:platform_params) do
+        case facts[:osfamily]
+        when 'Debian'
+          if facts[:os_package_type] == 'debian'
+            { :client_package_name => 'python3-saharaclient' }
+          else
+            { :client_package_name => 'python-saharaclient' }
+          end
+        when 'RedHat'
+          { :client_package_name => 'python-saharaclient' }
+        end
       end
 
       it_configures 'sahara client'
