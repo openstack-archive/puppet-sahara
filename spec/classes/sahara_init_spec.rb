@@ -33,7 +33,7 @@ describe 'sahara' do
       it { is_expected.to contain_sahara_config('DEFAULT/use_floating_ips').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_sahara_config('DEFAULT/host').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_sahara_config('DEFAULT/port').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_sahara_config('keystone_authtoken/auth_uri').with_value('http://127.0.0.1:5000/') }
+      it { is_expected.to contain_sahara_config('keystone_authtoken/www_authenticate_uri').with_value('http://127.0.0.1:5000/') }
       it { is_expected.to contain_sahara_config('DEFAULT/plugins').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/kombu_compression').with_value('<SERVICE DEFAULT>') }

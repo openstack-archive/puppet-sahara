@@ -45,7 +45,7 @@ class Puppet::Provider::Sahara < Puppet::Provider::Openstack
   end
 
   def self.get_sahara_credentials
-    auth_keys = ['auth_uri', 'admin_tenant_name', 'admin_user',
+    auth_keys = ['www_authenticate_uri', 'admin_tenant_name', 'admin_user',
                  'admin_password']
     conf = sahara_conf
     if conf and conf['keystone_authtoken'] and
@@ -61,7 +61,7 @@ class Puppet::Provider::Sahara < Puppet::Provider::Openstack
 
   def self.get_auth_endpoint
     q = sahara_credentials
-    "#{q['auth_uri']}"
+    "#{q['www_authenticate_uri']}"
   end
 
   def self.auth_endpoint
