@@ -18,6 +18,8 @@ describe 'sahara::config' do
       }
     end
 
+    it { is_expected.to contain_class('sahara::deps') }
+
     it 'configures arbitrary sahara configurations' do
       is_expected.to contain_sahara_config('DEFAULT/foo').with_value('fooValue')
       is_expected.to contain_sahara_config('DEFAULT/bar').with_value('barValue')
