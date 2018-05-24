@@ -271,31 +271,6 @@
 #
 # === DEPRECATED PARAMETERS
 #
-# [*rabbit_host*]
-#   (Optional) IP or hostname of the rabbit server.
-#   Defaults to $::os_service_default.
-#
-# [*rabbit_port*]
-#   (Optional) Port of the rabbit server.
-#   Defaults to $::os_service_default.
-#
-# [*rabbit_hosts*]
-#   (Optional) IP or hostname of the rabbits servers.
-#   comma separated array (ex: ['1.0.0.10:5672','1.0.0.11:5672'])
-#   Defaults to $::os_service_default.
-#
-# [*rabbit_userid*]
-#   (Optional) User to connect to the rabbit server.
-#   Defaults to $::os_service_default.
-#
-# [*rabbit_password*]
-#   (Optional) Password to connect to the rabbit server.
-#   Defaults to $::os_service_default.
-#
-# [*rabbit_virtual_host*]
-#   (Optional) Virtual host to use.
-#   Defaults to $::os_service_default.
-#
 # [*admin_user*]
 #   (Optional) Service user name
 #   Defaults to undef.
@@ -325,13 +300,6 @@
 # [*rabbit_max_retries*]
 #   (Optional) Number of times to retry (0 == no limit).
 #   Defaults to undef.
-#
-# [*rpc_backend*]
-#   (optional) The rpc backend implementation to use, can be:
-#     amqp (for AMQP 1.0)
-#     rabbit (for rabbitmq)
-#     zmq (for zeromq)
-#   Defaults to $::os_service_default.
 #
 # [*use_neutron*]
 #   (Optional) Whether to use neutron
@@ -401,12 +369,6 @@ class sahara(
   $purge_config                = false,
   $default_ntp_server          = $::os_service_default,
   # DEPRECATED PARAMETERS
-  $rabbit_host                 = $::os_service_default,
-  $rabbit_hosts                = $::os_service_default,
-  $rabbit_port                 = $::os_service_default,
-  $rabbit_userid               = $::os_service_default,
-  $rabbit_password             = $::os_service_default,
-  $rabbit_virtual_host         = $::os_service_default,
   $admin_user                  = undef,
   $admin_password              = undef,
   $admin_tenant_name           = undef,
@@ -414,7 +376,6 @@ class sahara(
   $identity_uri                = undef,
   $memcached_servers           = undef,
   $rabbit_max_retries          = undef,
-  $rpc_backend                 = $::os_service_default,
   $use_neutron                 = undef,
 ) {
 
@@ -430,18 +391,6 @@ class sahara(
 
   if $use_neutron {
     warning('The use_neutron parameter has been deprecated and will be removed in the future release.')
-  }
-
-  if !is_service_default($rabbit_host) or
-    !is_service_default($rabbit_hosts) or
-    !is_service_default($rabbit_password) or
-    !is_service_default($rabbit_port) or
-    !is_service_default($rabbit_userid) or
-    !is_service_default($rabbit_virtual_host) or
-    !is_service_default($rpc_backend) {
-    warning("sahara::rabbit_host, sahara::rabbit_hosts, sahara::rabbit_password, \
-sahara::rabbit_port, sahara::rabbit_userid and sahara::rabbit_virtual_host and \
-sahara::rpc_backend are deprecated. Please use sahara::default_transport_url instead.")
   }
 
   if $admin_user or $admin_password or
@@ -481,12 +430,6 @@ deprecated. Please use sahara::keystone::authtoken::* parameters instead.")
   }
 
   oslo::messaging::rabbit { 'sahara_config':
-    rabbit_userid           => $rabbit_userid,
-    rabbit_password         => $rabbit_password,
-    rabbit_virtual_host     => $rabbit_virtual_host,
-    rabbit_host             => $rabbit_host,
-    rabbit_port             => $rabbit_port,
-    rabbit_hosts            => $rabbit_hosts,
     rabbit_ha_queues        => $rabbit_ha_queues,
     rabbit_use_ssl          => $rabbit_use_ssl,
     kombu_failover_strategy => $kombu_failover_strategy,

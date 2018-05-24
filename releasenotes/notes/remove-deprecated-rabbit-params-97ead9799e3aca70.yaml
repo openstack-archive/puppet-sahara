@@ -1,0 +1,6 @@
+---
+upgrade:
+  - |
+    The deprecated sahara::rabbit_host, sahara::rabbit_hosts, sahara::rabbit_password,
+    sahara::rabbit_port, sahara::rabbit_userid and sahara::rabit_virtual_host are now
+    removed. Please use sahara::default_transport_url instead.

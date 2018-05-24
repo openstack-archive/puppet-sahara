@@ -69,23 +69,13 @@ describe 'sahara' do
   shared_examples_for 'sahara rpc' do
 
     context 'when defaults with rabbit pass specified' do
-       it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_password').with_value('<SERVICE DEFAULT>').with_secret(true) }
-       it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_userid').with_value('<SERVICE DEFAULT>') }
-       it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_host').with_value('<SERVICE DEFAULT>') }
-       it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_port').with_value('<SERVICE DEFAULT>') }
        it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('<SERVICE DEFAULT>') }
-       it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_virtual_host').with_value('<SERVICE DEFAULT>') }
        it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/amqp_durable_queues').with_value('<SERVICE DEFAULT>') }
-       it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_hosts').with_value('<SERVICE DEFAULT>') }
     end
 
     context 'when passing params' do
       before do
         params.merge!({
-          :rabbit_password            => 'pass',
-          :rabbit_userid              => 'guest2',
-          :rabbit_host                => 'localhost2',
-          :rabbit_port                => '5673',
           :rabbit_ha_queues           => 'true',
           :amqp_durable_queues        => 'true',
           :kombu_reconnect_delay      => '1.0',
@@ -94,13 +84,8 @@ describe 'sahara' do
         })
       end
 
-      it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_userid').with_value('guest2') }
-      it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_password').with_value('pass').with_secret(true) }
-      it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_host').with_value('localhost2') }
-      it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_port').with_value('5673') }
       it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('true') }
       it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/amqp_durable_queues').with_value('true') }
-      it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_hosts').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('1.0') }
       it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/kombu_compression').with_value('gzip') }
       it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/kombu_failover_strategy').with_value('round-robin') }
@@ -140,35 +125,11 @@ describe 'sahara' do
     context 'when passing params for single rabbit host' do
       before do
         params.merge!({
-          :rabbit_password  => 'pass',
-          :rabbit_userid    => 'guest2',
-          :rabbit_host      => 'localhost2',
-          :rabbit_port      => '5673',
           :rabbit_ha_queues => true,
         })
       end
 
-      it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_userid').with_value('guest2') }
-      it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_host').with_value('localhost2') }
-      it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_port').with_value('5673') }
       it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('true') }
-      it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_hosts').with_value('<SERVICE DEFAULT>') }
-    end
-
-    context 'when passing params for multiple rabbit hosts' do
-      before do
-        params.merge!({
-          :rabbit_password => 'pass',
-          :rabbit_userid   => 'guest3',
-          :rabbit_hosts    => ['nonlocalhost3:5673', 'nonlocalhost4:5673']
-        })
-      end
-
-      it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_userid').with_value('guest3') }
-      it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_hosts').with_value('nonlocalhost3:5673,nonlocalhost4:5673') }
-      it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('true') }
-      it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_port').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_host').with_value('<SERVICE DEFAULT>') }
     end
 
     context 'with zmq rpc' do
