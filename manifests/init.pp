@@ -297,10 +297,6 @@
 #   undefined, tokens will instead be cached in-process.
 #   Defaults to undef.
 #
-# [*rabbit_max_retries*]
-#   (Optional) Number of times to retry (0 == no limit).
-#   Defaults to undef.
-#
 # [*use_neutron*]
 #   (Optional) Whether to use neutron
 #   Defaults to undef.
@@ -375,7 +371,6 @@ class sahara(
   $auth_uri                    = undef,
   $identity_uri                = undef,
   $memcached_servers           = undef,
-  $rabbit_max_retries          = undef,
   $use_neutron                 = undef,
 ) {
 
@@ -384,10 +379,6 @@ class sahara(
   include ::sahara::logging
   include ::sahara::db
   include ::sahara::policy
-
-  if $rabbit_max_retries {
-    warning('The rabbit_max_retries parameter has been deprecated and will be removed in the future release.')
-  }
 
   if $use_neutron {
     warning('The use_neutron parameter has been deprecated and will be removed in the future release.')
