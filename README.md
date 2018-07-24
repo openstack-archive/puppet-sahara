@@ -125,6 +125,6 @@ Release Notes
 * https://docs.openstack.org/releasenotes/puppet-sahara
 
 Repository
--------------
+----------
 
 * https://git.openstack.org/cgit/openstack/puppet-sahara
