@@ -70,7 +70,7 @@ describe 'sahara::db' do
         { :database_connection => 'sqlite://sahara:sahara@localhost/sahara', }
       end
 
-      it_raises 'a Puppet::Error', /validate_re/
+      it { should raise_error(Puppet::Error, /validate_re/) }
     end
 
     context 'with incorrect database_connection string' do
@@ -78,7 +78,7 @@ describe 'sahara::db' do
         { :database_connection => 'foo+pymysql://sahara:sahara@localhost/sahara', }
       end
 
-      it_raises 'a Puppet::Error', /validate_re/
+      it { should raise_error(Puppet::Error, /validate_re/) }
     end
   end
 

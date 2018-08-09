@@ -21,16 +21,29 @@
 #   (Optional) Ensure state for package.
 #   Defaults to 'present'
 #
+# [*service_name*]
+#   (Optional) Name of the service that will be providing the
+#   server functionality of sahara-api.
+#   If the value is 'httpd', this means sahara-api will be a web
+#   service, and you must use another class to configure that
+#   web service. For example, use class { 'sahara::wsgi::apache'...}
+#   to make sahara-api be a web app using apache mod_wsgi.
+#   Defaults to '$::sahara::params::api_service_name'
+#
 class sahara::service::api (
   $api_workers    = $::os_workers,
   $enabled        = true,
   $manage_service = true,
   $package_ensure = 'present',
-) {
+  $service_name   = $::sahara::params::api_service_name,
+) inherits ::sahara::params {
 
   include ::sahara::deps
   include ::sahara::policy
-  include ::sahara::params
+
+  if $::operatingsystem == 'Ubuntu' and $service_name == $::sahara::params::api_service_name {
+    fail('The Sahara API must be run with WSGI on Ubuntu')
+  }
 
   package { 'sahara-api':
     ensure => $package_ensure,
@@ -50,13 +63,27 @@ class sahara::service::api (
     }
   }
 
-  service { 'sahara-api':
-    ensure     => $service_ensure,
-    name       => $::sahara::params::api_service_name,
-    enable     => $enabled,
-    hasstatus  => true,
-    hasrestart => true,
-    tag        => 'sahara-service',
-  }
+  if $service_name == $::sahara::params::api_service_name {
+    service { 'sahara-api':
+      ensure     => $service_ensure,
+      name       => $::sahara::params::api_service_name,
+      enable     => $enabled,
+      hasstatus  => true,
+      hasrestart => true,
+      tag        => 'sahara-service',
+    }
+  } elsif $service_name == 'httpd' {
+    include ::apache::params
 
+    if $::operatingsystem != 'Ubuntu' {
+      service { 'sahara-api':
+        ensure => 'stopped',
+        name   => $::sahara::params::api_service_name,
+        enable => false,
+        tag    => 'sahara-service',
+      }
+      Service['sahara-api'] -> Service[$service_name]
+    }
+    Service<| title == 'httpd' |> { tag +> 'sahara-service' }
+  }
 }

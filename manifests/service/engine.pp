@@ -47,5 +47,4 @@ class sahara::service::engine (
     hasrestart => true,
     tag        => 'sahara-service',
   }
-
 }

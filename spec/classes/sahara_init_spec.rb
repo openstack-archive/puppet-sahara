@@ -230,7 +230,8 @@ describe 'sahara' do
         :use_ssl   => true,
       }
       end
-      it_raises 'a Puppet::Error', /The cert_file parameter is required when use_ssl is set to true/
+
+      it { should raise_error(Puppet::Error, /The cert_file parameter is required when use_ssl is set to true/) }
     end
 
     context 'with ssl but without key_file' do
@@ -240,7 +241,8 @@ describe 'sahara' do
         :cert_file => '/tmp/cert_file',
       }
       end
-      it_raises 'a Puppet::Error', /The key_file parameter is required when use_ssl is set to true/
+
+      it { should raise_error(Puppet::Error, /The key_file parameter is required when use_ssl is set to true/) }
     end
   end
 

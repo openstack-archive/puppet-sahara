@@ -48,5 +48,4 @@ class sahara::service::all (
     hasrestart => true,
     tag        => 'sahara-service',
   }
-
 }
