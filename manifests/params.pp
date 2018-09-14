@@ -37,7 +37,8 @@ class sahara::params {
       $sahara_wsgi_script_source = '/usr/bin/sahara-wsgi-api'
     }
     default: {
-      fail("Unsupported osfamily: ${::osfamily} operatingsystem: ${::operatingsystem}")
+      fail("Unsupported osfamily: ${::osfamily} operatingsystem: ${::operatingsystem}, \
+module ${module_name} only support osfamily RedHat and Debian")
     }
   }
 }
