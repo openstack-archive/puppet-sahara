@@ -70,5 +70,5 @@
     ],
     "source": "git://github.com/openstack/puppet-sahara.git",
     "summary": "Puppet module for OpenStack Sahara",
-    "version": "13.3.0"
+    "version": "13.3.1"
 }
