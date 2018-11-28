@@ -283,10 +283,6 @@
 #   (Optional) Service tenant name.
 #   Defaults to undef.
 #
-# [*auth_uri*]
-#   (Optional) Complete public Identity API endpoint.
-#   Defaults to undef.
-#
 # [*identity_uri*]
 #   (Optional) Complete admin Identity API endpoint.
 #   This should specify the unversioned root endpoint.
@@ -368,7 +364,6 @@ class sahara(
   $admin_user                  = undef,
   $admin_password              = undef,
   $admin_tenant_name           = undef,
-  $auth_uri                    = undef,
   $identity_uri                = undef,
   $memcached_servers           = undef,
   $use_neutron                 = undef,
@@ -385,9 +380,9 @@ class sahara(
   }
 
   if $admin_user or $admin_password or
-    $admin_tenant_name or $auth_uri or
+    $admin_tenant_name or
     $identity_uri or $memcached_servers {
-    warning("sahara::admin_user, sahara::admin_password, sahara::auth_uri, \
+    warning("sahara::admin_user, sahara::admin_password, \
 sahara::identity_uri, sahara::admin_tenant_name and sahara::memcached_servers are \
 deprecated. Please use sahara::keystone::authtoken::* parameters instead.")
   }

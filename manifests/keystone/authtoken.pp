@@ -163,10 +163,6 @@
 #
 # DEPRECATED PARAMETERS
 #
-# [*auth_uri*]
-#   (Optional) Complete public Identity API endpoint.
-#   Defaults to undef
-#
 # [*check_revocations_for_cached*]
 #   (Optional) If true, the revocation list will be checked for cached tokens.
 #   This requires that PKI tokens are configured on the identity server.
@@ -218,16 +214,11 @@ class sahara::keystone::authtoken(
   $region_name                    = $::os_service_default,
   $token_cache_time               = $::os_service_default,
   # DEPRECATED PARAMETERS
-  $auth_uri                       = undef,
   $check_revocations_for_cached   = undef,
   $hash_algorithms                = undef,
 ) {
 
   include ::sahara::deps
-
-  if $auth_uri {
-    warning('The auth_uri parameter is deprecated. Please use www_authenticate_uri instead.')
-  }
 
   if $check_revocations_for_cached {
     warning('check_revocations_for_cached parameter is deprecated, has no effect and will be removed in the future.')
@@ -242,7 +233,6 @@ class sahara::keystone::authtoken(
   $password_real = pick($::sahara::admin_password,$password)
   $project_name_real = pick($::sahara::admin_tenant_name,$project_name)
   $memcached_servers_real = pick($::sahara::memcached_servers,$memcached_servers)
-  $www_authenticate_uri_real = pick($::sahara::auth_uri,$auth_uri,$www_authenticate_uri)
   $auth_url_real = pick($::sahara::identity_uri,$auth_url)
 
   keystone::resource::authtoken { 'sahara_config':
@@ -250,7 +240,7 @@ class sahara::keystone::authtoken(
     password                       => $password_real,
     project_name                   => $project_name_real,
     auth_url                       => $auth_url_real,
-    www_authenticate_uri           => $www_authenticate_uri_real,
+    www_authenticate_uri           => $www_authenticate_uri,
     auth_version                   => $auth_version,
     auth_type                      => $auth_type,
     auth_section                   => $auth_section,
