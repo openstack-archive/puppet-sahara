@@ -116,26 +116,14 @@ class sahara::logging(
 
   include ::sahara::deps
 
-  # NOTE(degorenko): In order to keep backward compatibility we rely on the pick function
-  # to use sahara::<myparam> if sahara::logging::<myparam> isn't specified.
-  $use_syslog_real   = pick($::sahara::use_syslog, $use_syslog)
-  $use_stderr_real   = pick($::sahara::use_stderr, $use_stderr)
-  $log_facility_real = pick($::sahara::log_facility, $log_facility)
-  if $log_dir != '' {
-    $log_dir_real = pick($::sahara::log_dir,$log_dir)
-  } else {
-    $log_dir_real = $log_dir
-  }
-  $debug_real        = pick($::sahara::debug, $debug)
-
   oslo::log { 'sahara_config':
-    debug                         => $debug_real,
-    use_syslog                    => $use_syslog_real,
+    debug                         => $debug,
+    use_syslog                    => $use_syslog,
     use_json                      => $use_json,
     use_journal                   => $use_journal,
-    use_stderr                    => $use_stderr_real,
-    log_dir                       => $log_dir_real,
-    syslog_log_facility           => $log_facility_real,
+    use_stderr                    => $use_stderr,
+    log_dir                       => $log_dir,
+    syslog_log_facility           => $log_facility,
     logging_context_format_string => $logging_context_format_string,
     logging_default_format_string => $logging_default_format_string,
     logging_debug_format_suffix   => $logging_debug_format_suffix,

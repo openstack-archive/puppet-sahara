@@ -8,27 +8,6 @@
 #   (Optional) Ensure state for package
 #   Defaults to 'present'.
 #
-# [*debug*]
-#   (Optional) Should the daemons log debug messages
-#   Defaults to undef.
-#
-# [*use_syslog*]
-#   Use syslog for logging.
-#   (Optional) Defaults to undef.
-#
-# [*use_stderr*]
-#   (optional) Use stderr for logging
-#   Defaults to undef
-#
-# [*log_facility*]
-#   Syslog facility to receive log lines.
-#   (Optional) Defaults to undef.
-#
-# [*log_dir*]
-#   (optional) Directory where logs should be stored.
-#   If set to $::os_service_default, it will not log to any directory.
-#   Defaults to undef.
-#
 # [*host*]
 #   (Optional) Hostname for sahara to listen on
 #   Defaults to $::os_service_default.
@@ -303,11 +282,6 @@
 #
 class sahara(
   $package_ensure              = 'present',
-  $debug                       = undef,
-  $use_syslog                  = undef,
-  $use_stderr                  = undef,
-  $log_facility                = undef,
-  $log_dir                     = undef,
   $host                        = $::os_service_default,
   $port                        = $::os_service_default,
   $plugins                     = $::os_service_default,
@@ -376,7 +350,6 @@ class sahara(
 
   include ::sahara::deps
   include ::sahara::params
-  include ::sahara::logging
   include ::sahara::db
   include ::sahara::policy
 
