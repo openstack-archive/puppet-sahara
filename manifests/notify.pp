@@ -5,15 +5,13 @@
 # === Parameters
 #
 # [*notification_transport_url*]
-#   (optional) A URL representing the messaging driver to use for notifications
+#   (Optional) A URL representing the messaging driver to use for notifications
 #   and its full configuration. Transport URLs take the form:
 #     transport://user:pass@host1:port[,hostN:portN]/virtual_host
 #   Defaults to $::os_service_default
 #
 # [*notification_driver*]
-#   (Optional) Notification driver to use. WARNING: the enable_notifications is
-#   deprecated. plese specify the notification_driver if you wish to enable
-#   notifications
+#   (Optional) Notification driver to use.
 #   Defaults to $::os_service_default.
 #
 # [*notification_topics*]

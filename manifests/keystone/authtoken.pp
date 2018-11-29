@@ -228,18 +228,11 @@ class sahara::keystone::authtoken(
     warning('hash_algorithms parameter is deprecated, has no effect and will be removed in the future.')
   }
 
-  #NOTE(emilien): Use pick to keep backward compatibility
-  $username_real = pick($::sahara::admin_user,$username)
-  $password_real = pick($::sahara::admin_password,$password)
-  $project_name_real = pick($::sahara::admin_tenant_name,$project_name)
-  $memcached_servers_real = pick($::sahara::memcached_servers,$memcached_servers)
-  $auth_url_real = pick($::sahara::identity_uri,$auth_url)
-
   keystone::resource::authtoken { 'sahara_config':
-    username                       => $username_real,
-    password                       => $password_real,
-    project_name                   => $project_name_real,
-    auth_url                       => $auth_url_real,
+    username                       => $username,
+    password                       => $password,
+    project_name                   => $project_name,
+    auth_url                       => $auth_url,
     www_authenticate_uri           => $www_authenticate_uri,
     auth_version                   => $auth_version,
     auth_type                      => $auth_type,
@@ -264,7 +257,7 @@ class sahara::keystone::authtoken(
     memcache_security_strategy     => $memcache_security_strategy,
     memcache_use_advanced_pool     => $memcache_use_advanced_pool,
     memcache_pool_unused_timeout   => $memcache_pool_unused_timeout,
-    memcached_servers              => $memcached_servers_real,
+    memcached_servers              => $memcached_servers,
     manage_memcache_package        => $manage_memcache_package,
     region_name                    => $region_name,
     token_cache_time               => $token_cache_time,

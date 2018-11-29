@@ -28,10 +28,17 @@ class Puppet::Provider::Sahara < Puppet::Provider::Openstack
 
   def self.sahara_request(service, action, error, properties=nil)
     properties ||= []
-    @credentials.username = sahara_credentials['admin_user']
-    @credentials.password = sahara_credentials['admin_password']
-    @credentials.project_name = sahara_credentials['admin_tenant_name']
+    @credentials.username = sahara_credentials['username']
+    @credentials.password = sahara_credentials['password']
+    @credentials.project_name = sahara_credentials['project_name']
     @credentials.auth_url = auth_endpoint
+    if sahara_credentials['region_name']
+      @credentials.region_name = sahara_credentials['region_name']
+    end
+    if @credentials.version == '3'
+      @credentials.user_domain_name = sahara_credentials['user_domain_name']
+      @credentials.project_domain_name = sahara_credentials['project_domain_name']
+    end
     raise error unless @credentials.set?
     Puppet::Provider::Openstack.request(service, action, properties, @credentials)
   end
@@ -45,13 +52,26 @@ class Puppet::Provider::Sahara < Puppet::Provider::Openstack
   end
 
   def self.get_sahara_credentials
-    auth_keys = ['auth_url', 'admin_tenant_name', 'admin_user',
-                 'admin_password']
+    auth_keys = ['auth_url', 'project_name', 'username',
+                 'password']
     conf = sahara_conf
     if conf and conf['keystone_authtoken'] and
         auth_keys.all?{|k| !conf['keystone_authtoken'][k].nil?}
       creds = Hash[ auth_keys.map \
                    { |k| [k, conf['keystone_authtoken'][k].strip] } ]
+      if conf['project_domain_name']
+        creds['project_domain_name'] = conf['project_domain_name']
+      else
+        creds['project_domain_name'] = 'Default'
+      end
+      if conf['user_domain_name']
+        creds['user_domain_name'] = conf['user_domain_name']
+      else
+        creds['user_domain_name'] = 'Default'
+      end
+      if conf['keystone_authtoken']['region_name']
+        creds['region_name'] = conf['keystone_authtoken']['region_name']
+      end
       return creds
     else
       raise(Puppet::Error, "File: #{conf_filename} does not contain all " +

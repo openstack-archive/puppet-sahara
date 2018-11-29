@@ -226,32 +226,6 @@
 #
 # === DEPRECATED PARAMETERS
 #
-# [*admin_user*]
-#   (Optional) Service user name
-#   Defaults to undef.
-#
-# [*admin_password*]
-#   (Optional) Service user password.
-#   Defaults to undef.
-#
-# [*admin_tenant_name*]
-#   (Optional) Service tenant name.
-#   Defaults to undef.
-#
-# [*identity_uri*]
-#   (Optional) Complete admin Identity API endpoint.
-#   This should specify the unversioned root endpoint.
-#   Defaults to undef.
-#
-# [*memcached_servers*]
-#   (optinal) a list of memcached server(s) to use for caching. If left
-#   undefined, tokens will instead be cached in-process.
-#   Defaults to undef.
-#
-# [*use_neutron*]
-#   (Optional) Whether to use neutron
-#   Defaults to undef.
-#
 # [*zeromq_bind_address*]
 #   (Optional) Bind address; wildcard, ethernet, or ip address.
 #   Defaults to undef.
@@ -329,12 +303,6 @@ class sahara(
   $purge_config                = false,
   $default_ntp_server          = $::os_service_default,
   # DEPRECATED PARAMETERS
-  $admin_user                  = undef,
-  $admin_password              = undef,
-  $admin_tenant_name           = undef,
-  $identity_uri                = undef,
-  $memcached_servers           = undef,
-  $use_neutron                 = undef,
   $zeromq_bind_address         = undef,
   $zeromq_contexts             = undef,
   $zeromq_topic_backlog        = undef,
@@ -347,22 +315,6 @@ class sahara(
   include ::sahara::params
   include ::sahara::db
   include ::sahara::policy
-
-  if $use_neutron {
-    warning('The use_neutron parameter has been deprecated and will be removed in the future release.')
-  }
-
-  if $admin_user or $admin_password or
-    $admin_tenant_name or
-    $identity_uri or $memcached_servers {
-    warning("sahara::admin_user, sahara::admin_password, \
-sahara::identity_uri, sahara::admin_tenant_name and sahara::memcached_servers are \
-deprecated. Please use sahara::keystone::authtoken::* parameters instead.")
-  }
-
-  if $admin_password {
-    include ::sahara::keystone::authtoken
-  }
 
   package { 'sahara-common':
     ensure => $package_ensure,

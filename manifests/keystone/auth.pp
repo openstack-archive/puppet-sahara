@@ -54,14 +54,10 @@
 #   This url should *not* contain any trailing '/'.
 #   Defaults to 'http://127.0.0.1:8386/v1.1/%(tenant_id)s'
 #
-# === Deprecation notes
-#
-# If any value is provided for public_protocol, public_address or port parameters,
-# public_url will be completely ignored. The same applies for internal and admin parameters.
-#
 # === Examples
 #
 #  class { 'sahara::keystone::auth':
+#    password     => 'secret',
 #    public_url   => 'https://10.0.0.10:8386/v1.1/%(tenant_id)s',
 #    internal_url => 'https://10.0.0.11:8386/v1.1/%(tenant_id)s',
 #    admin_url    => 'https://10.0.0.11:8386/v1.1/%(tenant_id)s',

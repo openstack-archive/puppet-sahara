@@ -24,17 +24,19 @@ describe Puppet::Provider::Sahara do
 
     it 'should read conf file with all sections' do
       creds_hash = {
-        'auth_url'          => 'https://192.168.56.210:5000/v2.0/',
-        'admin_tenant_name' => 'admin_tenant',
-        'admin_user'        => 'admin',
-        'admin_password'    => 'password',
+        'auth_url'            => 'https://192.168.56.210:5000/v2.0/',
+        'project_name'        => 'admin_tenant',
+        'username'            => 'admin',
+        'password'            => 'password',
+        'project_domain_name' => 'Default',
+        'user_domain_name'    => 'Default',
       }
       mock = {
         'keystone_authtoken' => {
-          'auth_url'          => 'https://192.168.56.210:5000/v2.0/',
-          'admin_tenant_name' => 'admin_tenant',
-          'admin_user'        => 'admin',
-          'admin_password'    => 'password',
+          'auth_url'     => 'https://192.168.56.210:5000/v2.0/',
+          'project_name' => 'admin_tenant',
+          'username'     => 'admin',
+          'password'     => 'password',
         }
       }
       Puppet::Util::IniConfig::File.expects(:new).returns(mock)
