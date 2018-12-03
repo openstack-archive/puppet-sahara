@@ -116,30 +116,6 @@
 #   (Optional) Backoff between reconnection attempts for rabbit.
 #   Defaults to $::os_service_default.
 #
-# [*zeromq_bind_address*]
-#   (Optional) Bind address; wildcard, ethernet, or ip address.
-#   Defaults to $::os_service_default.
-#
-# [*zeromq_contexts*]
-#   (Optional) Number of contexsts for zeromq.
-#   Defaults to $::os_service_default.
-#
-# [*zeromq_topic_backlog*]
-#   (Optional) Number of incoming messages to buffer.
-#   Defaults to $::os_service_default.
-#
-# [*zeromq_ipc_dir*]
-#   (Optional) Directory for zeromq IPC.
-#   Defaults to $::os_service_default.
-#
-# [*zeromq_host*]
-#   (Optional) Name of the current node: hostname, FQDN, or IP.
-#   Defaults to 'sahara'.
-#
-# [*cast_timeout*]
-#   (Optional) TTL for zeromq messages.
-#   Defaults to $::os_service_default.
-#
 #  [*kombu_ssl_version*]
 #    (optional) SSL version to use (valid only if SSL enabled).
 #    Valid values are TLSv1, SSLv23 and SSLv3. SSLv2 may be
@@ -276,6 +252,30 @@
 #   (Optional) Whether to use neutron
 #   Defaults to undef.
 #
+# [*zeromq_bind_address*]
+#   (Optional) Bind address; wildcard, ethernet, or ip address.
+#   Defaults to undef.
+#
+# [*zeromq_contexts*]
+#   (Optional) Number of contexsts for zeromq.
+#   Defaults to undef.
+#
+# [*zeromq_topic_backlog*]
+#   (Optional) Number of incoming messages to buffer.
+#   Defaults to undef.
+#
+# [*zeromq_ipc_dir*]
+#   (Optional) Directory for zeromq IPC.
+#   Defaults to undef.
+#
+# [*zeromq_host*]
+#   (Optional) Name of the current node: hostname, FQDN, or IP.
+#   Defaults to undef.
+#
+# [*cast_timeout*]
+#   (Optional) TTL for zeromq messages.
+#   Defaults to undef.
+#
 class sahara(
   $package_ensure              = 'present',
   $host                        = $::os_service_default,
@@ -303,12 +303,6 @@ class sahara(
   $rabbit_login_method         = $::os_service_default,
   $rabbit_retry_interval       = $::os_service_default,
   $rabbit_retry_backoff        = $::os_service_default,
-  $zeromq_bind_address         = $::os_service_default,
-  $zeromq_contexts             = $::os_service_default,
-  $zeromq_topic_backlog        = $::os_service_default,
-  $zeromq_ipc_dir              = $::os_service_default,
-  $zeromq_host                 = 'sahara',
-  $cast_timeout                = $::os_service_default,
   $kombu_ssl_version           = $::os_service_default,
   $kombu_ssl_keyfile           = $::os_service_default,
   $kombu_ssl_certfile          = $::os_service_default,
@@ -341,6 +335,12 @@ class sahara(
   $identity_uri                = undef,
   $memcached_servers           = undef,
   $use_neutron                 = undef,
+  $zeromq_bind_address         = undef,
+  $zeromq_contexts             = undef,
+  $zeromq_topic_backlog        = undef,
+  $zeromq_ipc_dir              = undef,
+  $zeromq_host                 = undef,
+  $cast_timeout                = undef,
 ) {
 
   include ::sahara::deps
@@ -402,15 +402,6 @@ deprecated. Please use sahara::keystone::authtoken::* parameters instead.")
     rabbit_login_method     => $rabbit_login_method,
     rabbit_retry_interval   => $rabbit_retry_interval,
     rabbit_retry_backoff    => $rabbit_retry_backoff,
-  }
-
-  oslo::messaging::zmq { 'sahara_config':
-    rpc_zmq_bind_address  => $zeromq_bind_address,
-    rpc_zmq_contexts      => $zeromq_contexts,
-    rpc_zmq_topic_backlog => $zeromq_topic_backlog,
-    rpc_zmq_ipc_dir       => $zeromq_ipc_dir,
-    rpc_zmq_host          => $zeromq_host,
-    rpc_cast_timeout      => $cast_timeout,
   }
 
   oslo::messaging::amqp { 'sahara_config':

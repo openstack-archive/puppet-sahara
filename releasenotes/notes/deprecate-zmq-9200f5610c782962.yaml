@@ -1,0 +1,11 @@
+---
+deprecations:
+  - |
+    The following ZeroMQ parameters in ::sahara is now deprecated and has no effect:
+
+      - ``zeromq_bind_address``
+      - ``zeromq_contexts``
+      - ``zeromq_topic_backlog``
+      - ``zeromq_ipc_dir``
+      - ``zeromq_host``
+      - ``cast_timeout``

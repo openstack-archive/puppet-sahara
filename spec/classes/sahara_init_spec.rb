@@ -131,32 +131,6 @@ describe 'sahara' do
       it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('true') }
     end
 
-    context 'with zmq rpc' do
-
-      context 'with default params' do
-        it { is_expected.to contain_sahara_config('DEFAULT/rpc_zmq_bind_address').with_value('<SERVICE DEFAULT>') }
-        it { is_expected.to contain_sahara_config('DEFAULT/rpc_zmq_contexts').with_value('<SERVICE DEFAULT>') }
-        it { is_expected.to contain_sahara_config('DEFAULT/rpc_zmq_topic_backlog').with_value('<SERVICE DEFAULT>') }
-        it { is_expected.to contain_sahara_config('DEFAULT/rpc_zmq_ipc_dir').with_value('<SERVICE DEFAULT>') }
-        it { is_expected.to contain_sahara_config('DEFAULT/rpc_zmq_host').with_value('sahara') }
-        it { is_expected.to contain_sahara_config('DEFAULT/rpc_cast_timeout').with_value('<SERVICE DEFAULT>') }
-      end
-
-      context 'when passing params' do
-        before do
-          params.merge!({
-            :zeromq_bind_address => '*',
-            :zeromq_host         => 'localhost',
-            :cast_timeout        => '30',
-          })
-        end
-
-        it { is_expected.to contain_sahara_config('DEFAULT/rpc_zmq_bind_address').with_value('*') }
-        it { is_expected.to contain_sahara_config('DEFAULT/rpc_zmq_host').with_value('localhost') }
-        it { is_expected.to contain_sahara_config('DEFAULT/rpc_cast_timeout').with_value('30') }
-      end
-    end
-
     context 'with amqp rpc' do
 
       context 'with default parameters' do
