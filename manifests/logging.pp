@@ -21,7 +21,7 @@
 #   (Optional) Defaults to $::os_service_default.
 #
 # [*use_stderr*]
-#   (optional) Use stderr for logging
+#   (Optional) Use stderr for logging
 #   Defaults to $::os_service_default.
 #
 # [*log_facility*]
@@ -29,39 +29,39 @@
 #   (Optional) Defaults to $::os_service_default.
 #
 # [*log_dir*]
-#   (optional) Directory where logs should be stored.
+#   (Optional) Directory where logs should be stored.
 #   If set to $::os_service_default, it will not log to any directory.
 #   Defaults to '/var/log/sahara'
 #
 # [*logging_context_format_string*]
-#   (optional) Format string to use for log messages with context.
+#   (Optional) Format string to use for log messages with context.
 #   Defaults to $::os_service_default.
 #   Example: '%(asctime)s.%(msecs)03d %(process)d %(levelname)s %(name)s\
 #             [%(request_id)s %(user_identity)s] %(instance)s%(message)s'
 #
 # [*logging_default_format_string*]
-#   (optional) Format string to use for log messages without context.
+#   (Optional) Format string to use for log messages without context.
 #   Defaults to $::os_service_default.
 #   Example: '%(asctime)s.%(msecs)03d %(process)d %(levelname)s %(name)s\
 #             [-] %(instance)s%(message)s'
 #
 # [*logging_debug_format_suffix*]
-#   (optional) Formatted data to append to log format when level is DEBUG.
+#   (Optional) Formatted data to append to log format when level is DEBUG.
 #   Defaults to $::os_service_default.
 #   Example: '%(funcName)s %(pathname)s:%(lineno)d'
 #
 # [*logging_exception_prefix*]
-#   (optional) Prefix each line of exception output with this format.
+#   (Optional) Prefix each line of exception output with this format.
 #   Defaults to $::os_service_default.
 #   Example: '%(asctime)s.%(msecs)03d %(process)d TRACE %(name)s %(instance)s'
 #
 # [*log_config_append*]
-#   The name of an additional logging configuration file.
+#   (Optional) The name of an additional logging configuration file.
 #   Defaults to $::os_service_default.
 #   See https://docs.python.org/2/howto/logging.html
 #
 # [*default_log_levels*]
-#   (optional) Hash of logger (keys) and level (values) pairs.
+#   (0ptional) Hash of logger (keys) and level (values) pairs.
 #   Defaults to $::os_service_default.
 #   Example:
 #     {'amqp' => 'WARN', 'amqplib' => 'WARN', 'boto' => 'WARN',
@@ -69,27 +69,27 @@
 #     'requests.packages.urllib3.connectionpool' => 'WARN' }
 #
 # [*publish_errors*]
-#   (optional) Publish error events (boolean value).
+#   (Optional) Publish error events (boolean value).
 #   Defaults to $::os_service_default (false if unconfigured).
 #
 # [*fatal_deprecations*]
-#   (optional) Make deprecations fatal (boolean value)
+#   (Optional) Make deprecations fatal (boolean value)
 #   Defaults to $::os_service_default (false if unconfigured).
 #
 # [*instance_format*]
-#   (optional) If an instance is passed with the log message, format it
+#   (Optional) If an instance is passed with the log message, format it
 #   like this (string value).
 #   Defaults to $::os_service_default.
 #   Example: '[instance: %(uuid)s] '
 #
 # [*instance_uuid_format*]
-#   (optional) If an instance UUID is passed with the log message, format
+#   (Optional) If an instance UUID is passed with the log message, format
 #   It like this (string value).
 #   Defaults to $::os_service_default.
 #   Example: instance_uuid_format='[instance: %(uuid)s] '
 
 # [*log_date_format*]
-#   (optional) Format string for %%(asctime)s in log records.
+#   (Optional) Format string for %%(asctime)s in log records.
 #   Defaults to $::os_service_default.
 #   Example: 'Y-%m-%d %H:%M:%S'
 #

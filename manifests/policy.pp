@@ -5,7 +5,7 @@
 # === Parameters
 #
 # [*policies*]
-#   (optional) Set of policies to configure for sahara
+#   (Optional) Set of policies to configure for sahara
 #   Example :
 #     {
 #       'sahara-context_is_admin' => {
@@ -20,7 +20,7 @@
 #   Defaults to empty hash.
 #
 # [*policy_path*]
-#   (optional) Path to the sahara policy.json file
+#   (Optional) Path to the sahara policy.json file
 #   Defaults to /etc/sahara/policy.json
 #
 class sahara::policy (

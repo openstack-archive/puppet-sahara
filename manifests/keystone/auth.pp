@@ -5,7 +5,7 @@
 # === Parameters
 #
 # [*password*]
-#   (required) Password for Sahara user.
+#   (Required) Password for Sahara user.
 #
 # [*service_name*]
 #   (Optional) Name of the service.
@@ -25,7 +25,7 @@
 #
 # [*configure_endpoint*]
 #   (Optional) Should Sahara endpoint be configured?
-#   Defaults to 'true'.
+#   Defaults to true.
 #
 # [*service_type*]
 #   (Optional) Type of service.
@@ -40,16 +40,19 @@
 #   Defaults to 'RegionOne'.
 #
 # [*public_url*]
-#   (optional) The endpoint's public url. (Defaults to 'http://127.0.0.1:8386/v1.1/%(tenant_id)s')
+#   (Optional) The endpoint's public url.
 #   This url should *not* contain any trailing '/'.
+#   Defaults to 'http://127.0.0.1:8386/v1.1/%(tenant_id)s'
 #
 # [*admin_url*]
-#   (optional) The endpoint's admin url. (Defaults to 'http://127.0.0.1:8386/v1.1/%(tenant_id)s')
+#   (Optional) The endpoint's admin url.
 #   This url should *not* contain any trailing '/'.
+#   Defaults to 'http://127.0.0.1:8386/v1.1/%(tenant_id)s'
 #
 # [*internal_url*]
-#   (optional) The endpoint's internal url. (Defaults to 'http://127.0.0.1:8386/v1.1/%(tenant_id)s')
+#   (Optional) The endpoint's internal url.
 #   This url should *not* contain any trailing '/'.
+#   Defaults to 'http://127.0.0.1:8386/v1.1/%(tenant_id)s'
 #
 # === Deprecation notes
 #

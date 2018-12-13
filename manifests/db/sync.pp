@@ -4,7 +4,7 @@
 # == Parameters
 #
 # [*extra_params*]
-#   (optional) String of extra command line parameters to append
+#   (Optional) String of extra command line parameters to append
 #   to the sahara-db-manage command.
 #   Defaults to '--config-file /etc/sahara/sahara.conf'
 #
