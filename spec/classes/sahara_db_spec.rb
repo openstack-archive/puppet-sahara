@@ -1,9 +1,10 @@
 require 'spec_helper'
 
 describe 'sahara::db' do
-
   shared_examples 'sahara::db' do
     context 'with default parameters' do
+      it { should contain_class('sahara::deps') }
+
       it { is_expected.to contain_oslo__db('sahara_config').with(
         :db_max_retries => '<SERVICE DEFAULT>',
         :connection     => 'mysql+pymysql://sahara:secrete@localhost:3306/sahara',
@@ -19,7 +20,8 @@ describe 'sahara::db' do
 
     context 'with specific parameters' do
       let :params do
-        { :database_db_max_retries => '-1',
+        {
+          :database_db_max_retries => '-1',
           :database_connection     => 'mysql+pymysql://sahara:sahara@localhost/sahara',
           :database_idle_timeout   => '3601',
           :database_min_pool_size  => '2',
@@ -30,6 +32,8 @@ describe 'sahara::db' do
           :database_pool_timeout   => '21',
         }
       end
+
+      it { should contain_class('sahara::deps') }
 
       it { is_expected.to contain_oslo__db('sahara_config').with(
         :db_max_retries => '-1',
@@ -43,68 +47,6 @@ describe 'sahara::db' do
         :pool_timeout   => '21',
       )}
     end
-
-    context 'with MySQL-python library as backend package' do
-      let :params do
-        { :database_connection => 'mysql://sahara:sahara@localhost/sahara' }
-      end
-
-      it { is_expected.to contain_oslo__db('sahara_config').with(
-        :connection => 'mysql://sahara:sahara@localhost/sahara',
-      )}
-    end
-
-    context 'with postgresql backend' do
-      let :params do
-        { :database_connection => 'postgresql://sahara:sahara@localhost/sahara', }
-      end
-
-      it 'install the proper backend package' do
-        is_expected.to contain_package('python-psycopg2').with(:ensure => 'present')
-      end
-
-    end
-
-    context 'with incorrect database_connection string' do
-      let :params do
-        { :database_connection => 'sqlite://sahara:sahara@localhost/sahara', }
-      end
-
-      it { should raise_error(Puppet::Error, /validate_re/) }
-    end
-
-    context 'with incorrect database_connection string' do
-      let :params do
-        { :database_connection => 'foo+pymysql://sahara:sahara@localhost/sahara', }
-      end
-
-      it { should raise_error(Puppet::Error, /validate_re/) }
-    end
-  end
-
-  shared_examples_for 'sahara::db on Debian' do
-    context 'using pymysql driver' do
-      let :params do
-        { :database_connection => 'mysql+pymysql://sahara:sahara@localhost/sahara', }
-      end
-
-      it 'install the proper backend package' do
-        is_expected.to contain_package('python-pymysql').with(
-          :ensure => 'present',
-          :name   => 'python-pymysql',
-          :tag    => 'openstack'
-        )
-      end
-    end
-  end
-
-  shared_examples_for 'sahara::db on RedHat' do
-    context 'using pymysql driver' do
-      let :params do
-        { :database_connection => 'mysql+pymysql://sahara:sahara@localhost/sahara', }
-      end
-
-    end
   end
 
   on_supported_os({
@@ -115,14 +57,7 @@ describe 'sahara::db' do
         facts.merge!(OSDefaults.get_facts())
       end
 
-      case facts[:osfamily]
-      when 'Debian'
-        it_configures 'sahara::db on Debian'
-      when 'RedHat'
-        it_configures 'sahara::db on RedHat'
-      end
-      it_configures 'sahara::db'
+      it_behaves_like 'sahara::db'
     end
   end
-
 end
