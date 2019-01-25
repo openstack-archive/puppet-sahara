@@ -42,25 +42,25 @@
 # [*public_url*]
 #   (Optional) The endpoint's public url.
 #   This url should *not* contain any trailing '/'.
-#   Defaults to 'http://127.0.0.1:8386/v1.1/%(tenant_id)s'
+#   Defaults to 'http://127.0.0.1:8386'
 #
 # [*admin_url*]
 #   (Optional) The endpoint's admin url.
 #   This url should *not* contain any trailing '/'.
-#   Defaults to 'http://127.0.0.1:8386/v1.1/%(tenant_id)s'
+#   Defaults to 'http://127.0.0.1:8386'
 #
 # [*internal_url*]
 #   (Optional) The endpoint's internal url.
 #   This url should *not* contain any trailing '/'.
-#   Defaults to 'http://127.0.0.1:8386/v1.1/%(tenant_id)s'
+#   Defaults to 'http://127.0.0.1:8386'
 #
 # === Examples
 #
 #  class { 'sahara::keystone::auth':
 #    password     => 'secret',
-#    public_url   => 'https://10.0.0.10:8386/v1.1/%(tenant_id)s',
-#    internal_url => 'https://10.0.0.11:8386/v1.1/%(tenant_id)s',
-#    admin_url    => 'https://10.0.0.11:8386/v1.1/%(tenant_id)s',
+#    public_url   => 'https://10.0.0.10:8386',
+#    internal_url => 'https://10.0.0.11:8386',
+#    admin_url    => 'https://10.0.0.11:8386',
 #  }
 #
 class sahara::keystone::auth(
@@ -73,9 +73,9 @@ class sahara::keystone::auth(
   $service_description = 'Sahara Data Processing',
   $configure_endpoint  = true,
   $region              = 'RegionOne',
-  $public_url          = 'http://127.0.0.1:8386/v1.1/%(tenant_id)s',
-  $admin_url           = 'http://127.0.0.1:8386/v1.1/%(tenant_id)s',
-  $internal_url        = 'http://127.0.0.1:8386/v1.1/%(tenant_id)s',
+  $public_url          = 'http://127.0.0.1:8386',
+  $admin_url           = 'http://127.0.0.1:8386',
+  $internal_url        = 'http://127.0.0.1:8386',
 ) {
 
   include ::sahara::deps

@@ -29,9 +29,9 @@ describe 'sahara::keystone::auth' do
 
       it { is_expected.to contain_keystone_endpoint('RegionOne/sahara::data-processing').with(
         :ensure       => 'present',
-        :public_url   => "http://127.0.0.1:8386/v1.1/%(tenant_id)s",
-        :admin_url    => "http://127.0.0.1:8386/v1.1/%(tenant_id)s",
-        :internal_url => "http://127.0.0.1:8386/v1.1/%(tenant_id)s"
+        :public_url   => "http://127.0.0.1:8386",
+        :admin_url    => "http://127.0.0.1:8386",
+        :internal_url => "http://127.0.0.1:8386"
       ) }
     end
 
@@ -49,16 +49,16 @@ describe 'sahara::keystone::auth' do
     context 'with endpoint parameters' do
       let :params do
         { :password     => 'sahara_password',
-          :public_url   => 'https://10.10.10.10:80/v1.1/%(tenant_id)s',
-          :internal_url => 'http://10.10.10.11:81/v1.1/%(tenant_id)s',
-          :admin_url    => 'http://10.10.10.12:81/v1.1/%(tenant_id)s' }
+          :public_url   => 'https://10.10.10.10:80',
+          :internal_url => 'http://10.10.10.11:81',
+          :admin_url    => 'http://10.10.10.12:81' }
       end
 
       it { is_expected.to contain_keystone_endpoint('RegionOne/sahara::data-processing').with(
         :ensure       => 'present',
-        :public_url   => 'https://10.10.10.10:80/v1.1/%(tenant_id)s',
-        :internal_url => 'http://10.10.10.11:81/v1.1/%(tenant_id)s',
-        :admin_url    => 'http://10.10.10.12:81/v1.1/%(tenant_id)s'
+        :public_url   => 'https://10.10.10.10:80',
+        :internal_url => 'http://10.10.10.11:81',
+        :admin_url    => 'http://10.10.10.12:81'
       ) }
     end
 
