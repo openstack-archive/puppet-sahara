@@ -15,6 +15,7 @@ class sahara::params {
       $all_package_name          = 'openstack-sahara'
       $api_package_name          = 'openstack-sahara-api'
       $engine_package_name       = 'openstack-sahara-engine'
+      # TODO(tobias-urdin): Remove this when deprecated sahara-all service is removed.
       $all_service_name          = 'openstack-sahara-all'
       $api_service_name          = 'openstack-sahara-api'
       $engine_service_name       = 'openstack-sahara-engine'

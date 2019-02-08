@@ -74,6 +74,7 @@ Puppet::Type.newtype(:sahara_node_group_template) do
     end
   end
 
+  # TODO(tobias-urdin): Remove deprecated sahara-all from here when it's removed.
   autorequire(:service) do
     [ 'sahara-api', 'sahara-all', 'sahara-engine' ]
   end

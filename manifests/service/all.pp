@@ -26,6 +26,9 @@ class sahara::service::all (
   include ::sahara::policy
   include ::sahara::params
 
+  warning('The sahara::service::all service is deprecated and might not be working \
+please move to using separate API and engine services.')
+
   package { 'sahara-all':
     ensure => $package_ensure,
     name   => $::sahara::params::all_package_name,

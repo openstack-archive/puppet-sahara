@@ -1,3 +1,4 @@
+# TODO(tobias-urdin): Remove this when deprecated sahara-all is removed.
 require 'spec_helper'
 
 describe 'sahara::service::all' do

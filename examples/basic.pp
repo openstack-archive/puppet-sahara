@@ -34,8 +34,37 @@ class { '::sahara::keystone::authtoken':
   password => 'a_big_secret',
 }
 
-# Please note, that if you enabled 'all' service, then you should not enable 'api' and 'engine'. And vice versa.
-class { '::sahara::service::all': }
+# Setup API service in Apache
+class { '::sahara::service::api':
+  service_name => 'httpd',
+}
+
+# On Ubuntu there are Apache configuration that is dropped when the
+# sahara-api package is installed. The puppet-sahara module will remove
+# these and fix the apache configuration for you but the Ubuntu packages
+# requires these files to exist for upgrading the sahara-api package to not
+# break.
+if ($::operatingsystem == 'Ubuntu') and (versioncmp($::operatingsystemmajrelease, '18') >= 0) {
+  ensure_resource('file', '/etc/apache2/sites-available/sahara-api.conf', {
+    'ensure'  => 'present',
+    'content' => '',
+  })
+  ensure_resource('file', '/etc/apache2/sites-enabled/sahara-api.conf', {
+    'ensure'  => 'present',
+    'content' => '',
+  })
+
+  Package['sahara-api'] -> File['/etc/apache2/sites-available/sahara-api.conf']
+  -> File['/etc/apache2/sites-enabled/sahara-api.conf'] ~> Anchor['sahara::install::end']
+}
+
+include ::apache
+class { '::sahara::wsgi::apache':
+  workers => 2,
+}
+
+# Setup the engine service
+class { '::sahara::service::engine': }
 
 # Finally, make it accessible
 class { '::sahara::keystone::auth':
