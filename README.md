@@ -39,7 +39,7 @@ Setup
 
 **What the sahara module affects:**
 
-* [Sahara](https://wiki.openstack.org/wiki/Sahara), the data processing service for OpenStack.
+* [Sahara](https://docs.openstack.org/sahara/latest/), the data processing service for OpenStack.
 
 ### Installing Sahara
 
