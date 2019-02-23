@@ -30,8 +30,8 @@ class sahara::config (
 
   include ::sahara::deps
 
-  validate_hash($sahara_config)
-  validate_hash($sahara_api_paste_ini)
+  validate_legacy(Hash, 'validate_hash', $sahara_config)
+  validate_legacy(Hash, 'validate_hash', $sahara_api_paste_ini)
 
   create_resources('sahara_config', $sahara_config)
   create_resources('sahara_api_paste_ini', $sahara_api_paste_ini)
