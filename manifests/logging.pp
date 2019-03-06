@@ -28,6 +28,10 @@
 #   Syslog facility to receive log lines.
 #   (Optional) Defaults to $::os_service_default.
 #
+# [*log_file*]
+#   (optional) Where to log
+#   Defaults to $::os_service_default
+#
 # [*log_dir*]
 #   (Optional) Directory where logs should be stored.
 #   If set to $::os_service_default, it will not log to any directory.
@@ -100,6 +104,7 @@ class sahara::logging(
   $use_journal                   = $::os_service_default,
   $use_stderr                    = $::os_service_default,
   $log_facility                  = $::os_service_default,
+  $log_file                      = $::os_service_default,
   $log_dir                       = '/var/log/sahara',
   $logging_context_format_string = $::os_service_default,
   $logging_default_format_string = $::os_service_default,
@@ -122,6 +127,7 @@ class sahara::logging(
     use_json                      => $use_json,
     use_journal                   => $use_journal,
     use_stderr                    => $use_stderr,
+    log_file                      => $log_file,
     log_dir                       => $log_dir,
     syslog_log_facility           => $log_facility,
     logging_context_format_string => $logging_context_format_string,

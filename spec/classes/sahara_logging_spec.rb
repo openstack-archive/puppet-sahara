@@ -15,6 +15,7 @@ describe 'sahara::logging' do
       :use_journal                   => 'true',
       :use_stderr                    => 'false',
       :log_facility                  => 'LOG_LOCAL0',
+      :log_file                      => 'sahara.log',
       :log_dir                       => '/tmp/sahara',
       :logging_context_format_string => '%(asctime)s.%(msecs)03d %(process)d %(levelname)s %(name)s [%(request_id)s %(user_identity)s] %(instance)s%(message)s',
       :logging_default_format_string => '%(asctime)s.%(msecs)03d %(process)d %(levelname)s %(name)s [-] %(instance)s%(message)s',
@@ -67,6 +68,7 @@ describe 'sahara::logging' do
         :use_json    => '<SERVICE DEFAULT>',
         :use_journal => '<SERVICE DEFAULT>',
         :use_stderr  => '<SERVICE DEFAULT>',
+        :log_file    => '<SERVICE DEFAULT>',
         :log_dir     => '/var/log/sahara',
         :debug       => '<SERVICE DEFAULT>',
       )}
@@ -92,6 +94,7 @@ describe 'sahara::logging' do
         :use_journal         => true,
         :use_stderr          => false,
         :syslog_log_facility => 'LOG_LOCAL0',
+        :log_file            => 'sahara.log',
         :log_dir             => '/tmp/sahara',
         :debug               => true,
       )}
