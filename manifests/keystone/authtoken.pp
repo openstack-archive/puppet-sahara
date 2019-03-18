@@ -1,6 +1,7 @@
 # class: sahara::keystone::authtoken
 #
-# Configure the keystone_authtoken section in the configuration file
+# Configure the keystone_authtoken and the trustee sections in the
+# configuration file
 #
 # === Parameters
 #
@@ -269,5 +270,14 @@ class sahara::keystone::authtoken(
     region_name                    => $region_name,
     token_cache_time               => $token_cache_time,
     service_token_roles_required   => $service_token_roles_required,
+  }
+
+  sahara_config {
+    'trustee/username'            : value => $username;
+    'trustee/password'            : value => $password, secret => true;
+    'trustee/project_name'        : value => $project_name;
+    'trustee/auth_url'            : value => $auth_url;
+    'trustee/user_domain_name'    : value => $user_domain_name;
+    'trustee/project_domain_name' : value => $project_domain_name;
   }
 }
