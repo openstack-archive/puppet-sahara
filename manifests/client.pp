@@ -20,4 +20,7 @@ class sahara::client (
     name   => $::sahara::params::client_package_name,
     tag    => 'openstack',
   }
+
+  include '::openstacklib::openstackclient'
+
 }
