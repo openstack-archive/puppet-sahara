@@ -7,6 +7,9 @@ describe 'sahara::client' do
 
   shared_examples_for 'sahara client' do
 
+    it { is_expected.to contain_class('sahara::deps') }
+    it { is_expected.to contain_class('sahara::params') }
+
     context 'with default parameters' do
       it { is_expected.to contain_package('python-saharaclient').with(
         :ensure => 'present',
