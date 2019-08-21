@@ -35,6 +35,7 @@ describe 'sahara' do
       it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/kombu_compression').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/kombu_failover_strategy').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/heartbeat_in_pthread').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_sahara_config('DEFAULT/transport_url').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_sahara_config('DEFAULT/control_exchange').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_sahara_config('DEFAULT/rpc_response_timeout').with_value('<SERVICE DEFAULT>') }
@@ -73,16 +74,18 @@ describe 'sahara' do
     context 'when passing params' do
       before do
         params.merge!({
-          :rabbit_ha_queues           => 'true',
-          :amqp_durable_queues        => 'true',
-          :kombu_reconnect_delay      => '1.0',
-          :kombu_compression          => 'gzip',
-          :kombu_failover_strategy    => 'round-robin',
+          :rabbit_ha_queues            => 'true',
+          :amqp_durable_queues         => 'true',
+          :rabbit_heartbeat_in_pthread => 'true',
+          :kombu_reconnect_delay       => '1.0',
+          :kombu_compression           => 'gzip',
+          :kombu_failover_strategy     => 'round-robin',
         })
       end
 
       it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('true') }
       it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/amqp_durable_queues').with_value('true') }
+      it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/heartbeat_in_pthread').with_value('true') }
       it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('1.0') }
       it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/kombu_compression').with_value('gzip') }
       it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/kombu_failover_strategy').with_value('round-robin') }

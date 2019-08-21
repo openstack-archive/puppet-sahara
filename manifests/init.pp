@@ -116,6 +116,16 @@
 #   (Optional) Backoff between reconnection attempts for rabbit.
 #   Defaults to $::os_service_default.
 #
+# [*rabbit_heartbeat_in_pthread*]
+#   (Optional) EXPERIMENTAL: Run the health check heartbeat thread
+#   through a native python thread. By default if this
+#   option isn't provided the  health check heartbeat will
+#   inherit the execution model from the parent process. By
+#   example if the parent process have monkey patched the
+#   stdlib by using eventlet/greenlet then the heartbeat
+#   will be run through a green thread.
+#   Defaults to $::os_service_default
+#
 #  [*kombu_ssl_version*]
 #    (optional) SSL version to use (valid only if SSL enabled).
 #    Valid values are TLSv1, SSLv23 and SSLv3. SSLv2 may be
@@ -277,6 +287,7 @@ class sahara(
   $rabbit_login_method         = $::os_service_default,
   $rabbit_retry_interval       = $::os_service_default,
   $rabbit_retry_backoff        = $::os_service_default,
+  $rabbit_heartbeat_in_pthread = $::os_service_default,
   $kombu_ssl_version           = $::os_service_default,
   $kombu_ssl_keyfile           = $::os_service_default,
   $kombu_ssl_certfile          = $::os_service_default,
@@ -354,6 +365,7 @@ class sahara(
     rabbit_login_method     => $rabbit_login_method,
     rabbit_retry_interval   => $rabbit_retry_interval,
     rabbit_retry_backoff    => $rabbit_retry_backoff,
+    heartbeat_in_pthread    => $rabbit_heartbeat_in_pthread,
   }
 
   oslo::messaging::amqp { 'sahara_config':
