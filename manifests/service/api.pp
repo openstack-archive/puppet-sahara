@@ -38,8 +38,8 @@ class sahara::service::api (
   $service_name   = $::sahara::params::api_service_name,
 ) inherits ::sahara::params {
 
-  include ::sahara::deps
-  include ::sahara::policy
+  include sahara::deps
+  include sahara::policy
 
   if $::operatingsystem == 'Ubuntu' and $service_name == $::sahara::params::api_service_name {
     fail('The Sahara API must be run with WSGI on Ubuntu')
@@ -73,7 +73,7 @@ class sahara::service::api (
       tag        => 'sahara-service',
     }
   } elsif $service_name == 'httpd' {
-    include ::apache::params
+    include apache::params
 
     if $::operatingsystem != 'Ubuntu' {
       service { 'sahara-api':

@@ -32,7 +32,7 @@ class sahara::db::postgresql(
   $privileges = 'ALL',
 ) {
 
-  include ::sahara::deps
+  include sahara::deps
 
   ::openstacklib::db::postgresql { 'sahara':
     password_hash => postgresql_password($user, $password),

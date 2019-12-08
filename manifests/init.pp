@@ -322,10 +322,10 @@ class sahara(
   $cast_timeout                = undef,
 ) {
 
-  include ::sahara::deps
-  include ::sahara::params
-  include ::sahara::db
-  include ::sahara::policy
+  include sahara::deps
+  include sahara::params
+  include sahara::db
+  include sahara::policy
 
   package { 'sahara-common':
     ensure => $package_ensure,
@@ -402,7 +402,7 @@ class sahara(
   }
 
   if $sync_db {
-    include ::sahara::db::sync
+    include sahara::db::sync
   }
 
 }

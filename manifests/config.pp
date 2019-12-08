@@ -28,7 +28,7 @@ class sahara::config (
   $sahara_api_paste_ini = {},
 ) {
 
-  include ::sahara::deps
+  include sahara::deps
 
   validate_legacy(Hash, 'validate_hash', $sahara_config)
   validate_legacy(Hash, 'validate_hash', $sahara_api_paste_ini)

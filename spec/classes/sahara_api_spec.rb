@@ -66,7 +66,7 @@ describe 'sahara::service::api' do
 
   shared_examples 'sahara-api wsgi' do
     let :pre_condition do
-      'include ::apache'
+      'include apache'
     end
 
     let :params do
@@ -93,7 +93,7 @@ describe 'sahara::service::api' do
 
   shared_examples 'sahara-api wsgi ubuntu' do
     let :pre_condition do
-      'include ::apache'
+      'include apache'
     end
 
     let :params do

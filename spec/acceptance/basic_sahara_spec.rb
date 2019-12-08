@@ -6,12 +6,12 @@ describe 'basic sahara' do
 
     it 'should work with no errors' do
       pp= <<-EOS
-      include ::openstack_integration
-      include ::openstack_integration::repos
-      include ::openstack_integration::rabbitmq
-      include ::openstack_integration::mysql
-      include ::openstack_integration::keystone
-      class { '::openstack_integration::sahara':
+      include openstack_integration
+      include openstack_integration::repos
+      include openstack_integration::rabbitmq
+      include openstack_integration::mysql
+      include openstack_integration::keystone
+      class { 'openstack_integration::sahara':
         integration_enable => false,
       }
       EOS

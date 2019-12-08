@@ -1,5 +1,5 @@
 # First, install a mysql server
-class { '::mysql::server':
+class { 'mysql::server':
   # sahara documentation recommends this configuration.
   override_options   => {
     'mysqld' => {
@@ -16,12 +16,12 @@ class { '::mysql::server':
 }
 
 # Then, create a database
-class { '::sahara::db::mysql':
+class { 'sahara::db::mysql':
   password => 'a_big_secret',
 }
 
 # Then the common class
-class { '::sahara':
+class { 'sahara':
   database_connection => 'mysql+pymysql://sahara:a_big_secret@127.0.0.1:3306/sahara',
   debug               => true,
   host                => '0.0.0.0',
@@ -30,12 +30,12 @@ class { '::sahara':
 }
 
 # Keystone authtoken parameters
-class { '::sahara::keystone::authtoken':
+class { 'sahara::keystone::authtoken':
   password => 'a_big_secret',
 }
 
 # Setup API service in Apache
-class { '::sahara::service::api':
+class { 'sahara::service::api':
   service_name => 'httpd',
 }
 
@@ -58,15 +58,15 @@ if ($::operatingsystem == 'Ubuntu') and (versioncmp($::operatingsystemmajrelease
   -> File['/etc/apache2/sites-enabled/sahara-api.conf'] ~> Anchor['sahara::install::end']
 }
 
-include ::apache
-class { '::sahara::wsgi::apache':
+include apache
+class { 'sahara::wsgi::apache':
   workers => 2,
 }
 
 # Setup the engine service
-class { '::sahara::service::engine': }
+class { 'sahara::service::engine': }
 
 # Finally, make it accessible
-class { '::sahara::keystone::auth':
+class { 'sahara::keystone::auth':
   password => 'secrete',
 }

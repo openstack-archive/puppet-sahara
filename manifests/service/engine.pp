@@ -22,8 +22,8 @@ class sahara::service::engine (
   $package_ensure = 'present',
 ) {
 
-  include ::sahara::deps
-  include ::sahara::params
+  include sahara::deps
+  include sahara::params
 
   package { 'sahara-engine':
     ensure => $package_ensure,

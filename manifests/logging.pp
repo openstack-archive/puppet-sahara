@@ -119,7 +119,7 @@ class sahara::logging(
   $log_date_format               = $::os_service_default,
 ) {
 
-  include ::sahara::deps
+  include sahara::deps
 
   oslo::log { 'sahara_config':
     debug                         => $debug,

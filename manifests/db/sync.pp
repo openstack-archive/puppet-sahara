@@ -12,7 +12,7 @@ class sahara::db::sync(
   $extra_params = '--config-file /etc/sahara/sahara.conf',
 ) {
 
-  include ::sahara::deps
+  include sahara::deps
 
   exec { 'sahara-dbmanage':
     command     => "sahara-db-manage ${extra_params} upgrade head",

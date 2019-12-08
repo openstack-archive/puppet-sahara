@@ -22,9 +22,9 @@ class sahara::service::all (
   $package_ensure        = 'present',
 ) {
 
-  include ::sahara::deps
-  include ::sahara::policy
-  include ::sahara::params
+  include sahara::deps
+  include sahara::policy
+  include sahara::params
 
   warning('The sahara::service::all service is deprecated and might not be working \
 please move to using separate API and engine services.')

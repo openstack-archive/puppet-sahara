@@ -204,7 +204,7 @@ class sahara::keystone::authtoken(
   $service_token_roles_required   = $::os_service_default,
 ) {
 
-  include ::sahara::deps
+  include sahara::deps
 
   keystone::resource::authtoken { 'sahara_config':
     username                       => $username,

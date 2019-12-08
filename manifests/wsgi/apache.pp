@@ -115,12 +115,12 @@ class sahara::wsgi::apache (
   $custom_wsgi_process_options = {},
 ) {
 
-  include ::sahara::deps
-  include ::sahara::params
-  include ::apache
-  include ::apache::mod::wsgi
+  include sahara::deps
+  include sahara::params
+  include apache
+  include apache::mod::wsgi
   if $ssl {
-    include ::apache::mod::ssl
+    include apache::mod::ssl
   }
 
   ::openstacklib::wsgi::apache { 'sahara_wsgi':

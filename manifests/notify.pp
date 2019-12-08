@@ -24,7 +24,7 @@ class sahara::notify (
   $notification_topics        = $::os_service_default,
 ) {
 
-  include ::sahara::deps
+  include sahara::deps
 
   oslo::messaging::notifications { 'sahara_config':
     transport_url => $notification_transport_url,

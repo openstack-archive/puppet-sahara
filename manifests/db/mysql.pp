@@ -42,7 +42,7 @@ class sahara::db::mysql(
   $collate       = 'utf8_general_ci',
 ) {
 
-  include ::sahara::deps
+  include sahara::deps
 
   validate_legacy(String, 'validate_string', $password)
 

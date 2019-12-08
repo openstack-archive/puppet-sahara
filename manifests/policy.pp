@@ -28,8 +28,8 @@ class sahara::policy (
   $policy_path = '/etc/sahara/policy.json',
 ) {
 
-  include ::sahara::deps
-  include ::sahara::params
+  include sahara::deps
+  include sahara::params
 
   validate_legacy(Hash, 'validate_hash', $policies)
 
