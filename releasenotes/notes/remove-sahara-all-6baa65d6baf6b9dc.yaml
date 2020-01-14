@@ -1,0 +1,5 @@
+---
+upgrade:
+  - |
+    The deprecated sahara::service::all class is removed. Please use the specific
+    classes to deploy the API and engine services.
