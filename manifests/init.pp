@@ -60,10 +60,6 @@
 #   (optional) Interval between retries of opening a database connection.
 #   Defaults to undef.
 #
-# [*database_min_pool_size*]
-#   (optional) Minimum number of SQL connections to keep open in a pool.
-#   Defaults to undef.
-#
 # [*database_max_pool_size*]
 #   (optional) Maximum number of SQL connections to keep open in a pool.
 #   Defaults to undef.
@@ -260,6 +256,10 @@
 #   (Optional) TTL for zeromq messages.
 #   Defaults to undef.
 #
+# [*database_min_pool_size*]
+#   (optional) Minimum number of SQL connections to keep open in a pool.
+#   Defaults to undef.
+#
 class sahara(
   $package_ensure              = 'present',
   $host                        = $::os_service_default,
@@ -272,7 +272,6 @@ class sahara(
   $key_file                    = $::os_service_default,
   $database_connection         = undef,
   $database_idle_timeout       = undef,
-  $database_min_pool_size      = undef,
   $database_max_pool_size      = undef,
   $database_max_retries        = undef,
   $database_retry_interval     = undef,
@@ -320,6 +319,7 @@ class sahara(
   $zeromq_ipc_dir              = undef,
   $zeromq_host                 = undef,
   $cast_timeout                = undef,
+  $database_min_pool_size      = undef,
 ) {
 
   include sahara::deps
