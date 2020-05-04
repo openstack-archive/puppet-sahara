@@ -33,17 +33,17 @@ describe Puppet::Type.type(:sahara_cluster_template) do
 
   it 'should autorequire sahara-api service' do
     catalog = Puppet::Resource::Catalog.new
-    service = Puppet::Type.type(:service).new(:name => 'sahara-api')
+    anchor = Puppet::Type.type(:anchor).new(:name => 'sahara::service::end')
     correct_input = {
       :name        => 'test_type',
       :node_groups => [ 'nodegroup_1:1', 'nodegroup_2:2' ]
     }
     sahara_cluster_template = Puppet::Type.type(:sahara_cluster_template).new(correct_input)
-    catalog.add_resource service, sahara_cluster_template
+    catalog.add_resource anchor, sahara_cluster_template
     dependency = sahara_cluster_template.autorequire
     expect(dependency.size).to eq(1)
     expect(dependency[0].target).to eq(sahara_cluster_template)
-    expect(dependency[0].source).to eq(service)
+    expect(dependency[0].source).to eq(anchor)
   end
 
   it 'should autorequire sahara_node_group_template' do

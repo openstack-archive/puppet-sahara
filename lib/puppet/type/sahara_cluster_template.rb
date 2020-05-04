@@ -47,8 +47,8 @@ Puppet::Type.newtype(:sahara_cluster_template) do
     end
   end
 
-  autorequire(:service) do
-    [ 'sahara-api', 'sahara-engine' ]
+  autorequire(:anchor) do
+    ['sahara::service::end']
   end
 
   autorequire(:sahara_node_group_template) do

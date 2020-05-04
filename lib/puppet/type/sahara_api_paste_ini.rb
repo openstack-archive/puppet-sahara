@@ -45,8 +45,8 @@ Puppet::Type.newtype(:sahara_api_paste_ini) do
     defaultto('<SERVICE DEFAULT>')
   end
 
-  autorequire(:package) do
-    'sahara-common'
+  autorequire(:anchor) do
+    ['sahara::install::end']
   end
 
 end

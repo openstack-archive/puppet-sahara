@@ -20,7 +20,7 @@ describe Puppet::Type.type(:sahara_node_group_template) do
 
   it 'should autorequire cinder-api service' do
     catalog = Puppet::Resource::Catalog.new
-    service = Puppet::Type.type(:service).new(:name => 'sahara-api')
+    anchor = Puppet::Type.type(:anchor).new(:name => 'sahara::service::end')
     correct_input = {
       :name           => 'test_type',
       :plugin         => 'plugin',
@@ -29,10 +29,10 @@ describe Puppet::Type.type(:sahara_node_group_template) do
       :node_processes => [ 'process1', 'process2' ]
     }
     sahara_node_group_template = Puppet::Type.type(:sahara_node_group_template).new(correct_input)
-    catalog.add_resource service, sahara_node_group_template
+    catalog.add_resource anchor, sahara_node_group_template
     dependency = sahara_node_group_template.autorequire
     expect(dependency.size).to eq(1)
     expect(dependency[0].target).to eq(sahara_node_group_template)
-    expect(dependency[0].source).to eq(service)
+    expect(dependency[0].source).to eq(anchor)
   end
 end
