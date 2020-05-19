@@ -4,7 +4,7 @@ describe 'sahara::db::postgresql' do
 
   shared_examples_for 'sahara::db::postgresql' do
     let :req_params do
-      { :password => 'pw' }
+      { :password => 'saharapass' }
     end
 
     let :pre_condition do
@@ -16,9 +16,12 @@ describe 'sahara::db::postgresql' do
         req_params
       end
 
-      it { is_expected.to contain_postgresql__server__db('sahara').with(
-        :user     => 'sahara',
-        :password => 'md59b1dd0cc439677764ef5a848112ef0ab'
+      it { is_expected.to contain_openstacklib__db__postgresql('sahara').with(
+        :user       => 'sahara',
+        :password   => 'saharapass',
+        :dbname     => 'sahara',
+        :encoding   => nil,
+        :privileges => 'ALL',
       )}
     end
 

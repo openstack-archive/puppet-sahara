@@ -11,7 +11,7 @@ describe 'sahara::db::mysql' do
 
   let :params do
     { :dbname        => 'sahara',
-      :password      => 's3cr3t',
+      :password      => 'saharapass',
       :user          => 'sahara',
       :charset       => 'utf8',
       :collate       => 'utf8_general_ci',
@@ -30,7 +30,7 @@ describe 'sahara::db::mysql' do
       is_expected.to contain_openstacklib__db__mysql('sahara').with(
         :user          => params[:user],
         :dbname        => params[:dbname],
-        :password_hash => '*58C036CDA51D8E8BBBBF2F9EA5ABF111ADA444F0',
+        :password      => params[:password],
         :host          => params[:host],
         :charset       => params[:charset]
       )
@@ -47,7 +47,7 @@ describe 'sahara::db::mysql' do
         is_expected.to contain_openstacklib__db__mysql('sahara').with(
           :user          => params[:user],
           :dbname        => params[:dbname],
-          :password_hash => '*58C036CDA51D8E8BBBBF2F9EA5ABF111ADA444F0',
+          :password      => params[:password],
           :host          => params[:host],
           :charset       => params[:charset],
           :allowed_hosts => ['127.0.0.1','%']
@@ -65,7 +65,7 @@ describe 'sahara::db::mysql' do
         is_expected.to contain_openstacklib__db__mysql('sahara').with(
           :user          => params[:user],
           :dbname        => params[:dbname],
-          :password_hash => '*58C036CDA51D8E8BBBBF2F9EA5ABF111ADA444F0',
+          :password      => params[:password],
           :host          => params[:host],
           :charset       => params[:charset],
           :allowed_hosts => '192.168.1.1'
