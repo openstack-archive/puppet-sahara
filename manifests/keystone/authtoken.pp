@@ -168,6 +168,11 @@
 #   true/false
 #   Defaults to $::os_service_default.
 #
+# [*interface*]
+#  (Optional) Interface to use for the Identity API endpoint. Valid values are
+#  "public", "internal" or "admin".
+#  Defaults to $::os_service_default.
+#
 class sahara::keystone::authtoken(
   $username                       = 'sahara',
   $password                       = $::os_service_default,
@@ -202,6 +207,7 @@ class sahara::keystone::authtoken(
   $region_name                    = $::os_service_default,
   $token_cache_time               = $::os_service_default,
   $service_token_roles_required   = $::os_service_default,
+  $interface                      = $::os_service_default,
 ) {
 
   include sahara::deps
@@ -240,6 +246,7 @@ class sahara::keystone::authtoken(
     region_name                    => $region_name,
     token_cache_time               => $token_cache_time,
     service_token_roles_required   => $service_token_roles_required,
+    interface                      => $interface,
   }
 
   sahara_config {
