@@ -43,6 +43,7 @@ describe 'sahara::keystone::authtoken' do
         is_expected.to contain_sahara_config('keystone_authtoken/region_name').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_sahara_config('keystone_authtoken/token_cache_time').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_sahara_config('keystone_authtoken/service_token_roles_required').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_sahara_config('keystone_authtoken/interface').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_sahara_config('trustee/username').with_value('sahara')
         is_expected.to contain_sahara_config('trustee/password').with_value('sahara_password')
         is_expected.to contain_sahara_config('trustee/auth_url').with_value('http://127.0.0.1:5000/')
@@ -90,6 +91,7 @@ describe 'sahara::keystone::authtoken' do
           :region_name                          => 'region2',
           :token_cache_time                     => '301',
           :service_token_roles_required         => false,
+          :interface                            => 'internal',
         })
       end
 
@@ -126,6 +128,7 @@ describe 'sahara::keystone::authtoken' do
         is_expected.to contain_sahara_config('keystone_authtoken/region_name').with_value(params[:region_name])
         is_expected.to contain_sahara_config('keystone_authtoken/token_cache_time').with_value(params[:token_cache_time])
         is_expected.to contain_sahara_config('keystone_authtoken/service_token_roles_required').with_value(params[:service_token_roles_required])
+        is_expected.to contain_sahara_config('keystone_authtoken/interface').with_value(params[:interface])
         is_expected.to contain_sahara_config('trustee/username').with_value(params[:username])
         is_expected.to contain_sahara_config('trustee/password').with_value(params[:password]).with_secret(true)
         is_expected.to contain_sahara_config('trustee/auth_url').with_value(params[:auth_url])
