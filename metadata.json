@@ -7,7 +7,7 @@
         },
         {
             "name": "openstack/keystone",
-            "version_requirement": ">=17.1.0 <18.0.0"
+            "version_requirement": ">=17.2.0 <18.0.0"
         },
         {
             "name": "puppetlabs/inifile",
@@ -19,11 +19,11 @@
         },
         {
             "name": "openstack/openstacklib",
-            "version_requirement": ">=17.1.0 <18.0.0"
+            "version_requirement": ">=17.2.0 <18.0.0"
         },
         {
             "name": "openstack/oslo",
-            "version_requirement": ">=17.1.0 <18.0.0"
+            "version_requirement": ">=17.2.0 <18.0.0"
         }
     ],
     "description": "Installs and configures OpenStack Sahara (Data Processing).",
@@ -71,5 +71,5 @@
     ],
     "source": "git://github.com/openstack/puppet-sahara.git",
     "summary": "Puppet module for OpenStack Sahara",
-    "version": "17.1.0"
+    "version": "17.2.0"
 }
