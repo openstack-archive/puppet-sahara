@@ -232,30 +232,6 @@
 #
 # === DEPRECATED PARAMETERS
 #
-# [*zeromq_bind_address*]
-#   (Optional) Bind address; wildcard, ethernet, or ip address.
-#   Defaults to undef.
-#
-# [*zeromq_contexts*]
-#   (Optional) Number of contexsts for zeromq.
-#   Defaults to undef.
-#
-# [*zeromq_topic_backlog*]
-#   (Optional) Number of incoming messages to buffer.
-#   Defaults to undef.
-#
-# [*zeromq_ipc_dir*]
-#   (Optional) Directory for zeromq IPC.
-#   Defaults to undef.
-#
-# [*zeromq_host*]
-#   (Optional) Name of the current node: hostname, FQDN, or IP.
-#   Defaults to undef.
-#
-# [*cast_timeout*]
-#   (Optional) TTL for zeromq messages.
-#   Defaults to undef.
-#
 # [*database_min_pool_size*]
 #   (optional) Minimum number of SQL connections to keep open in a pool.
 #   Defaults to undef.
@@ -313,12 +289,6 @@ class sahara(
   $purge_config                = false,
   $default_ntp_server          = $::os_service_default,
   # DEPRECATED PARAMETERS
-  $zeromq_bind_address         = undef,
-  $zeromq_contexts             = undef,
-  $zeromq_topic_backlog        = undef,
-  $zeromq_ipc_dir              = undef,
-  $zeromq_host                 = undef,
-  $cast_timeout                = undef,
   $database_min_pool_size      = undef,
 ) {
 
