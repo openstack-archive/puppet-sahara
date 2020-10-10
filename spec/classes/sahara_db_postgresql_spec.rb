@@ -16,6 +16,8 @@ describe 'sahara::db::postgresql' do
         req_params
       end
 
+      it { is_expected.to contain_class('sahara::deps') }
+
       it { is_expected.to contain_openstacklib__db__postgresql('sahara').with(
         :user       => 'sahara',
         :password   => 'saharapass',
