@@ -5,6 +5,9 @@ describe 'sahara::db::sync' do
   shared_examples_for 'sahara-dbsync' do
 
     context 'default patameters' do
+
+      it { is_expected.to contain_class('sahara::deps') }
+
       it 'runs sahara-dbmanage' do
         is_expected.to contain_exec('sahara-dbmanage').with(
           :command     => 'sahara-db-manage --config-file /etc/sahara/sahara.conf upgrade head',
