@@ -43,31 +43,6 @@
 #
 # == database configuration options
 #
-# [*database_connection*]
-#   (Optional) Non-sqllite database for sahara
-#   Defaults to undef.
-#
-# [*database_max_retries*]
-#   (Optional) Maximum number of database connection retries during startup.
-#   Set to -1 to specify an infinite retry count.
-#   Defaults to undef.
-#
-# [*database_idle_timeout*]
-#   (Optional) Timeout before idle SQL connections are reaped.
-#   Defaults to undef.
-#
-# [*database_retry_interval*]
-#   (optional) Interval between retries of opening a database connection.
-#   Defaults to undef.
-#
-# [*database_max_pool_size*]
-#   (optional) Maximum number of SQL connections to keep open in a pool.
-#   Defaults to undef.
-#
-# [*database_max_overflow*]
-#   (optional) If set, use this value for max_overflow with sqlalchemy.
-#   Defaults to undef.
-#
 # [*sync_db*]
 #   (Optional) Enable dbsync
 #   Defaults to true.
@@ -236,6 +211,31 @@
 #   (optional) Minimum number of SQL connections to keep open in a pool.
 #   Defaults to undef.
 #
+# [*database_connection*]
+#   (Optional) Non-sqllite database for sahara
+#   Defaults to undef.
+#
+# [*database_max_retries*]
+#   (Optional) Maximum number of database connection retries during startup.
+#   Set to -1 to specify an infinite retry count.
+#   Defaults to undef.
+#
+# [*database_idle_timeout*]
+#   (Optional) Timeout before idle SQL connections are reaped.
+#   Defaults to undef.
+#
+# [*database_retry_interval*]
+#   (optional) Interval between retries of opening a database connection.
+#   Defaults to undef.
+#
+# [*database_max_pool_size*]
+#   (optional) Maximum number of SQL connections to keep open in a pool.
+#   Defaults to undef.
+#
+# [*database_max_overflow*]
+#   (optional) If set, use this value for max_overflow with sqlalchemy.
+#   Defaults to undef.
+#
 class sahara(
   $package_ensure              = 'present',
   $host                        = $::os_service_default,
@@ -246,12 +246,6 @@ class sahara(
   $ca_file                     = $::os_service_default,
   $cert_file                   = $::os_service_default,
   $key_file                    = $::os_service_default,
-  $database_connection         = undef,
-  $database_idle_timeout       = undef,
-  $database_max_pool_size      = undef,
-  $database_max_retries        = undef,
-  $database_retry_interval     = undef,
-  $database_max_overflow       = undef,
   $sync_db                     = true,
   $default_transport_url       = $::os_service_default,
   $rpc_response_timeout        = $::os_service_default,
@@ -290,12 +284,49 @@ class sahara(
   $default_ntp_server          = $::os_service_default,
   # DEPRECATED PARAMETERS
   $database_min_pool_size      = undef,
+  $database_connection         = undef,
+  $database_idle_timeout       = undef,
+  $database_max_pool_size      = undef,
+  $database_max_retries        = undef,
+  $database_retry_interval     = undef,
+  $database_max_overflow       = undef,
 ) {
 
   include sahara::deps
   include sahara::params
   include sahara::db
   include sahara::policy
+
+  if $database_connection != undef {
+    warning('The database_connection parameter is deprecated and will be \
+removed in a future realse. Use sahara::db::database_connection instead')
+  }
+
+  if $database_idle_timeout != undef {
+    warning('The database_idle_timeout parameter is deprecated and will be \
+removed in a future realse. Use sahara::db::database_connection_recycle_time \
+instead')
+  }
+
+  if $database_max_pool_size != undef {
+    warning('The database_max_pool_size parameter is deprecated and will be \
+removed in a future realse. Use sahara::db::database_max_pool_size instead')
+  }
+
+  if $database_max_retries!= undef {
+    warning('The database_max_retries parameter is deprecated and will be \
+removed in a future realse. Use sahara::db::database_max_retries instead')
+  }
+
+  if $database_retry_interval != undef {
+    warning('The database_retry_interval parameter is deprecated and will be \
+removed in a future realse. Use sahara::db::database_retry_interval instead')
+  }
+
+  if $database_max_overflow != undef {
+    warning('The database_max_overflow parameter is deprecated and will be \
+removed in a future realse. Use sahara::db::database_max_overflow instead')
+  }
 
   package { 'sahara-common':
     ensure => $package_ensure,
