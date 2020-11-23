@@ -16,6 +16,7 @@ describe 'sahara::db::sync' do
           :refreshonly => 'true',
           :try_sleep   => 5,
           :tries       => 10,
+          :timeout     => 300,
           :logoutput   => 'on_failure',
           :subscribe   => ['Anchor[sahara::install::end]',
                            'Anchor[sahara::config::end]',
@@ -26,10 +27,11 @@ describe 'sahara::db::sync' do
       end
     end
 
-    context 'overriding extra_params' do
+    context 'overriding params' do
       let :params do
         {
-          :extra_params => '--config-file /etc/sahara/sahara01.conf',
+          :extra_params    => '--config-file /etc/sahara/sahara01.conf',
+          :db_sync_timeout => 750,
         }
       end
 
@@ -41,6 +43,7 @@ describe 'sahara::db::sync' do
           :refreshonly => 'true',
           :try_sleep   => 5,
           :tries       => 10,
+          :timeout     => 750,
           :logoutput   => 'on_failure',
           :subscribe   => ['Anchor[sahara::install::end]',
                            'Anchor[sahara::config::end]',
