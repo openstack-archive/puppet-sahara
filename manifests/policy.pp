@@ -20,12 +20,12 @@
 #   Defaults to empty hash.
 #
 # [*policy_path*]
-#   (Optional) Path to the sahara policy.json file
-#   Defaults to /etc/sahara/policy.json
+#   (Optional) Path to the sahara policy.yaml file
+#   Defaults to /etc/sahara/policy.yaml
 #
 class sahara::policy (
   $policies    = {},
-  $policy_path = '/etc/sahara/policy.json',
+  $policy_path = '/etc/sahara/policy.yaml',
 ) {
 
   include sahara::deps
@@ -34,9 +34,10 @@ class sahara::policy (
   validate_legacy(Hash, 'validate_hash', $policies)
 
   Openstacklib::Policy::Base {
-    file_path  => $policy_path,
-    file_user  => 'root',
-    file_group => $::sahara::params::group,
+    file_path   => $policy_path,
+    file_user   => 'root',
+    file_group  => $::sahara::params::group,
+    file_format => 'yaml',
   }
 
   create_resources('openstacklib::policy::base', $policies)
