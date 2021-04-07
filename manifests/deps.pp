@@ -29,6 +29,11 @@ class sahara::deps {
   -> Openstacklib::Policy::Base<||>
   ~> Anchor['sahara::config::end']
 
+  # On any uwsgi config change, we must restart Sahara API.
+  Anchor['sahara::config::begin']
+  -> Sahara_api_uwsgi_config<||>
+  ~> Anchor['sahara::config::end']
+
   # all db settings should be applied and all packages should be installed
   # before dbsync starts
   Oslo::Db<||> -> Anchor['sahara::dbsync::begin']
