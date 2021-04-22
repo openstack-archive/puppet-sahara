@@ -295,7 +295,6 @@ class sahara(
   include sahara::deps
   include sahara::params
   include sahara::db
-  include sahara::policy
 
   if $amqp_allow_insecure_clients != undef {
     warning('The amqp_allow_insecure_clients parameter is deprecated and \
