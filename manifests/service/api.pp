@@ -36,7 +36,7 @@ class sahara::service::api (
   $manage_service = true,
   $package_ensure = 'present',
   $service_name   = $::sahara::params::api_service_name,
-) inherits ::sahara::params {
+) inherits sahara::params {
 
   include sahara::deps
   include sahara::policy
