@@ -46,15 +46,7 @@ describe 'sahara::client' do
         when 'Debian'
           { :client_package_name => 'python3-saharaclient' }
         when 'RedHat'
-          if facts[:operatingsystem] == 'Fedora'
-            { :client_package_name => 'python3-saharaclient' }
-          else
-            if facts[:operatingsystemmajrelease] > '7'
-              { :client_package_name => 'python3-saharaclient' }
-            else
-              { :client_package_name => 'python-saharaclient' }
-            end
-          end
+          { :client_package_name => 'python3-saharaclient' }
         end
       end
 
