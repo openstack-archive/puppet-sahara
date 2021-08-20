@@ -1,0 +1,8 @@
+---
+features:
+  - |
+    The ``sahara::service::engine`` class now support the following two
+    parameters.
+
+    - ``periodic_coordinator_backend_url``
+    - ``periodic_workers_number``

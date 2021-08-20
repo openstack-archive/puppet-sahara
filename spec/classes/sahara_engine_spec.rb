@@ -22,14 +22,26 @@ describe 'sahara::service::engine' do
         :hasrestart => true,
         :tag        => 'sahara-service',
       )}
+
+      it 'should configure default coordination parameters' do
+        should contain_oslo__coordination('sahara_config').with(
+          :backend_url   => '<SERVICE DEFAULT>',
+          :manage_config => false,
+        )
+
+        should contain_sahara_config('DEFAULT/periodic_coordinator_backend_url').with_value('<SERVICE DEFAULT>')
+        should contain_sahara_config('DEFAULT/periodic_workers_number').with_value('<SERVICE DEFAULT>')
+      end
     end
 
     context 'with custom params' do
       let :params do
         {
-          :enabled        => false,
-          :manage_service => false,
-          :package_ensure => 'absent',
+          :enabled                          => false,
+          :manage_service                   => false,
+          :package_ensure                   => 'absent',
+          :periodic_coordinator_backend_url => 'etcd3+http://127.0.0.1:2379',
+          :periodic_workers_number          => 4,
         }
       end
 
@@ -47,6 +59,16 @@ describe 'sahara::service::engine' do
         :hasrestart => true,
         :tag        => 'sahara-service',
       )}
+
+      it 'should configure default coordination parameters' do
+        should contain_oslo__coordination('sahara_config').with(
+          :backend_url   => 'etcd3+http://127.0.0.1:2379',
+          :manage_config => false,
+        )
+
+        should contain_sahara_config('DEFAULT/periodic_coordinator_backend_url').with_value('etcd3+http://127.0.0.1:2379')
+        should contain_sahara_config('DEFAULT/periodic_workers_number').with_value(4)
+      end
     end
   end
 
