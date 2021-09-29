@@ -27,6 +27,14 @@
 #   (Optional) Should Sahara endpoint be configured?
 #   Defaults to true.
 #
+# [*configure_user*]
+#   (Optional) Should the service user be configured?
+#   Defaults to true
+#
+# [*configure_user_role*]
+#   (Optional) Should the admin role be configured for the service user?
+#   Defaults to true
+#
 # [*service_type*]
 #   (Optional) Type of service.
 #   Defaults to 'data-processing'.
@@ -72,6 +80,8 @@ class sahara::keystone::auth(
   $service_type        = 'data-processing',
   $service_description = 'Sahara Data Processing',
   $configure_endpoint  = true,
+  $configure_user      = true,
+  $configure_user_role = true,
   $region              = 'RegionOne',
   $public_url          = 'http://127.0.0.1:8386',
   $admin_url           = 'http://127.0.0.1:8386',
@@ -81,8 +91,8 @@ class sahara::keystone::auth(
   include sahara::deps
 
   keystone::resource::service_identity { 'sahara':
-    configure_user      => true,
-    configure_user_role => true,
+    configure_user      => $configure_user,
+    configure_user_role => $configure_user_role,
     configure_endpoint  => $configure_endpoint,
     service_type        => $service_type,
     service_description => $service_description,

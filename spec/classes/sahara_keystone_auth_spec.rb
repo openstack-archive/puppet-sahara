@@ -36,6 +36,8 @@ describe 'sahara::keystone::auth' do
           :email               => 'alt_sahara@alt_localhost',
           :tenant              => 'alt_service',
           :configure_endpoint  => false,
+          :configure_user      => false,
+          :configure_user_role => false,
           :service_description => 'Alternative Sahara Data Processing',
           :service_name        => 'alt_service',
           :service_type        => 'alt_data-processing',
@@ -46,8 +48,8 @@ describe 'sahara::keystone::auth' do
       end
 
       it { is_expected.to contain_keystone__resource__service_identity('sahara').with(
-        :configure_user      => true,
-        :configure_user_role => true,
+        :configure_user      => false,
+        :configure_user_role => false,
         :configure_endpoint  => false,
         :service_name        => 'alt_service',
         :service_type        => 'alt_data-processing',
