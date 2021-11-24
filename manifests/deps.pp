@@ -24,6 +24,11 @@ class sahara::deps {
   ~> Service<| tag == 'sahara-service' |>
   ~> anchor { 'sahara::service::end': }
 
+  # paste-api.ini config should occur in the config block also.
+  Anchor['sahara::config::begin']
+  -> Sahara_api_paste_ini<||>
+  ~> Anchor['sahara::config::end']
+
   # policy config should occur in the config block also.
   Anchor['sahara::config::begin']
   -> Openstacklib::Policy::Base<||>
