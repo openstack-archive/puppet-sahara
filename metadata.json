@@ -2,10 +2,6 @@
     "author": "Red Hat and OpenStack Contributors",
     "dependencies": [
         {
-            "name": "duritong/sysctl",
-            "version_requirement": ">=0.0.1 <1.0.0"
-        },
-        {
             "name": "openstack/keystone",
             "version_requirement": ">=20.0.0 <21.0.0"
         },
