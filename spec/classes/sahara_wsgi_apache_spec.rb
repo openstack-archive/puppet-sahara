@@ -7,9 +7,6 @@ describe 'sahara::wsgi::apache' do
       it {
         should contain_class('sahara::deps')
         should contain_class('sahara::params')
-        should contain_class('apache')
-        should contain_class('apache::mod::wsgi')
-        should_not contain_class('apache::mod::ssl')
       }
 
       it { should contain_openstacklib__wsgi__apache('sahara_wsgi').with(
@@ -83,7 +80,6 @@ describe 'sahara::wsgi::apache' do
         }
       end
 
-      it { should contain_class('apache::mod::ssl') }
       it { should contain_openstacklib__wsgi__apache('sahara_wsgi').with_ssl(true) }
     end
   end
@@ -104,13 +100,11 @@ describe 'sahara::wsgi::apache' do
         case facts[:osfamily]
         when 'Debian'
           {
-            :httpd_service_name => 'apache2',
             :wsgi_script_path   => '/usr/lib/cgi-bin/sahara',
             :wsgi_script_source => '/usr/bin/sahara-wsgi-api'
           }
         when 'RedHat'
           {
-            :httpd_service_name => 'httpd',
             :wsgi_script_path   => '/var/www/cgi-bin/sahara',
             :wsgi_script_source => '/usr/bin/sahara-wsgi-api'
           }

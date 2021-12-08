@@ -73,8 +73,6 @@ class sahara::service::api (
       tag        => 'sahara-service',
     }
   } elsif $service_name == 'httpd' {
-    include apache::params
-
     if $::operatingsystem != 'Ubuntu' {
       service { 'sahara-api':
         ensure => 'stopped',
