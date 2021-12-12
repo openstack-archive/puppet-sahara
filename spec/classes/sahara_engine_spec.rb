@@ -36,6 +36,8 @@ describe 'sahara::service::engine' do
         should contain_sahara_config('DEFAULT/cleanup_time_for_incomplete_clusters').with_value('<SERVICE DEFAULT>')
         should contain_sahara_config('DEFAULT/periodic_coordinator_backend_url').with_value('<SERVICE DEFAULT>')
         should contain_sahara_config('DEFAULT/periodic_workers_number').with_value('<SERVICE DEFAULT>')
+        should contain_sahara_config('DEFAULT/coordinator_heartbeat_interval').with_value('<SERVICE DEFAULT>')
+        should contain_sahara_config('DEFAULT/hash_ring_replicas_count').with_value('<SERVICE DEFAULT>')
       end
     end
 
@@ -52,6 +54,8 @@ describe 'sahara::service::engine' do
           :cleanup_time_for_incomplete_clusters => 0,
           :periodic_coordinator_backend_url     => 'etcd3+http://127.0.0.1:2379',
           :periodic_workers_number              => 4,
+          :coordinator_heartbeat_interval       => 1,
+          :hash_ring_replicas_count             => 40,
         }
       end
 
@@ -83,6 +87,8 @@ describe 'sahara::service::engine' do
         should contain_sahara_config('DEFAULT/cleanup_time_for_incomplete_clusters').with_value(0)
         should contain_sahara_config('DEFAULT/periodic_coordinator_backend_url').with_value('etcd3+http://127.0.0.1:2379')
         should contain_sahara_config('DEFAULT/periodic_workers_number').with_value(4)
+        should contain_sahara_config('DEFAULT/coordinator_heartbeat_interval').with_value(1)
+        should contain_sahara_config('DEFAULT/hash_ring_replicas_count').with_value(40)
       end
     end
   end

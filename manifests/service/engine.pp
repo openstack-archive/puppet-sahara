@@ -47,6 +47,14 @@
 #   (Optional) Number of threads to run periodic tasks.
 #   Defaults to $::os_service_default
 #
+# [*coordinator_heartbeat_interval*]
+#   (Optional) Interval size between heartbeat execution in seconds.
+#   Defaults to $::os_service_default
+#
+# [*hash_ring_replicas_count*]
+#   (Optional) Number of points that belongs to each number on a hash ring.
+#   Defaults to $::os_service_default
+#
 class sahara::service::engine (
   $enabled                              = true,
   $manage_service                       = true,
@@ -58,6 +66,8 @@ class sahara::service::engine (
   $cleanup_time_for_incomplete_clusters = $::os_service_default,
   $periodic_coordinator_backend_url     = $::os_service_default,
   $periodic_workers_number              = $::os_service_default,
+  $coordinator_heartbeat_interval       = $::os_service_default,
+  $hash_ring_replicas_count             = $::os_service_default,
 ) {
 
   include sahara::deps
@@ -99,5 +109,7 @@ class sahara::service::engine (
     'DEFAULT/cleanup_time_for_incomplete_clusters': value => $cleanup_time_for_incomplete_clusters;
     'DEFAULT/periodic_coordinator_backend_url':     value => $periodic_coordinator_backend_url;
     'DEFAULT/periodic_workers_number':              value => $periodic_workers_number;
+    'DEFAULT/coordinator_heartbeat_interval':       value => $coordinator_heartbeat_interval;
+    'DEFAULT/hash_ring_replicas_count':             value => $hash_ring_replicas_count;
   }
 }

@@ -1,0 +1,8 @@
+---
+features:
+  - |
+    The following two parameters have been added to
+    the ``sahara::service::engine`` class.
+
+    - ``coordinator_heartbeat_interval``
+    - ``hash_ring_replicas_count``
