@@ -29,6 +29,11 @@ describe 'sahara::service::engine' do
           :manage_config => false,
         )
 
+        should contain_sahara_config('DEFAULT/periodic_enable').with_value('<SERVICE DEFAULT>')
+        should contain_sahara_config('DEFAULT/periodic_fuzzy_delay').with_value('<SERVICE DEFAULT>')
+        should contain_sahara_config('DEFAULT/periodic_interval_max').with_value('<SERVICE DEFAULT>')
+        should contain_sahara_config('DEFAULT/min_transient_cluster_active_time').with_value('<SERVICE DEFAULT>')
+        should contain_sahara_config('DEFAULT/cleanup_time_for_incomplete_clusters').with_value('<SERVICE DEFAULT>')
         should contain_sahara_config('DEFAULT/periodic_coordinator_backend_url').with_value('<SERVICE DEFAULT>')
         should contain_sahara_config('DEFAULT/periodic_workers_number').with_value('<SERVICE DEFAULT>')
       end
@@ -37,11 +42,16 @@ describe 'sahara::service::engine' do
     context 'with custom params' do
       let :params do
         {
-          :enabled                          => false,
-          :manage_service                   => false,
-          :package_ensure                   => 'absent',
-          :periodic_coordinator_backend_url => 'etcd3+http://127.0.0.1:2379',
-          :periodic_workers_number          => 4,
+          :enabled                              => false,
+          :manage_service                       => false,
+          :package_ensure                       => 'absent',
+          :periodic_enable                      => true,
+          :periodic_fuzzy_delay                 => 60,
+          :periodic_interval_max                => 61,
+          :min_transient_cluster_active_time    => 30,
+          :cleanup_time_for_incomplete_clusters => 0,
+          :periodic_coordinator_backend_url     => 'etcd3+http://127.0.0.1:2379',
+          :periodic_workers_number              => 4,
         }
       end
 
@@ -60,12 +70,17 @@ describe 'sahara::service::engine' do
         :tag        => 'sahara-service',
       )}
 
-      it 'should configure default coordination parameters' do
+      it 'should configure the custom values' do
         should contain_oslo__coordination('sahara_config').with(
           :backend_url   => 'etcd3+http://127.0.0.1:2379',
           :manage_config => false,
         )
 
+        should contain_sahara_config('DEFAULT/periodic_enable').with_value(true)
+        should contain_sahara_config('DEFAULT/periodic_fuzzy_delay').with_value(60)
+        should contain_sahara_config('DEFAULT/periodic_interval_max').with_value(61)
+        should contain_sahara_config('DEFAULT/min_transient_cluster_active_time').with_value(30)
+        should contain_sahara_config('DEFAULT/cleanup_time_for_incomplete_clusters').with_value(0)
         should contain_sahara_config('DEFAULT/periodic_coordinator_backend_url').with_value('etcd3+http://127.0.0.1:2379')
         should contain_sahara_config('DEFAULT/periodic_workers_number').with_value(4)
       end
