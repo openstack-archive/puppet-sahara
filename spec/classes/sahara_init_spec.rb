@@ -11,7 +11,7 @@ describe 'sahara' do
     }
   end
 
-  shared_examples_for 'sahara' do
+  shared_examples 'sahara' do
     it { is_expected.to contain_class('sahara::deps') }
     it { is_expected.to contain_class('sahara::params') }
     it { is_expected.to contain_class('sahara::db') }
@@ -25,7 +25,7 @@ describe 'sahara' do
     end
   end
 
-  shared_examples_for 'sahara config' do
+  shared_examples 'sahara config' do
     context 'with default params' do
       it { is_expected.to contain_sahara_config('DEFAULT/use_floating_ips').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_sahara_config('DEFAULT/host').with_value('<SERVICE DEFAULT>') }
@@ -63,7 +63,7 @@ describe 'sahara' do
 
   end
 
-  shared_examples_for 'sahara rpc' do
+  shared_examples 'sahara rpc' do
 
     context 'when defaults with rabbit pass specified' do
        it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('<SERVICE DEFAULT>') }
@@ -175,7 +175,7 @@ describe 'sahara' do
     end
   end
 
-  shared_examples_for 'sahara ssl' do
+  shared_examples 'sahara ssl' do
     context 'without ssl' do
       it { is_expected.to_not contain_sahara_config('ssl/ca_file') }
       it { is_expected.to_not contain_sahara_config('ssl/cert_file') }

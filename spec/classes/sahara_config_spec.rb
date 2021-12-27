@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'sahara::config' do
 
 
-  shared_examples_for 'sahara-config' do
+  shared_examples 'sahara-config' do
     let :params do
       { :sahara_config => {
           'DEFAULT/foo' => { 'value'  => 'fooValue' },

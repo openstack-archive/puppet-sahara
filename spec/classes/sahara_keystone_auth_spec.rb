@@ -5,7 +5,7 @@
 require 'spec_helper'
 
 describe 'sahara::keystone::auth' do
-  shared_examples_for 'sahara::keystone::auth' do
+  shared_examples 'sahara::keystone::auth' do
     context 'with default class parameters' do
       let :params do
         { :password => 'sahara_password' }

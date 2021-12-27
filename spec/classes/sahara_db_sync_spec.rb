@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'sahara::db::sync' do
 
-  shared_examples_for 'sahara-dbsync' do
+  shared_examples 'sahara-dbsync' do
 
     context 'default patameters' do
 

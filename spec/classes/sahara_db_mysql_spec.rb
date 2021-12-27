@@ -19,7 +19,7 @@ describe 'sahara::db::mysql' do
     }
   end
 
-  shared_examples_for 'sahara mysql database' do
+  shared_examples 'sahara mysql database' do
     it { should contain_class('sahara::deps') }
 
     context 'when omiting the required parameter password' do

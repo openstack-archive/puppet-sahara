@@ -1,7 +1,7 @@
 require 'spec_helper'
 describe 'sahara::notify' do
 
-  shared_examples_for 'sahara-notify' do
+  shared_examples 'sahara-notify' do
     context 'when defaults parameters' do
       it { is_expected.to contain_sahara_config('oslo_messaging_notifications/transport_url').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_sahara_config('oslo_messaging_notifications/driver').with_value('<SERVICE DEFAULT>') }
