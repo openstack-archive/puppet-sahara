@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'sahara::db::postgresql' do
 
-  shared_examples_for 'sahara::db::postgresql' do
+  shared_examples 'sahara::db::postgresql' do
     let :req_params do
       { :password => 'saharapass' }
     end

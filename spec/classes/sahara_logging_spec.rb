@@ -39,7 +39,7 @@ describe 'sahara::logging' do
     }
   end
 
-  shared_examples_for 'sahara-logging' do
+  shared_examples 'sahara-logging' do
 
     context 'with basic logging options defaults' do
       it_behaves_like 'basic logging options defaults'
@@ -61,7 +61,7 @@ describe 'sahara::logging' do
 
   end
 
-  shared_examples_for 'basic logging options defaults' do
+  shared_examples 'basic logging options defaults' do
 
     context 'with defaults' do
      it { is_expected.to contain_oslo__log('sahara_config').with(
@@ -88,7 +88,7 @@ describe 'sahara::logging' do
     end
   end
 
-  shared_examples_for 'basic logging options passed' do
+  shared_examples 'basic logging options passed' do
     context 'with passed params' do
       it { is_expected.to contain_oslo__log('sahara_config').with(
         :use_syslog          => true,
@@ -104,7 +104,7 @@ describe 'sahara::logging' do
     end
   end
 
-  shared_examples_for 'logging params set' do
+  shared_examples 'logging params set' do
     it 'enables logging params' do
       is_expected.to contain_oslo__log('sahara_config').with(
         :logging_context_format_string =>
@@ -126,7 +126,7 @@ describe 'sahara::logging' do
     end
   end
 
-  shared_examples_for 'logging params unset' do
+  shared_examples 'logging params unset' do
    [ :logging_context_format_string, :logging_default_format_string,
      :logging_debug_format_suffix, :logging_exception_prefix,
      :log_config_append, :publish_errors,
