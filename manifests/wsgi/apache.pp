@@ -118,6 +118,8 @@ class sahara::wsgi::apache (
   include sahara::deps
   include sahara::params
 
+  Anchor['sahara::install::end'] -> Class['apache']
+
   ::openstacklib::wsgi::apache { 'sahara_wsgi':
     bind_host                   => $bind_host,
     bind_port                   => $port,
@@ -146,6 +148,5 @@ class sahara::wsgi::apache (
     access_log_format           => $access_log_format,
     error_log_file              => $error_log_file,
     custom_wsgi_process_options => $custom_wsgi_process_options,
-    require                     => Anchor['sahara::install::end'],
   }
 }
