@@ -23,6 +23,18 @@
 #   (Optional) Tenant for Sahara user.
 #   Defaults to 'services'.
 #
+# [*roles*]
+#   (Optional) List of roles assigned to aodh user.
+#   Defaults to ['admin']
+#
+# [*system_scope*]
+#   (Optional) Scope for system operations.
+#   Defaults to 'all'
+#
+# [*system_roles*]
+#   (Optional) List of system roles assigned to aodh user.
+#   Defaults to []
+#
 # [*configure_endpoint*]
 #   (Optional) Should Sahara endpoint be configured?
 #   Defaults to true.
@@ -77,6 +89,9 @@ class sahara::keystone::auth(
   $auth_name           = 'sahara',
   $email               = 'sahara@localhost',
   $tenant              = 'services',
+  $roles               = ['admin'],
+  $system_scope        = 'all',
+  $system_roles        = [],
   $service_type        = 'data-processing',
   $service_description = 'Sahara Data Processing',
   $configure_endpoint  = true,
@@ -102,6 +117,9 @@ class sahara::keystone::auth(
     password            => $password,
     email               => $email,
     tenant              => $tenant,
+    roles               => $roles,
+    system_scope        => $system_scope,
+    system_roles        => $system_roles,
     public_url          => $public_url,
     admin_url           => $admin_url,
     internal_url        => $internal_url,
