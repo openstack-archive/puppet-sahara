@@ -105,6 +105,8 @@ class sahara::keystone::auth(
 
   include sahara::deps
 
+  Keystone::Resource::Service_identity['sahara'] -> Anchor['sahara::service::end']
+
   keystone::resource::service_identity { 'sahara':
     configure_user      => $configure_user,
     configure_user_role => $configure_user_role,
