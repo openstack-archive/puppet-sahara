@@ -30,12 +30,12 @@ describe 'Puppet::Type.type(:sahara_config)' do
 
   it 'should accept a valid value' do
     @sahara_config[:value] = 'bar'
-    expect(@sahara_config[:value]).to eq('bar')
+    expect(@sahara_config[:value]).to eq(['bar'])
   end
 
   it 'should not accept a value with whitespace' do
     @sahara_config[:value] = 'b ar'
-    expect(@sahara_config[:value]).to eq('b ar')
+    expect(@sahara_config[:value]).to eq(['b ar'])
   end
 
   it 'should accept valid ensure values' do
