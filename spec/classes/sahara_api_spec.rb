@@ -47,14 +47,7 @@ describe 'sahara::service::api' do
 
       it { should contain_sahara_config('DEFAULT/api_workers').with_value(4) }
 
-      it { should contain_service('sahara-api').with(
-        :ensure     => nil,
-        :name       => platform_params[:api_service_name],
-        :enable     => false,
-        :hasstatus  => true,
-        :hasrestart => true,
-        :tag        => 'sahara-service',
-      )}
+      it { should_not contain_service('sahara-api') }
     end
   end
 
