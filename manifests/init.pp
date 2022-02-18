@@ -201,12 +201,6 @@
 #   (optional) default ntp server to be used by the cluster instances
 #   Defaults to $::os_service_default
 #
-# === DEPRECATED PARAMETERS
-#
-# [*amqp_allow_insecure_clients*]
-#   (Optional) Accept clients using either SSL or plain TCP
-#   Defaults to undef.
-#
 class sahara(
   $package_ensure              = 'present',
   $host                        = $::os_service_default,
@@ -252,18 +246,11 @@ class sahara(
   $amqp_password               = $::os_service_default,
   $purge_config                = false,
   $default_ntp_server          = $::os_service_default,
-  # DEPRECATED PARAMETERS
-  $amqp_allow_insecure_clients = undef,
 ) {
 
   include sahara::deps
   include sahara::params
   include sahara::db
-
-  if $amqp_allow_insecure_clients != undef {
-    warning('The amqp_allow_insecure_clients parameter is deprecated and \
-will be removed in a future release.')
-  }
 
   package { 'sahara-common':
     ensure => $package_ensure,
