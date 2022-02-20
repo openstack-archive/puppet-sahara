@@ -61,27 +61,27 @@ class sahara::service::api (
     } else {
       $service_ensure = 'stopped'
     }
-  }
 
-  if $service_name == $::sahara::params::api_service_name {
-    service { 'sahara-api':
-      ensure     => $service_ensure,
-      name       => $::sahara::params::api_service_name,
-      enable     => $enabled,
-      hasstatus  => true,
-      hasrestart => true,
-      tag        => 'sahara-service',
-    }
-  } elsif $service_name == 'httpd' {
-    if $::operatingsystem != 'Ubuntu' {
+    if $service_name == $::sahara::params::api_service_name {
       service { 'sahara-api':
-        ensure => 'stopped',
-        name   => $::sahara::params::api_service_name,
-        enable => false,
-        tag    => 'sahara-service',
+        ensure     => $service_ensure,
+        name       => $::sahara::params::api_service_name,
+        enable     => $enabled,
+        hasstatus  => true,
+        hasrestart => true,
+        tag        => 'sahara-service',
       }
-      Service['sahara-api'] -> Service[$service_name]
+    } elsif $service_name == 'httpd' {
+      if $::operatingsystem != 'Ubuntu' {
+        service { 'sahara-api':
+          ensure => 'stopped',
+          name   => $::sahara::params::api_service_name,
+          enable => false,
+          tag    => 'sahara-service',
+        }
+        Service['sahara-api'] -> Service[$service_name]
+      }
+      Service<| title == 'httpd' |> { tag +> 'sahara-service' }
     }
-    Service<| title == 'httpd' |> { tag +> 'sahara-service' }
   }
 }

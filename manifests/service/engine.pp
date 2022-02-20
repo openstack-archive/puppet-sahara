@@ -85,15 +85,15 @@ class sahara::service::engine (
     } else {
       $service_ensure = 'stopped'
     }
-  }
 
-  service { 'sahara-engine':
-    ensure     => $service_ensure,
-    name       => $::sahara::params::engine_service_name,
-    enable     => $enabled,
-    hasstatus  => true,
-    hasrestart => true,
-    tag        => 'sahara-service',
+    service { 'sahara-engine':
+      ensure     => $service_ensure,
+      name       => $::sahara::params::engine_service_name,
+      enable     => $enabled,
+      hasstatus  => true,
+      hasrestart => true,
+      tag        => 'sahara-service',
+    }
   }
 
   oslo::coordination{ 'sahara_config':

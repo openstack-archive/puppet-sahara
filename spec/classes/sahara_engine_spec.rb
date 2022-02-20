@@ -65,14 +65,7 @@ describe 'sahara::service::engine' do
         :tag    => ['openstack', 'sahara-package'],
       )}
 
-      it { should contain_service('sahara-engine').with(
-        :ensure     => nil,
-        :name       => platform_params[:engine_service_name],
-        :enable     => false,
-        :hasstatus  => true,
-        :hasrestart => true,
-        :tag        => 'sahara-service',
-      )}
+      it { should_not contain_service('sahara-engine') }
 
       it 'should configure the custom values' do
         should contain_oslo__coordination('sahara_config').with(
