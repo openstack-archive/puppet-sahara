@@ -18,11 +18,12 @@ class sahara::db::sync(
 ) {
 
   include sahara::deps
+  include sahara::params
 
   exec { 'sahara-dbmanage':
     command     => "sahara-db-manage ${extra_params} upgrade head",
     path        => '/usr/bin',
-    user        => 'sahara',
+    user        => $::sahara::params::user,
     refreshonly => true,
     try_sleep   => 5,
     tries       => 10,

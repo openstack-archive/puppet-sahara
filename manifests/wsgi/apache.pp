@@ -123,7 +123,7 @@ class sahara::wsgi::apache (
   ::openstacklib::wsgi::apache { 'sahara_wsgi':
     bind_host                   => $bind_host,
     bind_port                   => $port,
-    group                       => 'sahara',
+    group                       => $::sahara::params::group,
     path                        => $path,
     priority                    => $priority,
     servername                  => $servername,
@@ -136,7 +136,7 @@ class sahara::wsgi::apache (
     ssl_crl_path                => $ssl_crl_path,
     ssl_key                     => $ssl_key,
     threads                     => $threads,
-    user                        => 'sahara',
+    user                        => $::sahara::params::user,
     workers                     => $workers,
     wsgi_daemon_process         => 'sahara',
     wsgi_process_display_name   => $wsgi_process_display_name,
