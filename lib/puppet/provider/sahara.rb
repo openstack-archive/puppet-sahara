@@ -107,5 +107,6 @@ class Puppet::Provider::Sahara < Puppet::Provider::Openstack
   def self.reset
     @sahara_conf = nil
     @sahara_credentials = nil
+    @auth_endpoint = nil
   end
 end
