@@ -6,6 +6,7 @@ class sahara::params {
   include openstacklib::defaults
 
   $client_package_name = 'python3-saharaclient'
+  $user                = 'sahara'
   $group               = 'sahara'
 
   case $::osfamily {
