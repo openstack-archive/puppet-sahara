@@ -27,6 +27,7 @@ class Puppet::Provider::Sahara < Puppet::Provider::Openstack
   end
 
   def self.sahara_request(service, action, error, properties=nil)
+    warning('Usage of keystone_authtoken parameters is deprecated.')
     properties ||= []
     @credentials.username = sahara_credentials['username']
     @credentials.password = sahara_credentials['password']
