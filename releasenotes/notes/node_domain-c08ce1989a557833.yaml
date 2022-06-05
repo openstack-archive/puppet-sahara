@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    The new ``sahara::node_domain`` parameter has been added.

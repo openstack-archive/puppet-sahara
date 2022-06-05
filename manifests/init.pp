@@ -25,6 +25,10 @@
 #   (Optional) Whether to use floating IPs to communicate with instances.
 #   Defaults to $::os_service_default.
 #
+# [*node_domain*]
+#   (Optional) The suffix of the node's FQDN.
+#   Defaults to $::os_service_default.
+#
 # [*use_ssl*]
 #   (optional) Enable SSL on the API server
 #   Defaults to $::os_service_default, not set.
@@ -207,6 +211,7 @@ class sahara(
   $port                        = $::os_service_default,
   $plugins                     = $::os_service_default,
   $use_floating_ips            = $::os_service_default,
+  $node_domain                 = $::os_service_default,
   $use_ssl                     = $::os_service_default,
   $ca_file                     = $::os_service_default,
   $cert_file                   = $::os_service_default,
@@ -265,6 +270,7 @@ class sahara(
   sahara_config {
     'DEFAULT/plugins':            value => join(any2array($plugins),',');
     'DEFAULT/use_floating_ips':   value => $use_floating_ips;
+    'DEFAULT/node_domain':        value => $node_domain;
     'DEFAULT/host':               value => $host;
     'DEFAULT/port':               value => $port;
     'DEFAULT/default_ntp_server': value => $default_ntp_server;
