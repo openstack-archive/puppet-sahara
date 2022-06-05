@@ -1,0 +1,7 @@
+---
+features:
+  - |
+    The ``sahara`` class now supports the following two parameters.
+
+    - ``use_designate``
+    - ``nameservers``

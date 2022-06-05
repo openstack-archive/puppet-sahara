@@ -29,6 +29,14 @@
 #   (Optional) The suffix of the node's FQDN.
 #   Defaults to $::os_service_default.
 #
+# [*use_designate*]
+#   (Optional) Use Designate for internal and external hostnames resolution.
+#   Defaults to $::os_service_default.
+#
+# [*nameservers*]
+#   (Optional) IP addresses of Designate nameservers.
+#   Defaults to $::os_service_default.
+#
 # [*use_ssl*]
 #   (optional) Enable SSL on the API server
 #   Defaults to $::os_service_default, not set.
@@ -212,6 +220,8 @@ class sahara(
   $plugins                     = $::os_service_default,
   $use_floating_ips            = $::os_service_default,
   $node_domain                 = $::os_service_default,
+  $use_designate               = $::os_service_default,
+  $nameservers                 = $::os_service_default,
   $use_ssl                     = $::os_service_default,
   $ca_file                     = $::os_service_default,
   $cert_file                   = $::os_service_default,
@@ -271,6 +281,8 @@ class sahara(
     'DEFAULT/plugins':            value => join(any2array($plugins),',');
     'DEFAULT/use_floating_ips':   value => $use_floating_ips;
     'DEFAULT/node_domain':        value => $node_domain;
+    'DEFAULT/use_designate':      value => $use_designate;
+    'DEFAULT/nameservers':        value => join(any2array($nameservers), ',');
     'DEFAULT/host':               value => $host;
     'DEFAULT/port':               value => $port;
     'DEFAULT/default_ntp_server': value => $default_ntp_server;

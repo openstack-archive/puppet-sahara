@@ -29,6 +29,8 @@ describe 'sahara' do
     context 'with default params' do
       it { is_expected.to contain_sahara_config('DEFAULT/use_floating_ips').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_sahara_config('DEFAULT/node_domain').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_sahara_config('DEFAULT/use_designate').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_sahara_config('DEFAULT/nameservers').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_sahara_config('DEFAULT/host').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_sahara_config('DEFAULT/port').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_sahara_config('DEFAULT/plugins').with_value('<SERVICE DEFAULT>') }
