@@ -33,7 +33,7 @@ describe 'Puppet::Type.type(:sahara_config)' do
     expect(@sahara_config[:value]).to eq(['bar'])
   end
 
-  it 'should not accept a value with whitespace' do
+  it 'should accept a value with whitespace' do
     @sahara_config[:value] = 'b ar'
     expect(@sahara_config[:value]).to eq(['b ar'])
   end

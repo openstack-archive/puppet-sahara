@@ -33,7 +33,7 @@ describe 'Puppet::Type.type(:sahara_api_uwsgi_config)' do
     expect(@sahara_api_uwsgi_config[:value]).to eq('bar')
   end
 
-  it 'should not accept a value with whitespace' do
+  it 'should accept a value with whitespace' do
     @sahara_api_uwsgi_config[:value] = 'b ar'
     expect(@sahara_api_uwsgi_config[:value]).to eq('b ar')
   end
