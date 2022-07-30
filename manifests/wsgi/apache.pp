@@ -87,6 +87,14 @@
 #   { python-path => '/my/python/virtualenv' }
 #   Defaults to {}
 #
+# [*headers*]
+#   (Optional) Headers for the vhost.
+#   Defaults to undef
+#
+# [*request_headers*]
+#   (Optional) Modifies collected request headers in various ways.
+#   Defaults to undef
+#
 # == Example:
 #
 #   include apache
@@ -113,6 +121,8 @@ class sahara::wsgi::apache (
   $access_log_format           = false,
   $error_log_file              = undef,
   $custom_wsgi_process_options = {},
+  $headers                     = undef,
+  $request_headers             = undef,
 ) {
 
   include sahara::deps
@@ -144,6 +154,8 @@ class sahara::wsgi::apache (
     wsgi_script_dir             => $::sahara::params::sahara_wsgi_script_path,
     wsgi_script_file            => 'app',
     wsgi_script_source          => $::sahara::params::sahara_wsgi_script_source,
+    headers                     => $headers,
+    request_headers             => $request_headers,
     access_log_file             => $access_log_file,
     access_log_format           => $access_log_format,
     error_log_file              => $error_log_file,
