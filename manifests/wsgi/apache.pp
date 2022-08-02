@@ -47,7 +47,7 @@
 #
 # [*priority*]
 #   (Optional) The priority for the vhost.
-#   Defaults to '10'
+#   Defaults to 10
 #
 # [*threads*]
 #   (Optional) The number of threads for the vhost.
@@ -69,11 +69,11 @@
 #
 # [*access_log_file*]
 #   (Optional) The log file name for the virtualhost.
-#   Defaults to false
+#   Defaults to undef
 #
 # [*access_log_format*]
 #   (Optional) The log format for the virtualhost.
-#   Defaults to false
+#   Defaults to undef
 #
 # [*error_log_file*]
 #   (Optional) The error log file name for the virtualhost.
@@ -116,9 +116,9 @@ class sahara::wsgi::apache (
   $ssl_certs_dir               = undef,
   $wsgi_process_display_name   = undef,
   $threads                     = 1,
-  $priority                    = '10',
-  $access_log_file             = false,
-  $access_log_format           = false,
+  $priority                    = 10,
+  $access_log_file             = undef,
+  $access_log_format           = undef,
   $error_log_file              = undef,
   $custom_wsgi_process_options = {},
   $headers                     = undef,
