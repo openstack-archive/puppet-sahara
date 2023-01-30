@@ -28,7 +28,7 @@ describe provider_class do
     describe 'managing template' do
       describe '#create' do
         it 'creates a template' do
-          subject.class.expects(:request)
+          expect(subject.class).to receive(:request)
             .with('dataprocessing node group template', 'create', ['--name', 'node_group_template_1', '--plugin', 'plugin_name', '--plugin-version', 'some_version', '--auto-security-group', '--flavor', 'small', '--processes', ['process1', 'process2']])
           provider.create
         end
@@ -36,8 +36,8 @@ describe provider_class do
 
       describe '#destroy' do
         it 'destroys a template' do
-          subject.stubs(:id).returns('19e4d640-e88f-4241-9475-0543c2bc412b')
-          subject.class.expects(:request)
+          allow(subject).to receive(:id).and_return('19e4d640-e88f-4241-9475-0543c2bc412b')
+          expect(subject.class).to receive(:request)
             .with('dataprocessing node group template', 'delete', '19e4d640-e88f-4241-9475-0543c2bc412b')
           provider.destroy
         end
@@ -58,9 +58,9 @@ describe provider_class do
             auto_security_group: "True",
           }
 
-          subject.class.expects(:request)
+          expect(subject.class).to receive(:request)
             .with('dataprocessing node group template', 'show', '33c85b61-e9b3-468a-ab06-ef60091c68b6')
-            .returns(hash)
+            .and_return(hash)
 
           hash = {
             flavor_id: "small",
@@ -74,9 +74,9 @@ describe provider_class do
             auto_security_group: "True",
           }
 
-          subject.class.expects(:request)
+          expect(subject.class).to receive(:request)
             .with('dataprocessing node group template', 'show', '19e4d640-e88f-4241-9475-0543c2bc412b')
-            .returns(hash)
+            .and_return(hash)
 
           list = [
             {
@@ -93,9 +93,9 @@ describe provider_class do
             }
           ]
 
-          subject.class.expects(:request)
+          expect(subject.class).to receive(:request)
             .with('dataprocessing node group template', 'list')
-            .returns(list)
+            .and_return(list)
           instances = provider_class.instances
           expect(instances.count).to eq(2)
           expect(instances[0].name).to eq('node_group_template_1')
