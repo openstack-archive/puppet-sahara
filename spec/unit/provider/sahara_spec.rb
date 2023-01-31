@@ -15,8 +15,8 @@ describe Puppet::Provider::Sahara do
 
     it 'should fail if no auth params are passed and the glance config file does not have the expected contents' do
       mock = {}
-      Puppet::Util::IniConfig::File.expects(:new).returns(mock)
-      mock.expects(:read).with('/etc/sahara/sahara.conf')
+      expect(Puppet::Util::IniConfig::File).to receive(:new).and_return(mock)
+      expect(mock).to receive(:read).with('/etc/sahara/sahara.conf')
       expect do
         klass.sahara_credentials
       end.to raise_error(Puppet::Error, /Can not to authenticate Sahara/)
@@ -39,8 +39,8 @@ describe Puppet::Provider::Sahara do
           'password'     => 'password',
         }
       }
-      Puppet::Util::IniConfig::File.expects(:new).returns(mock)
-      mock.expects(:read).with('/etc/sahara/sahara.conf')
+      expect(Puppet::Util::IniConfig::File).to receive(:new).and_return(mock)
+      expect(mock).to receive(:read).with('/etc/sahara/sahara.conf')
       expect(klass.sahara_credentials).to eq(creds_hash)
     end
 
