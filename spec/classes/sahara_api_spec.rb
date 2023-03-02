@@ -114,7 +114,7 @@ describe 'sahara::service::api' do
         facts.merge(OSDefaults.get_facts)
       end
 
-      case facts[:osfamily]
+      case facts[:os]['family']
       when 'Debian'
         let (:platform_params) do
           {
@@ -131,7 +131,7 @@ describe 'sahara::service::api' do
         end
       end
 
-      if facts[:operatingsystem] == 'Ubuntu'
+      if facts[:os]['name'] == 'Ubuntu'
         it_behaves_like 'sahara-api eventlet ubuntu'
         it_behaves_like 'sahara-api wsgi ubuntu'
       else

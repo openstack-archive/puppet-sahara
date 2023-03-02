@@ -94,7 +94,7 @@ describe 'sahara::service::engine' do
         facts.merge(OSDefaults.get_facts)
       end
 
-      case facts[:osfamily]
+      case facts[:os]['family']
       when 'Debian'
         let (:platform_params) do
           {

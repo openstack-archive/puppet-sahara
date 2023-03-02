@@ -10,48 +10,48 @@
 #
 # [*host*]
 #   (Optional) Hostname for sahara to listen on
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*port*]
 #   (Optional) Port for sahara to listen on
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*plugins*]
 #   (Optional) List of plugins to be loaded.
 #   Sahara preserves the order of the list when returning it.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*use_floating_ips*]
 #   (Optional) Whether to use floating IPs to communicate with instances.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*node_domain*]
 #   (Optional) The suffix of the node's FQDN.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*use_designate*]
 #   (Optional) Use Designate for internal and external hostnames resolution.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*nameservers*]
 #   (Optional) IP addresses of Designate nameservers.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*use_ssl*]
 #   (optional) Enable SSL on the API server
-#   Defaults to $::os_service_default, not set.
+#   Defaults to $facts['os_service_default'], not set.
 #
 # [*cert_file*]
 #   (optinal) Certificate file to use when starting API server securely
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*key_file*]
 #   (optional) Private key file to use when starting API server securely
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*ca_file*]
 #   (optional) CA certificate file to use to verify connecting clients
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # == database configuration options
 #
@@ -65,39 +65,39 @@
 #    (optional) A URL representing the messaging driver to use and its full
 #    configuration. Transport URLs take the form:
 #      transport://user:pass@host1:port[,hostN:portN]/virtual_host
-#    Defaults to $::os_service_default
+#    Defaults to $facts['os_service_default']
 #
 # [*rpc_response_timeout*]
 #  (Optional) Seconds to wait for a response from a call.
-#  Defaults to $::os_service_default
+#  Defaults to $facts['os_service_default']
 #
 # [*control_exchange*]
 #   (Optional) The default exchange to scope topics.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*amqp_durable_queues*]
 #   (optional) Use durable queues in AMQP
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*rabbit_ha_queues*]
 #   (Optional) Use durable queues in RabbitMQ.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*rabbit_use_ssl*]
 #   (Optional) Connect over SSL for RabbitMQ.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*rabbit_login_method*]
 #   (Optional) Method to auth with the rabbit server.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*rabbit_retry_interval*]
 #   (Optional) Reconnection attempt frequency for rabbit.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*rabbit_retry_backoff*]
 #   (Optional) Backoff between reconnection attempts for rabbit.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*rabbit_heartbeat_in_pthread*]
 #   (Optional) EXPERIMENTAL: Run the health check heartbeat thread
@@ -107,102 +107,102 @@
 #   example if the parent process have monkey patched the
 #   stdlib by using eventlet/greenlet then the heartbeat
 #   will be run through a green thread.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 #  [*kombu_ssl_version*]
 #    (optional) SSL version to use (valid only if SSL enabled).
 #    Valid values are TLSv1, SSLv23 and SSLv3. SSLv2 may be
 #    available on some distributions.
-#    Defaults to $::os_service_default.
+#    Defaults to $facts['os_service_default'].
 #
 # [*kombu_ssl_keyfile*]
 #   (Optional) SSL key file (valid only if SSL enabled).
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*kombu_ssl_certfile*]
 #   (Optional) SSL cert file (valid only if SSL enabled).
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*kombu_ssl_ca_certs*]
 #   (Optional) SSL certification authority file (valid only if SSL enabled).
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*kombu_reconnect_delay*]
 #   (Optional) Backoff on cancel notification (valid only if SSL enabled).
 #   (floating-point value)
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*kombu_failover_strategy*]
 #   (Optional) Determines how the next RabbitMQ node is chosen in case the one
 #   we are currently connected to becomes unavailable. Takes effect only if
 #   more than one RabbitMQ node is provided in config. (string value)
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*kombu_compression*]
 #   (optional) Possible values are: gzip, bz2. If not set compression will not
 #   be used. This option may notbe available in future versions. EXPERIMENTAL.
 #   (string value)
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*amqp_server_request_prefix*]
 #   (Optional) Address prefix used when sending to a specific server
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*amqp_broadcast_prefix*]
 #   (Optional) address prefix used when broadcasting to all servers
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*amqp_group_request_prefix*]
 #   (Optional) address prefix when sending to any server in group
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*amqp_container_name*]
 #   (Optional) Name for the AMQP container
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*amqp_idle_timeout*]
 #   (Optional) Timeout for inactive connections
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*amqp_trace*]
 #   (Optional) Debug: dump AMQP frames to stdout
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*amqp_ssl_ca_file*]
 #   (Optional) CA certificate PEM file to verify server certificate
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*amqp_ssl_cert_file*]
 #   (Optional) Identifying certificate PEM file to present to clients
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*amqp_ssl_key_file*]
 #   (Optional) Private key PEM file used to sign cert_file certificate
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*amqp_ssl_key_password*]
 #   (Optional) Password for decrypting ssl_key_file (if encrypted)
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*amqp_sasl_mechanisms*]
 #   (Optional) Space separated list of acceptable SASL mechanisms
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*amqp_sasl_config_dir*]
 #   (Optional) Path to directory that contains the SASL configuration
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*amqp_sasl_config_name*]
 #   (Optional) Name of configuration file (without .conf suffix)
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*amqp_username*]
 #   (Optional) User name for message broker authentication
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*amqp_password*]
 #   (Optional) Password for message broker authentication
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*purge_config*]
 #   (optional) Whether to set only the specified config options
@@ -211,56 +211,56 @@
 #
 # [*default_ntp_server*]
 #   (optional) default ntp server to be used by the cluster instances
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 class sahara(
   $package_ensure              = 'present',
-  $host                        = $::os_service_default,
-  $port                        = $::os_service_default,
-  $plugins                     = $::os_service_default,
-  $use_floating_ips            = $::os_service_default,
-  $node_domain                 = $::os_service_default,
-  $use_designate               = $::os_service_default,
-  $nameservers                 = $::os_service_default,
-  $use_ssl                     = $::os_service_default,
-  $ca_file                     = $::os_service_default,
-  $cert_file                   = $::os_service_default,
-  $key_file                    = $::os_service_default,
+  $host                        = $facts['os_service_default'],
+  $port                        = $facts['os_service_default'],
+  $plugins                     = $facts['os_service_default'],
+  $use_floating_ips            = $facts['os_service_default'],
+  $node_domain                 = $facts['os_service_default'],
+  $use_designate               = $facts['os_service_default'],
+  $nameservers                 = $facts['os_service_default'],
+  $use_ssl                     = $facts['os_service_default'],
+  $ca_file                     = $facts['os_service_default'],
+  $cert_file                   = $facts['os_service_default'],
+  $key_file                    = $facts['os_service_default'],
   $sync_db                     = true,
-  $default_transport_url       = $::os_service_default,
-  $rpc_response_timeout        = $::os_service_default,
-  $control_exchange            = $::os_service_default,
-  $amqp_durable_queues         = $::os_service_default,
-  $rabbit_ha_queues            = $::os_service_default,
-  $rabbit_use_ssl              = $::os_service_default,
-  $rabbit_login_method         = $::os_service_default,
-  $rabbit_retry_interval       = $::os_service_default,
-  $rabbit_retry_backoff        = $::os_service_default,
-  $rabbit_heartbeat_in_pthread = $::os_service_default,
-  $kombu_ssl_version           = $::os_service_default,
-  $kombu_ssl_keyfile           = $::os_service_default,
-  $kombu_ssl_certfile          = $::os_service_default,
-  $kombu_ssl_ca_certs          = $::os_service_default,
-  $kombu_reconnect_delay       = $::os_service_default,
-  $kombu_failover_strategy     = $::os_service_default,
-  $kombu_compression           = $::os_service_default,
-  $amqp_server_request_prefix  = $::os_service_default,
-  $amqp_broadcast_prefix       = $::os_service_default,
-  $amqp_group_request_prefix   = $::os_service_default,
-  $amqp_container_name         = $::os_service_default,
-  $amqp_idle_timeout           = $::os_service_default,
-  $amqp_trace                  = $::os_service_default,
-  $amqp_ssl_ca_file            = $::os_service_default,
-  $amqp_ssl_cert_file          = $::os_service_default,
-  $amqp_ssl_key_file           = $::os_service_default,
-  $amqp_ssl_key_password       = $::os_service_default,
-  $amqp_sasl_mechanisms        = $::os_service_default,
-  $amqp_sasl_config_dir        = $::os_service_default,
-  $amqp_sasl_config_name       = $::os_service_default,
-  $amqp_username               = $::os_service_default,
-  $amqp_password               = $::os_service_default,
+  $default_transport_url       = $facts['os_service_default'],
+  $rpc_response_timeout        = $facts['os_service_default'],
+  $control_exchange            = $facts['os_service_default'],
+  $amqp_durable_queues         = $facts['os_service_default'],
+  $rabbit_ha_queues            = $facts['os_service_default'],
+  $rabbit_use_ssl              = $facts['os_service_default'],
+  $rabbit_login_method         = $facts['os_service_default'],
+  $rabbit_retry_interval       = $facts['os_service_default'],
+  $rabbit_retry_backoff        = $facts['os_service_default'],
+  $rabbit_heartbeat_in_pthread = $facts['os_service_default'],
+  $kombu_ssl_version           = $facts['os_service_default'],
+  $kombu_ssl_keyfile           = $facts['os_service_default'],
+  $kombu_ssl_certfile          = $facts['os_service_default'],
+  $kombu_ssl_ca_certs          = $facts['os_service_default'],
+  $kombu_reconnect_delay       = $facts['os_service_default'],
+  $kombu_failover_strategy     = $facts['os_service_default'],
+  $kombu_compression           = $facts['os_service_default'],
+  $amqp_server_request_prefix  = $facts['os_service_default'],
+  $amqp_broadcast_prefix       = $facts['os_service_default'],
+  $amqp_group_request_prefix   = $facts['os_service_default'],
+  $amqp_container_name         = $facts['os_service_default'],
+  $amqp_idle_timeout           = $facts['os_service_default'],
+  $amqp_trace                  = $facts['os_service_default'],
+  $amqp_ssl_ca_file            = $facts['os_service_default'],
+  $amqp_ssl_cert_file          = $facts['os_service_default'],
+  $amqp_ssl_key_file           = $facts['os_service_default'],
+  $amqp_ssl_key_password       = $facts['os_service_default'],
+  $amqp_sasl_mechanisms        = $facts['os_service_default'],
+  $amqp_sasl_config_dir        = $facts['os_service_default'],
+  $amqp_sasl_config_name       = $facts['os_service_default'],
+  $amqp_username               = $facts['os_service_default'],
+  $amqp_password               = $facts['os_service_default'],
   $purge_config                = false,
-  $default_ntp_server          = $::os_service_default,
+  $default_ntp_server          = $facts['os_service_default'],
 ) {
 
   include sahara::deps

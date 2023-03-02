@@ -7,7 +7,7 @@
 # [*api_workers*]
 #   (Optional) Number of workers for Sahara API service
 #   0 means all-in-one-thread configuration
-#   Defaults to $::os_workers
+#   Defaults to $facts['os_workers']
 #
 # [*enabled*]
 #   (Optional) Should the service be enabled.
@@ -31,7 +31,7 @@
 #   Defaults to '$::sahara::params::api_service_name'
 #
 class sahara::service::api (
-  $api_workers    = $::os_workers,
+  $api_workers    = $facts['os_workers'],
   $enabled        = true,
   $manage_service = true,
   $package_ensure = 'present',
@@ -41,7 +41,7 @@ class sahara::service::api (
   include sahara::deps
   include sahara::policy
 
-  if $::operatingsystem == 'Ubuntu' and $service_name == $::sahara::params::api_service_name {
+  if $facts['os']['name'] == 'Ubuntu' and $service_name == $::sahara::params::api_service_name {
     fail('The Sahara API must be run with WSGI on Ubuntu')
   }
 
@@ -72,7 +72,7 @@ class sahara::service::api (
         tag        => 'sahara-service',
       }
     } elsif $service_name == 'httpd' {
-      if $::operatingsystem != 'Ubuntu' {
+      if $facts['os']['name'] != 'Ubuntu' {
         service { 'sahara-api':
           ensure => 'stopped',
           name   => $::sahara::params::api_service_name,

@@ -9,7 +9,7 @@ class sahara::params {
   $user                = 'sahara'
   $group               = 'sahara'
 
-  case $::osfamily {
+  case $facts['os']['family'] {
     'RedHat': {
       $common_package_name       = 'openstack-sahara-common'
       $api_package_name          = 'openstack-sahara-api'
@@ -29,8 +29,7 @@ class sahara::params {
       $sahara_wsgi_script_source = '/usr/bin/sahara-wsgi-api'
     }
     default: {
-      fail("Unsupported osfamily: ${::osfamily} operatingsystem: ${::operatingsystem}, \
-module ${module_name} only support osfamily RedHat and Debian")
+      fail("Unsupported osfamily: ${facts['os']['family']}")
     }
   }
 }

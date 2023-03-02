@@ -44,7 +44,7 @@ class { 'sahara::service::api':
 # these and fix the apache configuration for you but the Ubuntu packages
 # requires these files to exist for upgrading the sahara-api package to not
 # break.
-if ($::operatingsystem == 'Ubuntu') and (versioncmp($::operatingsystemmajrelease, '18') >= 0) {
+if ($facts['os']['name'] == 'Ubuntu') {
   ensure_resource('file', '/etc/apache2/sites-available/sahara-api.conf', {
     'ensure'  => 'present',
     'content' => '',

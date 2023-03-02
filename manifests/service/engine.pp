@@ -18,56 +18,56 @@
 #
 # [*periodic_enable*]
 #   (Optional) Enable periodic tasks.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*periodic_fuzzy_delay*]
 #   (Optional) Range in seconds to randomly delay when starting the periodic
 #   task scheduler to reduse stampending.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*periodic_interval_max*]
 #   (Optional) Max interval size between periodic tasks execution in seconds.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*min_transient_cluster_active_time*]
 #   (Optional) Minimal "lifetime" in seconds for a transient cluster.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*cleanup_time_for_incomplete_clusters*]
 #   (Optional) Maximal time (in hours) for clusters allowed to be in states
 #   other than "Active", "Deleting" or "Error".
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*periodic_coordinator_backend_url*]
 #   (Optional) The backend URL to use for distributed periodic tasks
 #   coordination.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*periodic_workers_number*]
 #   (Optional) Number of threads to run periodic tasks.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*coordinator_heartbeat_interval*]
 #   (Optional) Interval size between heartbeat execution in seconds.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*hash_ring_replicas_count*]
 #   (Optional) Number of points that belongs to each number on a hash ring.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 class sahara::service::engine (
   $enabled                              = true,
   $manage_service                       = true,
   $package_ensure                       = 'present',
-  $periodic_enable                      = $::os_service_default,
-  $periodic_fuzzy_delay                 = $::os_service_default,
-  $periodic_interval_max                = $::os_service_default,
-  $min_transient_cluster_active_time    = $::os_service_default,
-  $cleanup_time_for_incomplete_clusters = $::os_service_default,
-  $periodic_coordinator_backend_url     = $::os_service_default,
-  $periodic_workers_number              = $::os_service_default,
-  $coordinator_heartbeat_interval       = $::os_service_default,
-  $hash_ring_replicas_count             = $::os_service_default,
+  $periodic_enable                      = $facts['os_service_default'],
+  $periodic_fuzzy_delay                 = $facts['os_service_default'],
+  $periodic_interval_max                = $facts['os_service_default'],
+  $min_transient_cluster_active_time    = $facts['os_service_default'],
+  $cleanup_time_for_incomplete_clusters = $facts['os_service_default'],
+  $periodic_coordinator_backend_url     = $facts['os_service_default'],
+  $periodic_workers_number              = $facts['os_service_default'],
+  $coordinator_heartbeat_interval       = $facts['os_service_default'],
+  $hash_ring_replicas_count             = $facts['os_service_default'],
 ) {
 
   include sahara::deps
