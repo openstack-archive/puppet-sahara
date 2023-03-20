@@ -107,7 +107,7 @@ class sahara::service::engine (
     'DEFAULT/periodic_interval_max':                value => $periodic_interval_max;
     'DEFAULT/min_transient_cluster_active_time':    value => $min_transient_cluster_active_time;
     'DEFAULT/cleanup_time_for_incomplete_clusters': value => $cleanup_time_for_incomplete_clusters;
-    'DEFAULT/periodic_coordinator_backend_url':     value => $periodic_coordinator_backend_url;
+    'DEFAULT/periodic_coordinator_backend_url':     value => $periodic_coordinator_backend_url, secret => true;
     'DEFAULT/periodic_workers_number':              value => $periodic_workers_number;
     'DEFAULT/coordinator_heartbeat_interval':       value => $coordinator_heartbeat_interval;
     'DEFAULT/hash_ring_replicas_count':             value => $hash_ring_replicas_count;
