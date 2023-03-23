@@ -24,11 +24,8 @@ describe 'basic sahara' do
       apply_manifest(pp, :catch_changes => true)
     end
 
-    if os[:family].casecmp('RedHat') == 0
-      describe port(8386) do
-        it { is_expected.to be_listening.with('tcp') }
-      end
+    describe port(8386) do
+      it { is_expected.to be_listening.with('tcp') }
     end
-
   end
 end
