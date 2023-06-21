@@ -39,7 +39,7 @@
 #
 # [*use_ssl*]
 #   (optional) Enable SSL on the API server
-#   Defaults to $facts['os_service_default'], not set.
+#   Defaults to false
 #
 # [*cert_file*]
 #   (optinal) Certificate file to use when starting API server securely
@@ -222,11 +222,11 @@ class sahara(
   $node_domain                 = $facts['os_service_default'],
   $use_designate               = $facts['os_service_default'],
   $nameservers                 = $facts['os_service_default'],
-  $use_ssl                     = $facts['os_service_default'],
+  Boolean $use_ssl             = false,
   $ca_file                     = $facts['os_service_default'],
   $cert_file                   = $facts['os_service_default'],
   $key_file                    = $facts['os_service_default'],
-  $sync_db                     = true,
+  Boolean $sync_db             = true,
   $default_transport_url       = $facts['os_service_default'],
   $rpc_response_timeout        = $facts['os_service_default'],
   $control_exchange            = $facts['os_service_default'],
@@ -329,7 +329,7 @@ class sahara(
     password              => $amqp_password,
   }
 
-  if ! is_service_default($use_ssl) and $use_ssl {
+  if $use_ssl {
     if is_service_default($cert_file) {
       fail('The cert_file parameter is required when use_ssl is set to true')
     }
@@ -337,9 +337,15 @@ class sahara(
       fail('The key_file parameter is required when use_ssl is set to true')
     }
     sahara_config {
-      'ssl/cert_file' : value => $cert_file;
-      'ssl/key_file' :  value => $key_file;
-      'ssl/ca_file' :   value => $ca_file;
+      'ssl/cert_file': value => $cert_file;
+      'ssl/key_file':  value => $key_file;
+      'ssl/ca_file':   value => $ca_file;
+    }
+  } else {
+    sahara_config {
+      'ssl/cert_file': ensure => absent;
+      'ssl/key_file':  ensure => absent;
+      'ssl/ca_file':   ensure => absent;
     }
   }
 

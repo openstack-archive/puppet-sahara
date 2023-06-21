@@ -33,7 +33,7 @@
 #    Defaults to 'utf8_general_ci'.
 #
 class sahara::db::mysql(
-  $password,
+  String[1] $password,
   $dbname        = 'sahara',
   $user          = 'sahara',
   $host          = '127.0.0.1',
@@ -43,8 +43,6 @@ class sahara::db::mysql(
 ) {
 
   include sahara::deps
-
-  validate_legacy(String, 'validate_string', $password)
 
   ::openstacklib::db::mysql{ 'sahara':
     user          => $user,

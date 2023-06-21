@@ -56,8 +56,8 @@
 #   Defaults to $facts['os_service_default']
 #
 class sahara::service::engine (
-  $enabled                              = true,
-  $manage_service                       = true,
+  Boolean $enabled                      = true,
+  Boolean $manage_service               = true,
   $package_ensure                       = 'present',
   $periodic_enable                      = $facts['os_service_default'],
   $periodic_fuzzy_delay                 = $facts['os_service_default'],

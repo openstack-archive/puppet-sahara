@@ -31,11 +31,11 @@
 #   Defaults to '$::sahara::params::api_service_name'
 #
 class sahara::service::api (
-  $api_workers    = $facts['os_workers'],
-  $enabled        = true,
-  $manage_service = true,
-  $package_ensure = 'present',
-  $service_name   = $::sahara::params::api_service_name,
+  $api_workers            = $facts['os_workers'],
+  Boolean $enabled        = true,
+  Boolean $manage_service = true,
+  $package_ensure         = 'present',
+  $service_name           = $::sahara::params::api_service_name,
 ) inherits sahara::params {
 
   include sahara::deps

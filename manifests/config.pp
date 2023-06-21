@@ -24,14 +24,11 @@
 #   or Puppet catalog compilation will fail with duplicate resources.
 #
 class sahara::config (
-  $sahara_config        = {},
-  $sahara_api_paste_ini = {},
+  Hash $sahara_config        = {},
+  Hash $sahara_api_paste_ini = {},
 ) {
 
   include sahara::deps
-
-  validate_legacy(Hash, 'validate_hash', $sahara_config)
-  validate_legacy(Hash, 'validate_hash', $sahara_api_paste_ini)
 
   create_resources('sahara_config', $sahara_config)
   create_resources('sahara_api_paste_ini', $sahara_api_paste_ini)

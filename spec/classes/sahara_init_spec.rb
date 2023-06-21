@@ -180,9 +180,9 @@ describe 'sahara' do
 
   shared_examples 'sahara ssl' do
     context 'without ssl' do
-      it { is_expected.to_not contain_sahara_config('ssl/ca_file') }
-      it { is_expected.to_not contain_sahara_config('ssl/cert_file') }
-      it { is_expected.to_not contain_sahara_config('ssl/key_file') }
+      it { is_expected.to contain_sahara_config('ssl/ca_file').with_ensure('absent') }
+      it { is_expected.to contain_sahara_config('ssl/cert_file').with_ensure('absent') }
+      it { is_expected.to contain_sahara_config('ssl/key_file').with_ensure('absent') }
     end
 
     context 'with ssl' do
