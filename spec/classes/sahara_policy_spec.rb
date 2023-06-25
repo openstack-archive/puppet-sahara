@@ -33,6 +33,7 @@ describe 'sahara::policy' do
           :file_group   => 'sahara',
           :file_format  => 'yaml',
           :purge_config => false,
+          :tag          => 'sahara',
         )
         is_expected.to contain_oslo__policy('sahara_config').with(
           :enforce_scope        => false,
@@ -63,6 +64,7 @@ describe 'sahara::policy' do
           :file_group   => 'sahara',
           :file_format  => 'yaml',
           :purge_config => true,
+          :tag          => 'sahara',
         )
         is_expected.to contain_oslo__policy('sahara_config').with(
           :enforce_scope        => false,

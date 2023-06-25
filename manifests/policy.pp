@@ -67,6 +67,7 @@ class sahara::policy (
     file_group   => $::sahara::params::group,
     file_format  => 'yaml',
     purge_config => $purge_config,
+    tag          => 'sahara',
   }
 
   create_resources('openstacklib::policy', { $policy_path => $policy_parameters })
