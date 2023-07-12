@@ -5,13 +5,12 @@
 #
 # === Parameters
 #
+# [*password*]
+#   (Required) Password to create for the service user
+#
 # [*username*]
 #   (Optional) The name of the service user
 #   Defaults to 'sahara'
-#
-# [*password*]
-#   (Optional) Password to create for the service user
-#   Defaults to $facts['os_service_default']
 #
 # [*auth_url*]
 #   (Optional) The URL to use for authentication.
@@ -193,8 +192,8 @@
 #  Defaults to $facts['os_service_default'].
 #
 class sahara::keystone::authtoken(
+  String[1] $password,
   $username                       = 'sahara',
-  $password                       = $facts['os_service_default'],
   $auth_url                       = 'http://127.0.0.1:5000/',
   $project_name                   = 'services',
   $user_domain_name               = 'Default',
