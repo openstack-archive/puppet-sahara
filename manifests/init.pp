@@ -259,7 +259,7 @@ class sahara(
   $amqp_sasl_config_name       = $facts['os_service_default'],
   $amqp_username               = $facts['os_service_default'],
   $amqp_password               = $facts['os_service_default'],
-  $purge_config                = false,
+  Boolean $purge_config        = false,
   $default_ntp_server          = $facts['os_service_default'],
 ) {
 
