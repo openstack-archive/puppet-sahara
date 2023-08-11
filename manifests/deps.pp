@@ -43,6 +43,13 @@ class sahara::deps {
   # before dbsync starts
   Oslo::Db<||> -> Anchor['sahara::dbsync::begin']
 
+  # We need openstackclient before marking service end so that sahara
+  # will have clients available to create resources. This tag handles the
+  # openstackclient but indirectly since the client is not available in
+  # all catalogs that don't need the client class (like many spec tests)
+  Package<| tag == 'openstack'|>
+  ~> Anchor['sahara::service::end']
+
   # Installation or config changes will always restart services.
   Anchor['sahara::install::end'] ~> Anchor['sahara::service::begin']
   Anchor['sahara::config::end']  ~> Anchor['sahara::service::begin']
