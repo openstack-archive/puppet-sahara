@@ -32,7 +32,7 @@ class sahara::deps {
   # policy config should occur in the config block also.
   Anchor['sahara::config::begin']
   -> Openstacklib::Policy<| tag == 'sahara' |>
-  ~> Anchor['sahara::config::end']
+  -> Anchor['sahara::config::end']
 
   # On any uwsgi config change, we must restart Sahara API.
   Anchor['sahara::config::begin']
