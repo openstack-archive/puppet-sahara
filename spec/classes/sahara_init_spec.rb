@@ -34,13 +34,32 @@ describe 'sahara' do
       it { is_expected.to contain_sahara_config('DEFAULT/host').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_sahara_config('DEFAULT/port').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_sahara_config('DEFAULT/plugins').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/kombu_compression').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/kombu_failover_strategy').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/heartbeat_in_pthread').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_sahara_config('DEFAULT/transport_url').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_sahara_config('DEFAULT/control_exchange').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_sahara_config('DEFAULT/rpc_response_timeout').with_value('<SERVICE DEFAULT>') }
+
+      it { is_expected.to contain_oslo__messaging__rabbit('sahara_config').with(
+        :rabbit_use_ssl                  => '<SERVICE DEFAULT>',
+        :heartbeat_timeout_threshold     => '<SERVICE DEFAULT>',
+        :heartbeat_rate                  => '<SERVICE DEFAULT>',
+        :heartbeat_in_pthread            => '<SERVICE DEFAULT>',
+        :kombu_reconnect_delay           => '<SERVICE DEFAULT>',
+        :kombu_failover_strategy         => '<SERVICE DEFAULT>',
+        :amqp_durable_queues             => '<SERVICE DEFAULT>',
+        :kombu_compression               => '<SERVICE DEFAULT>',
+        :kombu_ssl_ca_certs              => '<SERVICE DEFAULT>',
+        :kombu_ssl_certfile              => '<SERVICE DEFAULT>',
+        :kombu_ssl_keyfile               => '<SERVICE DEFAULT>',
+        :kombu_ssl_version               => '<SERVICE DEFAULT>',
+        :rabbit_ha_queues                => '<SERVICE DEFAULT>',
+        :rabbit_retry_interval           => '<SERVICE DEFAULT>',
+        :rabbit_quorum_queue             => '<SERVICE DEFAULT>',
+        :rabbit_quorum_delivery_limit    => '<SERVICE DEFAULT>',
+        :rabbit_quorum_max_memory_length => '<SERVICE DEFAULT>',
+        :rabbit_quorum_max_memory_bytes  => '<SERVICE DEFAULT>',
+      ) }
+      it { is_expected.to contain_oslo__messaging__default('sahara_config').with(
+        :transport_url        => '<SERVICE DEFAULT>',
+        :rpc_response_timeout => '<SERVICE DEFAULT>',
+        :control_exchange     => '<SERVICE DEFAULT>'
+      ) }
       it { is_expected.to contain_sahara_config('DEFAULT/default_ntp_server').with_value('<SERVICE DEFAULT>') }
     end
 
@@ -67,30 +86,36 @@ describe 'sahara' do
   end
 
   shared_examples 'sahara rpc' do
-
-    context 'when defaults with rabbit pass specified' do
-       it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('<SERVICE DEFAULT>') }
-       it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/amqp_durable_queues').with_value('<SERVICE DEFAULT>') }
-    end
-
     context 'when passing params' do
       before do
         params.merge!({
-          :rabbit_ha_queues            => 'true',
-          :amqp_durable_queues         => 'true',
-          :rabbit_heartbeat_in_pthread => 'true',
-          :kombu_reconnect_delay       => '1.0',
-          :kombu_compression           => 'gzip',
-          :kombu_failover_strategy     => 'round-robin',
+          :rabbit_ha_queues                => true,
+          :amqp_durable_queues             => true,
+          :rabbit_heartbeat_in_pthread     => true,
+          :kombu_reconnect_delay           => '1.0',
+          :kombu_compression               => 'gzip',
+          :kombu_failover_strategy         => 'round-robin',
+          :rabbit_quorum_queue             => true,
+          :rabbit_quorum_delivery_limit    => 3,
+          :rabbit_quorum_max_memory_length => 5,
+          :rabbit_quorum_max_memory_bytes  => 1073741824,
         })
       end
 
-      it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('true') }
-      it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/amqp_durable_queues').with_value('true') }
-      it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/heartbeat_in_pthread').with_value('true') }
-      it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('1.0') }
-      it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/kombu_compression').with_value('gzip') }
-      it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/kombu_failover_strategy').with_value('round-robin') }
+      it { is_expected.to contain_oslo__messaging__rabbit('sahara_config').with(
+        :rabbit_use_ssl                  => '<SERVICE DEFAULT>',
+        :heartbeat_timeout_threshold     => '<SERVICE DEFAULT>',
+        :heartbeat_rate                  => '<SERVICE DEFAULT>',
+        :heartbeat_in_pthread            => true,
+        :kombu_reconnect_delay           => '1.0',
+        :kombu_failover_strategy         => 'round-robin',
+        :amqp_durable_queues             => true,
+        :kombu_compression               => 'gzip',
+        :rabbit_quorum_queue             => true,
+        :rabbit_quorum_delivery_limit    => 3,
+        :rabbit_quorum_max_memory_length => 5,
+        :rabbit_quorum_max_memory_bytes  => 1073741824,
+      ) }
     end
 
     context 'with rabbit ssl cert parameters' do
@@ -115,43 +140,34 @@ describe 'sahara' do
     context 'with rabbit ssl disabled' do
       before do
         params.merge!({
-          :rabbit_use_ssl     => false,
+          :rabbit_use_ssl => false,
         })
       end
 
       it { is_expected.to contain_oslo__messaging__rabbit('sahara_config').with(
-        :rabbit_use_ssl     => false,
+        :rabbit_use_ssl => false,
       )}
-    end
-
-    context 'when passing params for single rabbit host' do
-      before do
-        params.merge!({
-          :rabbit_ha_queues => true,
-        })
-      end
-
-      it { is_expected.to contain_sahara_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('true') }
     end
 
     context 'with amqp rpc' do
 
       context 'with default parameters' do
-        it { is_expected.to contain_sahara_config('oslo_messaging_amqp/server_request_prefix').with_value('<SERVICE DEFAULT>') }
-        it { is_expected.to contain_sahara_config('oslo_messaging_amqp/broadcast_prefix').with_value('<SERVICE DEFAULT>') }
-        it { is_expected.to contain_sahara_config('oslo_messaging_amqp/group_request_prefix').with_value('<SERVICE DEFAULT>') }
-        it { is_expected.to contain_sahara_config('oslo_messaging_amqp/container_name').with_value('<SERVICE DEFAULT>') }
-        it { is_expected.to contain_sahara_config('oslo_messaging_amqp/idle_timeout').with_value('<SERVICE DEFAULT>') }
-        it { is_expected.to contain_sahara_config('oslo_messaging_amqp/trace').with_value('<SERVICE DEFAULT>') }
-        it { is_expected.to contain_sahara_config('oslo_messaging_amqp/ssl_ca_file').with_value('<SERVICE DEFAULT>') }
-        it { is_expected.to contain_sahara_config('oslo_messaging_amqp/ssl_cert_file').with_value('<SERVICE DEFAULT>') }
-        it { is_expected.to contain_sahara_config('oslo_messaging_amqp/ssl_key_file').with_value('<SERVICE DEFAULT>') }
-        it { is_expected.to contain_sahara_config('oslo_messaging_amqp/ssl_key_password').with_value('<SERVICE DEFAULT>') }
-        it { is_expected.to contain_sahara_config('oslo_messaging_amqp/sasl_mechanisms').with_value('<SERVICE DEFAULT>') }
-        it { is_expected.to contain_sahara_config('oslo_messaging_amqp/sasl_config_dir').with_value('<SERVICE DEFAULT>') }
-        it { is_expected.to contain_sahara_config('oslo_messaging_amqp/sasl_config_name').with_value('<SERVICE DEFAULT>') }
-        it { is_expected.to contain_sahara_config('oslo_messaging_amqp/username').with_value('<SERVICE DEFAULT>') }
-        it { is_expected.to contain_sahara_config('oslo_messaging_amqp/password').with_value('<SERVICE DEFAULT>') }
+        it { is_expected.to contain_oslo__messaging__amqp('sahara_config').with(
+          :server_request_prefix => '<SERVICE DEFAULT>',
+          :broadcast_prefix      => '<SERVICE DEFAULT>',
+          :group_request_prefix  => '<SERVICE DEFAULT>',
+          :container_name        => '<SERVICE DEFAULT>',
+          :idle_timeout          => '<SERVICE DEFAULT>',
+          :trace                 => '<SERVICE DEFAULT>',
+          :ssl_ca_file           => '<SERVICE DEFAULT>',
+          :ssl_cert_file         => '<SERVICE DEFAULT>',
+          :ssl_key_file          => '<SERVICE DEFAULT>',
+          :sasl_mechanisms       => '<SERVICE DEFAULT>',
+          :sasl_config_dir       => '<SERVICE DEFAULT>',
+          :sasl_config_name      => '<SERVICE DEFAULT>',
+          :username              => '<SERVICE DEFAULT>',
+          :password              => '<SERVICE DEFAULT>',
+        )}
       end
 
       context 'when pass parameters' do
@@ -167,13 +183,15 @@ describe 'sahara' do
           })
         end
 
-        it { is_expected.to contain_sahara_config('oslo_messaging_amqp/idle_timeout').with_value('60') }
-        it { is_expected.to contain_sahara_config('oslo_messaging_amqp/trace').with_value('true') }
-        it { is_expected.to contain_sahara_config('oslo_messaging_amqp/ssl_ca_file').with_value('/etc/ca.cert') }
-        it { is_expected.to contain_sahara_config('oslo_messaging_amqp/ssl_cert_file').with_value('/etc/certfile') }
-        it { is_expected.to contain_sahara_config('oslo_messaging_amqp/ssl_key_file').with_value('/etc/key') }
-        it { is_expected.to contain_sahara_config('oslo_messaging_amqp/username').with_value('amqp_user') }
-        it { is_expected.to contain_sahara_config('oslo_messaging_amqp/password').with_value('password') }
+        it { is_expected.to contain_oslo__messaging__amqp('sahara_config').with(
+          :idle_timeout          => '60',
+          :trace                 => true,
+          :ssl_ca_file           => '/etc/ca.cert',
+          :ssl_cert_file         => '/etc/certfile',
+          :ssl_key_file          => '/etc/key',
+          :username              => 'amqp_user',
+          :password              => 'password',
+        )}
       end
     end
   end
