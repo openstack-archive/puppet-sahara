@@ -109,6 +109,24 @@
 #   will be run through a green thread.
 #   Defaults to $facts['os_service_default']
 #
+# [*rabbit_quorum_queue*]
+#   (Optional) Use quorum queues in RabbitMQ.
+#   Defaults to $facts['os_service_default']
+#
+# [*rabbit_quorum_delivery_limit*]
+#   (Optional) Each time a message is rdelivered to a consumer, a counter is
+#   incremented. Once the redelivery count exceeds the delivery limit
+#   the message gets dropped or dead-lettered.
+#   Defaults to $facts['os_service_default']
+#
+# [*rabbit_quorum_max_memory_length*]
+#   (Optional) Limit the number of messages in the quorum queue.
+#   Defaults to $facts['os_service_default']
+#
+# [*rabbit_quorum_max_memory_bytes*]
+#   (Optional) Limit the number of memory bytes used by the quorum queue.
+#   Defaults to $facts['os_service_default']
+#
 #  [*kombu_ssl_version*]
 #    (optional) SSL version to use (valid only if SSL enabled).
 #    Valid values are TLSv1, SSLv23 and SSLv3. SSLv2 may be
@@ -214,53 +232,57 @@
 #   Defaults to $facts['os_service_default']
 #
 class sahara(
-  $package_ensure              = 'present',
-  $host                        = $facts['os_service_default'],
-  $port                        = $facts['os_service_default'],
-  $plugins                     = $facts['os_service_default'],
-  $use_floating_ips            = $facts['os_service_default'],
-  $node_domain                 = $facts['os_service_default'],
-  $use_designate               = $facts['os_service_default'],
-  $nameservers                 = $facts['os_service_default'],
-  Boolean $use_ssl             = false,
-  $ca_file                     = $facts['os_service_default'],
-  $cert_file                   = $facts['os_service_default'],
-  $key_file                    = $facts['os_service_default'],
-  Boolean $sync_db             = true,
-  $default_transport_url       = $facts['os_service_default'],
-  $rpc_response_timeout        = $facts['os_service_default'],
-  $control_exchange            = $facts['os_service_default'],
-  $amqp_durable_queues         = $facts['os_service_default'],
-  $rabbit_ha_queues            = $facts['os_service_default'],
-  $rabbit_use_ssl              = $facts['os_service_default'],
-  $rabbit_login_method         = $facts['os_service_default'],
-  $rabbit_retry_interval       = $facts['os_service_default'],
-  $rabbit_retry_backoff        = $facts['os_service_default'],
-  $rabbit_heartbeat_in_pthread = $facts['os_service_default'],
-  $kombu_ssl_version           = $facts['os_service_default'],
-  $kombu_ssl_keyfile           = $facts['os_service_default'],
-  $kombu_ssl_certfile          = $facts['os_service_default'],
-  $kombu_ssl_ca_certs          = $facts['os_service_default'],
-  $kombu_reconnect_delay       = $facts['os_service_default'],
-  $kombu_failover_strategy     = $facts['os_service_default'],
-  $kombu_compression           = $facts['os_service_default'],
-  $amqp_server_request_prefix  = $facts['os_service_default'],
-  $amqp_broadcast_prefix       = $facts['os_service_default'],
-  $amqp_group_request_prefix   = $facts['os_service_default'],
-  $amqp_container_name         = $facts['os_service_default'],
-  $amqp_idle_timeout           = $facts['os_service_default'],
-  $amqp_trace                  = $facts['os_service_default'],
-  $amqp_ssl_ca_file            = $facts['os_service_default'],
-  $amqp_ssl_cert_file          = $facts['os_service_default'],
-  $amqp_ssl_key_file           = $facts['os_service_default'],
-  $amqp_ssl_key_password       = $facts['os_service_default'],
-  $amqp_sasl_mechanisms        = $facts['os_service_default'],
-  $amqp_sasl_config_dir        = $facts['os_service_default'],
-  $amqp_sasl_config_name       = $facts['os_service_default'],
-  $amqp_username               = $facts['os_service_default'],
-  $amqp_password               = $facts['os_service_default'],
-  Boolean $purge_config        = false,
-  $default_ntp_server          = $facts['os_service_default'],
+  $package_ensure                  = 'present',
+  $host                            = $facts['os_service_default'],
+  $port                            = $facts['os_service_default'],
+  $plugins                         = $facts['os_service_default'],
+  $use_floating_ips                = $facts['os_service_default'],
+  $node_domain                     = $facts['os_service_default'],
+  $use_designate                   = $facts['os_service_default'],
+  $nameservers                     = $facts['os_service_default'],
+  Boolean $use_ssl                 = false,
+  $ca_file                         = $facts['os_service_default'],
+  $cert_file                       = $facts['os_service_default'],
+  $key_file                        = $facts['os_service_default'],
+  Boolean $sync_db                 = true,
+  $default_transport_url           = $facts['os_service_default'],
+  $rpc_response_timeout            = $facts['os_service_default'],
+  $control_exchange                = $facts['os_service_default'],
+  $amqp_durable_queues             = $facts['os_service_default'],
+  $rabbit_ha_queues                = $facts['os_service_default'],
+  $rabbit_use_ssl                  = $facts['os_service_default'],
+  $rabbit_login_method             = $facts['os_service_default'],
+  $rabbit_retry_interval           = $facts['os_service_default'],
+  $rabbit_retry_backoff            = $facts['os_service_default'],
+  $rabbit_heartbeat_in_pthread     = $facts['os_service_default'],
+  $rabbit_quorum_queue             = $facts['os_service_default'],
+  $rabbit_quorum_delivery_limit    = $facts['os_service_default'],
+  $rabbit_quorum_max_memory_length = $facts['os_service_default'],
+  $rabbit_quorum_max_memory_bytes  = $facts['os_service_default'],
+  $kombu_ssl_version               = $facts['os_service_default'],
+  $kombu_ssl_keyfile               = $facts['os_service_default'],
+  $kombu_ssl_certfile              = $facts['os_service_default'],
+  $kombu_ssl_ca_certs              = $facts['os_service_default'],
+  $kombu_reconnect_delay           = $facts['os_service_default'],
+  $kombu_failover_strategy         = $facts['os_service_default'],
+  $kombu_compression               = $facts['os_service_default'],
+  $amqp_server_request_prefix      = $facts['os_service_default'],
+  $amqp_broadcast_prefix           = $facts['os_service_default'],
+  $amqp_group_request_prefix       = $facts['os_service_default'],
+  $amqp_container_name             = $facts['os_service_default'],
+  $amqp_idle_timeout               = $facts['os_service_default'],
+  $amqp_trace                      = $facts['os_service_default'],
+  $amqp_ssl_ca_file                = $facts['os_service_default'],
+  $amqp_ssl_cert_file              = $facts['os_service_default'],
+  $amqp_ssl_key_file               = $facts['os_service_default'],
+  $amqp_ssl_key_password           = $facts['os_service_default'],
+  $amqp_sasl_mechanisms            = $facts['os_service_default'],
+  $amqp_sasl_config_dir            = $facts['os_service_default'],
+  $amqp_sasl_config_name           = $facts['os_service_default'],
+  $amqp_username                   = $facts['os_service_default'],
+  $amqp_password                   = $facts['os_service_default'],
+  Boolean $purge_config            = false,
+  $default_ntp_server              = $facts['os_service_default'],
 ) {
 
   include sahara::deps
@@ -295,20 +317,24 @@ class sahara(
   }
 
   oslo::messaging::rabbit { 'sahara_config':
-    rabbit_ha_queues        => $rabbit_ha_queues,
-    rabbit_use_ssl          => $rabbit_use_ssl,
-    kombu_failover_strategy => $kombu_failover_strategy,
-    kombu_compression       => $kombu_compression,
-    kombu_reconnect_delay   => $kombu_reconnect_delay,
-    kombu_ssl_version       => $kombu_ssl_version,
-    kombu_ssl_keyfile       => $kombu_ssl_keyfile,
-    kombu_ssl_certfile      => $kombu_ssl_certfile,
-    kombu_ssl_ca_certs      => $kombu_ssl_ca_certs,
-    amqp_durable_queues     => $amqp_durable_queues,
-    rabbit_login_method     => $rabbit_login_method,
-    rabbit_retry_interval   => $rabbit_retry_interval,
-    rabbit_retry_backoff    => $rabbit_retry_backoff,
-    heartbeat_in_pthread    => $rabbit_heartbeat_in_pthread,
+    rabbit_ha_queues                => $rabbit_ha_queues,
+    rabbit_use_ssl                  => $rabbit_use_ssl,
+    kombu_failover_strategy         => $kombu_failover_strategy,
+    kombu_compression               => $kombu_compression,
+    kombu_reconnect_delay           => $kombu_reconnect_delay,
+    kombu_ssl_version               => $kombu_ssl_version,
+    kombu_ssl_keyfile               => $kombu_ssl_keyfile,
+    kombu_ssl_certfile              => $kombu_ssl_certfile,
+    kombu_ssl_ca_certs              => $kombu_ssl_ca_certs,
+    amqp_durable_queues             => $amqp_durable_queues,
+    rabbit_login_method             => $rabbit_login_method,
+    rabbit_retry_interval           => $rabbit_retry_interval,
+    rabbit_retry_backoff            => $rabbit_retry_backoff,
+    heartbeat_in_pthread            => $rabbit_heartbeat_in_pthread,
+    rabbit_quorum_queue             => $rabbit_quorum_queue,
+    rabbit_quorum_delivery_limit    => $rabbit_quorum_delivery_limit,
+    rabbit_quorum_max_memory_length => $rabbit_quorum_max_memory_length,
+    rabbit_quorum_max_memory_bytes  => $rabbit_quorum_max_memory_bytes,
   }
 
   oslo::messaging::amqp { 'sahara_config':
