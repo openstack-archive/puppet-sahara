@@ -18,6 +18,7 @@ class sahara::params {
       $engine_service_name       = 'openstack-sahara-engine'
       $sahara_wsgi_script_path   = '/var/www/cgi-bin/sahara'
       $sahara_wsgi_script_source = '/usr/bin/sahara-wsgi-api'
+      $plugin_package_name_base  = 'python3-sahara-plugin-'
     }
     'Debian': {
       $common_package_name       = 'sahara-common'
@@ -27,6 +28,7 @@ class sahara::params {
       $engine_service_name       = 'sahara-engine'
       $sahara_wsgi_script_path   = '/usr/lib/cgi-bin/sahara'
       $sahara_wsgi_script_source = '/usr/bin/sahara-wsgi-api'
+      $plugin_package_name_base  = 'python3-sahara-plugin-'
     }
     default: {
       fail("Unsupported osfamily: ${facts['os']['family']}")
