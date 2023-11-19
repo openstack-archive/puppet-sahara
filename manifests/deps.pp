@@ -47,8 +47,8 @@ class sahara::deps {
   # will have clients available to create resources. This tag handles the
   # openstackclient but indirectly since the client is not available in
   # all catalogs that don't need the client class (like many spec tests)
-  Package<| tag == 'openstack'|>
-  ~> Anchor['sahara::service::end']
+  Package<| tag == 'openstackclient'|>
+  -> Anchor['sahara::service::end']
 
   # Installation or config changes will always restart services.
   Anchor['sahara::install::end'] ~> Anchor['sahara::service::begin']

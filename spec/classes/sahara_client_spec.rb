@@ -13,7 +13,7 @@ describe 'sahara::client' do
     context 'with default parameters' do
       it { is_expected.to contain_package('python-saharaclient').with(
         :ensure => 'present',
-        :tag    => 'openstack',
+        :tag    => ['openstack', 'openstackclient'],
         )
       }
     end
@@ -25,7 +25,7 @@ describe 'sahara::client' do
       it { is_expected.to contain_package('python-saharaclient').with(
         :ensure => false,
         :name   => platform_params[:client_package_name],
-        :tag    => 'openstack',
+        :tag    => ['openstack', 'openstackclient'],
         )
       }
     end
