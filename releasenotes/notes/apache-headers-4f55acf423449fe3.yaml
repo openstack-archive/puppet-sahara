@@ -1,5 +1,0 @@
----
-features:
-  - |
-    The ``sahara::wsgi::apache`` class now supports customizing
-    request/response headers added by apache.

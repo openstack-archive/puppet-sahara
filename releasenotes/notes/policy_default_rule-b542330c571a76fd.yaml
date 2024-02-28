@@ -1,4 +1,0 @@
----
-features:
-  - |
-    The new ``sahara::policy::policy_default_rule`` parameter has been added.

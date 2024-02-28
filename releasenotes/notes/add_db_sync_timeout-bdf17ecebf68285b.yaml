@@ -1,3 +1,0 @@
----
-features:
-  - Adds db_sync_timeout parameter to db sync.

@@ -1,5 +1,0 @@
----
-upgrade:
-  - |
-    The deprecated parameters use_syslog, use_stderr, log_facility, log_dir and
-    debug in the init class is now removed. Please set them in the logging class.

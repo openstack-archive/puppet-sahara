@@ -1,4 +1,0 @@
----
-features:
-  - |
-    Expose use_json logging parameter, which enables JSON formatted logging.

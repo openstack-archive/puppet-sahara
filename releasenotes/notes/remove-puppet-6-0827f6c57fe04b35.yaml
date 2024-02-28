@@ -1,4 +1,0 @@
----
-upgrade:
-  - |
-    Puppet 6 is no longer supported.

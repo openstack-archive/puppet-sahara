@@ -1,7 +1,0 @@
----
-deprecations:
-  - The 'enable' option has been removed from sahara, so
-    sahara::notify::enable_notifications will be removed.
-    The 'level' option does not exist in the oslo.messaging,
-    so we will remove sahara::notify::notification_level.
-

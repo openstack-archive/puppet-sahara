@@ -1,3 +1,0 @@
----
-features:
-  - Add support for oslo_messaging_amqp backend via puppet-oslo resource

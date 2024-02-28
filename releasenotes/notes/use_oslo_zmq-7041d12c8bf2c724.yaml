@@ -1,4 +1,0 @@
----
-features:
-  - Switch to using oslo::zmq messaging instead of manual
-    configuring parameters in sahara.

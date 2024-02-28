@@ -1,6 +1,0 @@
----
-deprecations:
-  - sahara::rabbit_host, sahara::rabbit_hosts, sahara::rabbit_password,
-    sahara::rabbit_port, sahara::rabbit_userid and
-    sahara::rabbit_virtual_host are deprecated.
-    sahara::default_transport_url should be used instead.

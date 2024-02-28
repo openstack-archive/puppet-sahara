@@ -1,9 +1,0 @@
----
-features:
-  - Allow to configure authtoken parameters, useful when running Keystone
-    v3 API. This class is sahara::keystone::authtoken and parameters are
-    consistent with other modules.
-deprecations:
-  - sahara::admin_user, sahara::admin_password, sahara::auth_uri,
-    sahara::identity_uri, sahara::admin_tenant_name and sahara::memcached_servers
-    are deprecated. Please use sahara::keystone::authtoken::* parameters instead.

@@ -1,4 +1,0 @@
----
-features:
-  - |
-    The ``sahara`` class now supports options for quorum queues in RabbitMQ.

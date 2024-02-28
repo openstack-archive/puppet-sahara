@@ -1,5 +1,0 @@
----
-features:
-  - |
-    There is now a new policy_dirs parameter in the sahara::policy class,
-    so one can set a custom path.

@@ -1,4 +1,0 @@
----
-features:
-  - |
-    The new ``sahara::logging::watch_log_file`` parameter has been added.

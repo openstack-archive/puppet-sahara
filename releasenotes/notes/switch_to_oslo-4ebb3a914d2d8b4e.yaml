@@ -1,4 +1,0 @@
----
-features:
-  - Switch to puppet-oslo resource usage (instead of
-    manual configuration file editing).

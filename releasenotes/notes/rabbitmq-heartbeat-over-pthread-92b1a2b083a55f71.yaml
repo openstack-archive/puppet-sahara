@@ -1,6 +1,0 @@
----
-features:
-  - |
-    Allow users to run the RabbitMQ heartbeat over a native python thread in the
-    oslo.messaging RabbitMQ driver, by using the `rabbit_heartbeat_in_pthread`
-    option in configuration.

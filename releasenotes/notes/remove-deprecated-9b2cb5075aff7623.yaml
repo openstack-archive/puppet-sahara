@@ -1,7 +1,0 @@
----
-upgrade:
-  - |
-    The deprecated parameters admin_user, admin_password, admin_tenant_name,
-    auth_uri, identity_uri and memcached_servers in ::sahara is now removed.
-  - |
-    The deprecated parameter sahara::use_neutron is now removed.

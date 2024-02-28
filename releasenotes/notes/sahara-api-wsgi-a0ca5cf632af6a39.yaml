@@ -1,9 +1,0 @@
----
-features:
-  - |
-    Added new class sahara::wsgi::apache, you can now run the API under Apache
-    with mod_wsgi.
-other:
-  - |
-    Added support for running Sahara API in WSGI, like on Ubuntu where eventlet
-    is not supported.

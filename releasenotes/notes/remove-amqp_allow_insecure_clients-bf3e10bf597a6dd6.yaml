@@ -1,4 +1,0 @@
----
-upgrade:
-  - |
-    The ``sahara::amqp_allow_insecure_clients`` parameter has been removed.

@@ -1,5 +1,0 @@
----
-other:
-  - Remove deprecated sahara::notify::enable_notifications parameter.
-  - Remove deprecated sahara::notify::control_exchange parameter.
-  - Remove deprecated sahara::notify::notification_level parameter.

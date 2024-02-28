@@ -1,5 +1,0 @@
----
-deprecations:
-  - |
-    The configuration option ``rabbit_max_retries`` is now deprecated and
-    will be removed in the future.

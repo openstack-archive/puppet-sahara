@@ -1,8 +1,0 @@
----
-upgrade:
-  - |
-    The following resource types no longer attempts to load user credentials
-    from the ``[keystone_authtoken]`` section in ``sahara.conf``.
-
-    - ``sahara_cluster_template``
-    - ``sahara_node_group_template``

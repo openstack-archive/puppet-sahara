@@ -1,4 +1,0 @@
----
-features:
-  - |
-    Add mysql_enable_ndb parameter to select mysql storage engine.

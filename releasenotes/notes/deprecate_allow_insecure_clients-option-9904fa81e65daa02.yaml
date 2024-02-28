@@ -1,4 +1,0 @@
----
-deprecations:
-  - allow_insecure_clients option is now deprecated for removal, the
-    parameter has no effect.

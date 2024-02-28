@@ -1,4 +1,0 @@
----
-features:
-  - Add new parameter "rpc_response_timeout", seconds to wait for a
-    response from a call

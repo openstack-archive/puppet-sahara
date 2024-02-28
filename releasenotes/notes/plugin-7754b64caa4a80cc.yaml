@@ -1,5 +1,0 @@
----
-features:
-  - |
-    The new ``sahara::plugin`` defined resource type has been added. This can
-    be used to manage plugin packages.
